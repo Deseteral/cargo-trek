@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "ES2022",
+
+    /* Modules */
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "paths": {
+      "ludum-dare-54/*": ["./src/*"],
+      "*": ["node_modules/*"],
+      "ponczek/*": ["./ponczek/src/*"],
+      "ponczek": ["./ponczek/src"],
+    },
+    "resolveJsonModule": true,
+
+    /* Emit */
+    "declaration": true,
+    "outDir": "dist",
+    "sourceMap": true,
+
+    /* Interop Constraints */
+    "esModuleInterop": true,
+
+    /* Type Checking */
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* Completeness */
+    "skipLibCheck": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules/**/*"
+  ]
+}

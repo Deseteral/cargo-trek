@@ -1,0 +1,3 @@
+[submodule "ponczek"]
+	path = ponczek
+	url = https://github.com/deseteral/ponczek.git
