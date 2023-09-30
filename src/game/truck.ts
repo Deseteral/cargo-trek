@@ -1,5 +1,5 @@
 import { WorldMap } from 'ludum-dare-54/game/world-map';
-import { Vector2, Screen, Ponczek, Color, Input } from 'ponczek';
+import { Vector2, Screen, Ponczek, Color } from 'ponczek';
 
 export class Truck {
   public position: Vector2;

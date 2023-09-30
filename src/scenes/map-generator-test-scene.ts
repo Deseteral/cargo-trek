@@ -33,10 +33,6 @@ export class MapGeneratorTestScene extends Scene {
 
     this.camera.screenToWorld(Input.pointer, this.mouseInWorld);
 
-    ImGui.Begin('M');
-    ImGui.Text(`${this.mouseInWorld.x} ${this.mouseInWorld.y}`);
-    ImGui.End();
-
     if (Input.pointerLeftPressed) {
       this.truck.driveTowards(this.mouseInWorld);
     }
