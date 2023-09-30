@@ -58,12 +58,23 @@ export class OverworldScene extends Scene {
     GameState.truck.update();
     GameState.world.clearFogAt(GameState.truck.position);
 
-    if (Input.getKeyDown('KeyE')) {
+    if (Input.getKey('KeyE')) {
       for (let idx = 0; idx < GameState.world.cities.length; idx += 1) {
         const c = GameState.world.cities[idx];
         const dst = Vector2.sqrDistance(c.position, GameState.truck.position);
         if (dst < 5) {
           SceneManager.pushScene(new CityScene(c));
+        }
+      }
+
+      if (GameState.truck.batteryPercent < 1.0) {
+        for (let idx = 0; idx < GameState.world.chargers.length; idx += 1) {
+          const c = GameState.world.chargers[idx];
+          const dst = Vector2.sqrDistance(c.position, GameState.truck.position);
+          if (dst < 5) {
+            GameState.truck.battery += 1;
+            GameState.truck.battery = Math.clamp(GameState.truck.battery, 0, GameState.truck.batteryCapacity);
+          }
         }
       }
     }
