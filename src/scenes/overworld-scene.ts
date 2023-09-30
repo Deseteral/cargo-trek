@@ -62,7 +62,7 @@ export class OverworldScene extends Scene {
       for (let idx = 0; idx < GameState.world.cities.length; idx += 1) {
         const c = GameState.world.cities[idx];
         const dst = Vector2.sqrDistance(c.position, GameState.truck.position);
-        if (dst < 3) {
+        if (dst < 5) {
           SceneManager.pushScene(new CityScene(c));
         }
       }

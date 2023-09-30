@@ -53,6 +53,8 @@ export class CityScene extends Scene {
       }],
     ];
     this.menu.cellMargin.set(1, 1);
+
+    GameState.truck.battery = GameState.truck.batteryCapacity;
   }
 
   completeJobs(): void {
