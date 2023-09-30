@@ -1,6 +1,6 @@
 import { GameState } from 'ludum-dare-54/game/game-state';
 import { CityScene } from 'ludum-dare-54/scenes/city-scene';
-import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, SceneManager } from 'ponczek';
+import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, SceneManager, Ponczek } from 'ponczek';
 
 export class OverworldScene extends Scene {
   camera: Camera;
@@ -10,6 +10,9 @@ export class OverworldScene extends Scene {
     super();
     this.camera = new Camera();
     this.camera.lookAt(GameState.truck.position);
+
+    // TODO: Move this to main menu scene
+    Ponczek.screen.activeFont?.generateColorVariant(Color.blue);
   }
 
   update(): void {
