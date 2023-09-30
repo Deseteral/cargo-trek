@@ -3,6 +3,7 @@ import { ENDESGA16PaletteIdx, Screen, Color, Texture, Pathfinder, Random, Simple
 const MINIMAP_SIZE = 100;
 
 export interface City {
+  id: number,
   name: string,
   position: Vector2,
 }
@@ -144,6 +145,7 @@ export class WorldMap {
         }
 
         this.cities.push({
+          id: this.cities.length,
           name: `City ${this.cities.length}`,
           position: new Vector2(mx, my),
         });
