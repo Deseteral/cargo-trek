@@ -9,7 +9,7 @@ export class Truck {
 
   constructor(position: Vector2, worldMap: WorldMap) {
     this.position = position;
-    this.speed = 0.1;
+    this.speed = 0.5;
     this.worldMap = worldMap;
   }
 

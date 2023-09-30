@@ -175,11 +175,17 @@ export class WorldMap {
             const y = points[pi].y + yy;
             const idx = this.posToIdx(x, y);
             if (idx === -1) continue;
-            this.roadPathTexture.data.setPixel(x, y, ENDESGA16PaletteIdx[10]);
+            if (this.roadTiles[idx]) continue;
+            this.roadPathTexture.data.setPixel(x, y, ENDESGA16PaletteIdx[7]);
             this.roadTiles[idx] = true;
           }
         }
       }
+
+      for (let pi = 0; pi < points.length; pi += 1) {
+        this.roadPathTexture.data.setPixel(points[pi].x, points[pi].y, ENDESGA16PaletteIdx[10]);
+      }
+
       this.roadPathTexture.data.commit();
     }
   }
