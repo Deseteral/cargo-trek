@@ -12,10 +12,13 @@ export class MapGeneratorTestScene extends Scene {
   constructor() {
     super();
     this.worldMap = new WorldMap(400);
-    this.camera = new Camera(new Vector2(200, 200));
-    this.truck = new Truck(new Vector2(10, 10), this.worldMap);
+    this.camera = new Camera();
 
     this.worldMap.generate();
+
+    const firstCityPos = this.worldMap.cities[0].copy();
+    this.truck = new Truck(firstCityPos, this.worldMap);
+    this.camera.lookAt(firstCityPos);
   }
 
   update(): void {
