@@ -1,7 +1,7 @@
 import { DeliveryJob } from 'ludum-dare-54/game/delivery-job-generator';
 import { GameState } from 'ludum-dare-54/game/game-state';
 import { City } from 'ludum-dare-54/game/world-map';
-import { Color, Screen, Input, Scene, SceneManager, ENDESGA16Palette, GridView, Vector2 } from 'ponczek';
+import { Color, Screen, Input, Scene, SceneManager, ENDESGA16Palette, GridView, Vector2, ENDESGA16PaletteIdx } from 'ponczek';
 
 interface MenuItem {
   job: DeliveryJob,
@@ -16,7 +16,7 @@ class JobMarketMenuGridView extends GridView<MenuItem> {
     if (!item) return;
 
     const job = item.job;
-    const color = isSelected ? Color.blue : Color.white;
+    const color = isSelected ? ENDESGA16PaletteIdx[4] : Color.white;
     const text = `${job.targetCity.name}, $${job.price}`;
 
     scr.drawText(text, x, y, color);
@@ -27,15 +27,15 @@ class JobMarketMenuGridView extends GridView<MenuItem> {
 
 export class CityJobMarketScene extends Scene {
   city: City;
-  jobMarketMenuGridView: JobMarketMenuGridView;
-  jobMarketMenuGridViewPostion = new Vector2(10, 10);
+  menu: JobMarketMenuGridView;
+  menuPosition = new Vector2(10, 10);
 
   constructor(city: City, jobs: DeliveryJob[]) {
     super();
     this.city = city;
 
-    this.jobMarketMenuGridView = new JobMarketMenuGridView();
-    this.jobMarketMenuGridView.cells = jobs.map((job) => ([{ job }]));
+    this.menu = new JobMarketMenuGridView();
+    this.menu.cells = jobs.map((job) => ([{ job }]));
   }
 
   update(): void {
@@ -44,19 +44,19 @@ export class CityJobMarketScene extends Scene {
     }
 
     if (Input.getKeyDown('KeyS')) {
-      this.jobMarketMenuGridView.selectNextRow(true);
+      this.menu.selectNextRow(true);
     }
     if (Input.getKeyDown('KeyW')) {
-      this.jobMarketMenuGridView.selectPreviousRow(true);
+      this.menu.selectPreviousRow(true);
     }
 
     if (Input.getKeyDown('Enter')) {
-      if (this.jobMarketMenuGridView.cells.length > 0) {
-        const idx = this.jobMarketMenuGridView.cells.findIndex((row) => row[0] === this.jobMarketMenuGridView.selectedValue);
-        const job = this.jobMarketMenuGridView.selectedValue.job;
-        this.jobMarketMenuGridView.cells.splice(idx, 1);
+      if (this.menu.cells.length > 0) {
+        const idx = this.menu.cells.findIndex((row) => row[0] === this.menu.selectedValue);
+        const job = this.menu.selectedValue.job;
+        this.menu.cells.splice(idx, 1);
         GameState.activeJobs.push(job);
-        this.jobMarketMenuGridView.selectPreviousRow();
+        this.menu.selectPreviousRow();
       }
     }
   }
@@ -64,19 +64,20 @@ export class CityJobMarketScene extends Scene {
   render(scr: Screen): void {
     scr.clearScreen(ENDESGA16Palette.darkBark);
 
-    this.jobMarketMenuGridView.drawAt(this.jobMarketMenuGridViewPostion, scr);
+    this.menu.drawAt(this.menuPosition, scr);
 
-    if (this.jobMarketMenuGridView.cells.length > 0) {
+    if (this.menu.cells.length > 0) {
       // Minimap
-      const selectedJob = this.jobMarketMenuGridView.selectedValue.job;
+      scr.color(ENDESGA16PaletteIdx[4]);
+
+      const selectedJob = this.menu.selectedValue.job;
       const fromCityPos = selectedJob.fromCity.position;
       const targetCityPos = selectedJob.targetCity.position;
       const minimapX = scr.width - 10 - GameState.world.minimapSize;
       const minimapY = 10;
 
+      scr.drawRect(minimapX - 1, minimapY - 1, GameState.world.minimapSize + 2, GameState.world.minimapSize + 2);
       scr.drawTexture(GameState.world.minimapTexture, minimapX, minimapY);
-
-      scr.color(Color.blue);
 
       scr.drawRect(
         minimapX + (fromCityPos.x / GameState.world.minimapScale) - 2,

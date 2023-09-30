@@ -12,7 +12,7 @@ export class OverworldScene extends Scene {
     this.camera.lookAt(GameState.truck.position);
 
     // TODO: Move this to main menu scene
-    Ponczek.screen.activeFont?.generateColorVariant(Color.blue);
+    Ponczek.screen.activeFont?.generateColorVariant(ENDESGA16PaletteIdx[4]);
   }
 
   update(): void {

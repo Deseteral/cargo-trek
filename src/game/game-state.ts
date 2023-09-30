@@ -3,10 +3,12 @@ import { Truck } from 'ludum-dare-54/game/truck';
 import { WorldMap } from 'ludum-dare-54/game/world-map';
 
 export class GameState {
-  public static seed: number;
-  public static world: WorldMap;
-  public static truck: Truck;
-  public static activeJobs: DeliveryJob[];
+  static seed: number;
+  static world: WorldMap;
+  static truck: Truck;
+  static activeJobs: DeliveryJob[];
+  static cash: number;
+  static points: number;
 
   static create(seed: number): void {
     GameState.seed = seed;
@@ -18,5 +20,8 @@ export class GameState {
     GameState.truck = new Truck(firstCityPos);
 
     GameState.activeJobs = [];
+
+    GameState.cash = 0;
+    GameState.points = 0;
   }
 }
