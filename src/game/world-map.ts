@@ -1,3 +1,4 @@
+import { generateCityName } from 'ludum-dare-54/game/city-name-generator';
 import { ENDESGA16PaletteIdx, Screen, Color, Texture, Pathfinder, Random, SimplexNoise, Vector2 } from 'ponczek';
 
 export interface City {
@@ -149,7 +150,7 @@ export class WorldMap {
 
         this.cities.push({
           id: this.cities.length,
-          name: `City ${this.cities.length}`,
+          name: generateCityName(),
           position: new Vector2(mx, my),
         });
       }
