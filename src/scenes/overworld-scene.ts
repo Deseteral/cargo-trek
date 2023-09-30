@@ -107,7 +107,7 @@ export class OverworldScene extends Scene {
     scr.drawText(formattedCalendarTime(), 10, 10, Color.white);
 
     scr.drawTexture(this.batteryTexture, 10, 20);
-    scr.color(ENDESGA16PaletteIdx[15]);
+    scr.color(GameState.truck.batteryPercent <= 0.2 ? ENDESGA16PaletteIdx[4] : ENDESGA16PaletteIdx[15]);
     scr.fillRect(13, 23, 24 * GameState.truck.batteryPercent, 10);
   }
 }
