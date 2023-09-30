@@ -37,7 +37,7 @@ export class MapGeneratorTestScene extends Scene {
     ImGui.Text(`${this.mouseInWorld.x} ${this.mouseInWorld.y}`);
     ImGui.End();
 
-    if (Input.getKey('KeyF')) {
+    if (Input.pointerLeftPressed) {
       this.truck.driveTowards(this.mouseInWorld);
     }
 
