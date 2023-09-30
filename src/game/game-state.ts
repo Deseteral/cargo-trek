@@ -22,6 +22,7 @@ export class GameState {
   static cash: number;
   static points: number;
   static cargoStorage: CargoStorage;
+  static time: number;
 
   static create(seed: number): void {
     GameState.seed = seed;
@@ -41,5 +42,7 @@ export class GameState {
       bounds: new Rectangle(10, 10, 100, 200),
       cargo: [],
     };
+
+    GameState.time = 0;
   }
 }
