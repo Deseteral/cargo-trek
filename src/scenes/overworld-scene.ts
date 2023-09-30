@@ -74,6 +74,7 @@ export class OverworldScene extends Scene {
         .at(0)!.city;
 
       GameState.truck.position = nearestCity.position.copy();
+      GameState.time += (60 * 24);
       SceneManager.pushScene(new CityScene(nearestCity));
     }
 
