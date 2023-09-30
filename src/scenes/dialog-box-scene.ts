@@ -21,7 +21,7 @@ export class DialogBoxScene extends Scene {
     replaceColorEffect.set(Color.gray, ENDESGA16PaletteIdx[10]);
     replaceColorEffect.apply(this.frameTexture);
 
-    replaceColorEffect.set(Color.black, ENDESGA16PaletteIdx[15]);
+    replaceColorEffect.set(Color.black, ENDESGA16PaletteIdx[11]);
     replaceColorEffect.apply(this.frameTexture);
   }
 

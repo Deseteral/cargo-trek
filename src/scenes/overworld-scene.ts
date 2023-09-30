@@ -20,7 +20,7 @@ export class OverworldScene extends Scene {
     this.worldTimeProgressionTimer.set(UNTIL_NEXT_MINUTE_MS);
 
     // TODO: Move this to main menu scene
-    Ponczek.screen.activeFont?.generateColorVariant(ENDESGA16PaletteIdx[4]);
+    Ponczek.screen.activeFont?.generateColorVariants([ENDESGA16PaletteIdx[4], ENDESGA16PaletteIdx[6]]);
   }
 
   update(): void {
