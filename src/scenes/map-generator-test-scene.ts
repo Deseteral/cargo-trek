@@ -38,6 +38,8 @@ export class MapGeneratorTestScene extends Scene {
     }
 
     this.truck.update();
+
+    this.worldMap.clearFogAt(this.truck.position);
   }
 
   render(scr: Screen): void {
@@ -48,13 +50,15 @@ export class MapGeneratorTestScene extends Scene {
     scr.drawTexture(this.worldMap.topoTexture, 0, 0);
     scr.drawTexture(this.worldMap.roadPathTexture, 0, 0);
 
+    this.truck.render(scr);
+
+    scr._ctx.drawImage(this.worldMap.fogScreen._domElement, 0, 0);
+
     for (let i = 0; i < this.worldMap.cities.length; i += 1) {
       const c = this.worldMap.cities[i];
       scr.color(ENDESGA16PaletteIdx[4]);
       scr.fillRect(c.x - 2, c.y - 2, 4, 4);
     }
-
-    this.truck.render(scr);
 
     this.camera.end();
   }

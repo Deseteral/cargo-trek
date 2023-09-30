@@ -1,6 +1,4 @@
-import { Color, Texture } from 'ponczek/gfx';
-import { Pathfinder, Random, SimplexNoise, Vector2 } from 'ponczek/math';
-import { ENDESGA16PaletteIdx } from 'ponczek/palettes';
+import { ENDESGA16PaletteIdx, Screen, Color, Texture, Pathfinder, Random, SimplexNoise, Vector2 } from 'ponczek';
 
 export class WorldMap {
   private random: Random;
@@ -15,6 +13,7 @@ export class WorldMap {
   public noiseTexture: Texture;
   public topoTexture: Texture;
   public roadPathTexture: Texture;
+  public fogScreen: Screen;
 
   // Map generator noise values
   private om: number = 3;
@@ -33,6 +32,10 @@ export class WorldMap {
     this.noiseTexture = Texture.createEmpty(this.mapSize, this.mapSize);
     this.topoTexture = Texture.createEmpty(this.mapSize, this.mapSize);
     this.roadPathTexture = Texture.createEmpty(this.mapSize, this.mapSize);
+    this.fogScreen = new Screen(this.mapSize, this.mapSize);
+
+    this.fogScreen.color(Color.black);
+    this.fogScreen.fillRect(0, 0, this.mapSize, this.mapSize);
   }
 
   vecToIdx(vec: Vector2): number {
@@ -188,5 +191,11 @@ export class WorldMap {
 
       this.roadPathTexture.data.commit();
     }
+  }
+
+  clearFogAt(position: Vector2): void {
+    const radius = 20;
+    this.fogScreen.color(Color.red);
+    this.fogScreen.clearCircleV(position, radius);
   }
 }
