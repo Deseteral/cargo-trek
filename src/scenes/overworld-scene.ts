@@ -2,7 +2,7 @@ import { Truck } from 'ludum-dare-54/game/truck';
 import { WorldMap } from 'ludum-dare-54/game/world-map';
 import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx } from 'ponczek';
 
-export class MapGeneratorTestScene extends Scene {
+export class OverworldScene extends Scene {
   public worldMap: WorldMap;
   public camera: Camera;
   public truck: Truck;

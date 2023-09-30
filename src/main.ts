@@ -1,5 +1,5 @@
 import { AssetDefinition, Assets, Ponczek, STARTUP_AUTOPLAY, STARTUP_SKIP_SPLASH_SCREEN } from 'ponczek';
-import { MapGeneratorTestScene } from 'ludum-dare-54/scenes/map-generator-test-scene';
+import { OverworldScene } from 'ludum-dare-54/scenes/overworld-scene';
 import textureList from '../assets/textures.json';
 import soundList from '../assets/sounds.json';
 
@@ -8,7 +8,7 @@ import soundList from '../assets/sounds.json';
   await Ponczek.initialize(
     320 * 1,
     240 * 1,
-    () => new MapGeneratorTestScene(),
+    () => new OverworldScene(),
     STARTUP_SKIP_SPLASH_SCREEN | STARTUP_AUTOPLAY,
   );
 }());
