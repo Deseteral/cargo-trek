@@ -1,5 +1,10 @@
 import { ENDESGA16PaletteIdx, Screen, Color, Texture, Pathfinder, Random, SimplexNoise, Vector2 } from 'ponczek';
 
+export interface City {
+  name: string,
+  position: Vector2,
+}
+
 export class WorldMap {
   private random: Random;
   private noise: SimplexNoise;
@@ -8,7 +13,7 @@ export class WorldMap {
 
   public tiles: number[];
   public roadTiles: boolean[];
-  public cities: Vector2[] = [];
+  public cities: City[] = [];
 
   public noiseTexture: Texture;
   public topoTexture: Texture;
@@ -129,7 +134,10 @@ export class WorldMap {
           }
         }
 
-        this.cities.push(new Vector2(mx, my));
+        this.cities.push({
+          name: 'City',
+          position: new Vector2(mx, my),
+        });
       }
     }
 
@@ -140,7 +148,7 @@ export class WorldMap {
       const count = this.random.nextInt(0, 3);
 
       const byDistance = this.cities
-        .map((pos, idx) => ({ idx, dist: Vector2.sqrDistance(current, pos) }))
+        .map((c, idx) => ({ idx, dist: Vector2.sqrDistance(current.position, c.position) }))
         .sort((a, b) => a.dist - b.dist);
 
       for (let ct = 1; ct <= count; ct += 1) {
@@ -153,7 +161,7 @@ export class WorldMap {
     const roads: Vector2[][] = [];
     roadConnectionIdx.forEach((pp) => {
       const [fromIdx, toIdx] = pp.split('-').map((s) => parseInt(s, 10) | 0);
-      roads.push([this.cities[fromIdx], this.cities[toIdx]]);
+      roads.push([this.cities[fromIdx].position, this.cities[toIdx].position]);
     });
 
     // Generate paths for roads

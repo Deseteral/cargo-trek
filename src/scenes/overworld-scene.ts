@@ -16,7 +16,7 @@ export class OverworldScene extends Scene {
 
     this.worldMap.generate();
 
-    const firstCityPos = this.worldMap.cities[0].copy();
+    const firstCityPos = this.worldMap.cities[0].position.copy();
     this.truck = new Truck(firstCityPos, this.worldMap);
     this.camera.lookAt(firstCityPos);
   }
@@ -61,7 +61,7 @@ export class OverworldScene extends Scene {
     for (let i = 0; i < this.worldMap.cities.length; i += 1) {
       const c = this.worldMap.cities[i];
       scr.color(ENDESGA16PaletteIdx[4]);
-      scr.fillRect(c.x - 2, c.y - 2, 4, 4);
+      scr.fillRect(c.position.x - 2, c.position.y - 2, 4, 4);
     }
 
     // Trucks
@@ -70,7 +70,10 @@ export class OverworldScene extends Scene {
     // City names
     for (let i = 0; i < this.worldMap.cities.length; i += 1) {
       const c = this.worldMap.cities[i];
-      scr.drawText('City', c.x + 1, c.y + 2, Color.white);
+      const x = c.position.x + 1;
+      const y = c.position.y + 2;
+      scr.drawText(c.name, x + 1, y + 1, Color.black);
+      scr.drawText(c.name, x, y, Color.white);
     }
 
     this.camera.end();
