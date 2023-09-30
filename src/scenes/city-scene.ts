@@ -3,6 +3,7 @@ import { GameState } from 'ludum-dare-54/game/game-state';
 import { City } from 'ludum-dare-54/game/world-map';
 import { CityJobMarketScene } from 'ludum-dare-54/scenes/city-job-market-scene';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
+import { UpgradeGarageScene } from 'ludum-dare-54/scenes/upgrade-garage-scene';
 import { Color, ENDESGA16Palette, ENDESGA16PaletteIdx, GridView, Input, Random, Scene, SceneManager, Screen, Vector2 } from 'ponczek';
 
 interface MenuItem {
@@ -45,6 +46,10 @@ export class CityScene extends Scene {
       [{
         text: 'See the job market',
         action: () => SceneManager.pushScene(new CityJobMarketScene(this.city, this.jobs)),
+      }],
+      [{
+        text: 'Drive to truck workshop',
+        action: () => SceneManager.pushScene(new UpgradeGarageScene()),
       }],
     ];
     this.menu.cellMargin.set(1, 1);
