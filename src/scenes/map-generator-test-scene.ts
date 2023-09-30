@@ -1,4 +1,4 @@
-import { WorldMap } from 'ludum-dare-54/world-map';
+import { WorldMap } from 'ludum-dare-54/game/world-map';
 import { Scene, Screen, Color, Vector2, Camera, Input } from 'ponczek';
 
 export class MapGeneratorTestScene extends Scene {
