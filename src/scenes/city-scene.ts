@@ -1,4 +1,5 @@
 import { DeliveryJob, DeliveryJobGenerator } from 'ludum-dare-54/game/delivery-job-generator';
+import { GameState } from 'ludum-dare-54/game/game-state';
 import { City } from 'ludum-dare-54/game/world-map';
 import { CityJobMarketScene } from 'ludum-dare-54/scenes/city-job-market-scene';
 import { Color, ENDESGA16Palette, GridView, Input, Random, Scene, SceneManager, Screen, Vector2 } from 'ponczek';
@@ -39,7 +40,7 @@ export class CityScene extends Scene {
     this.menuGridView.cells = [
       [{
         text: 'Complete jobs',
-        action: () => console.log('complete jobs'),
+        action: () => this.completeJobs(),
       }],
       [{
         text: 'See the job market',
@@ -47,6 +48,12 @@ export class CityScene extends Scene {
       }],
     ];
     this.menuGridView.cellMargin.set(1, 1);
+  }
+
+  completeJobs(): void {
+    const completedJobs = GameState.activeJobs.filter((job) => job.targetCity.id === this.city.id);
+    GameState.activeJobs = GameState.activeJobs.filter((job) => job.targetCity.id !== this.city.id);
+    console.log('Completed jobs', completedJobs);
   }
 
   update(): void {
