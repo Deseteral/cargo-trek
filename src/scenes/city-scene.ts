@@ -80,6 +80,8 @@ export class CityScene extends Scene {
 
     GameState.cargoStorage.cargo = GameState.cargoStorage.cargo.filter((c) => !completedJobIds.includes(c.parentJobId));
 
+    GameState.completedJobs += completedJobs.length;
+
     const text = [
       `Completed ${completedJobs.length} jobs for $${totalCash}.`,
     ];
