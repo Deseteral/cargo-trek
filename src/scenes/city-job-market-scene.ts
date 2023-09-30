@@ -49,6 +49,16 @@ export class CityJobMarketScene extends Scene {
     if (Input.getKeyDown('KeyW')) {
       this.jobMarketMenuGridView.selectPreviousRow(true);
     }
+
+    if (Input.getKeyDown('Enter')) {
+      if (this.jobMarketMenuGridView.cells.length > 0) {
+        const idx = this.jobMarketMenuGridView.cells.findIndex((row) => row[0] === this.jobMarketMenuGridView.selectedValue);
+        const job = this.jobMarketMenuGridView.selectedValue.job;
+        this.jobMarketMenuGridView.cells.splice(idx, 1);
+        GameState.activeJobs.push(job);
+        this.jobMarketMenuGridView.selectPreviousRow();
+      }
+    }
   }
 
   render(scr: Screen): void {
@@ -56,29 +66,33 @@ export class CityJobMarketScene extends Scene {
 
     this.jobMarketMenuGridView.drawAt(this.jobMarketMenuGridViewPostion, scr);
 
-    // Minimap
-    const selectedJob = this.jobMarketMenuGridView.selectedValue.job;
-    const fromCityPos = selectedJob.fromCity.position;
-    const targetCityPos = selectedJob.targetCity.position;
-    const minimapX = scr.width - 10 - GameState.world.minimapSize;
-    const minimapY = 10;
+    if (this.jobMarketMenuGridView.cells.length > 0) {
+      // Minimap
+      const selectedJob = this.jobMarketMenuGridView.selectedValue.job;
+      const fromCityPos = selectedJob.fromCity.position;
+      const targetCityPos = selectedJob.targetCity.position;
+      const minimapX = scr.width - 10 - GameState.world.minimapSize;
+      const minimapY = 10;
 
-    scr.drawTexture(GameState.world.minimapTexture, minimapX, minimapY);
+      scr.drawTexture(GameState.world.minimapTexture, minimapX, minimapY);
 
-    scr.color(Color.blue);
+      scr.color(Color.blue);
 
-    scr.drawRect(
-      minimapX + (fromCityPos.x / GameState.world.minimapScale) - 2,
-      minimapY + (fromCityPos.y / GameState.world.minimapScale) - 2,
-      5,
-      5,
-    );
+      scr.drawRect(
+        minimapX + (fromCityPos.x / GameState.world.minimapScale) - 2,
+        minimapY + (fromCityPos.y / GameState.world.minimapScale) - 2,
+        5,
+        5,
+      );
 
-    scr.drawRect(
-      minimapX + (targetCityPos.x / GameState.world.minimapScale) - 2,
-      minimapY + (targetCityPos.y / GameState.world.minimapScale) - 2,
-      5,
-      5,
-    );
+      scr.drawRect(
+        minimapX + (targetCityPos.x / GameState.world.minimapScale) - 2,
+        minimapY + (targetCityPos.y / GameState.world.minimapScale) - 2,
+        5,
+        5,
+      );
+    } else {
+      scr.drawText('Currently there are\nno delivery jobs here.', 10, 10, Color.white);
+    }
   }
 }
