@@ -43,6 +43,11 @@ export class Truck {
     this.battery -= (a * (1 / terrainModifier));
   }
 
+  charge(): void {
+    GameState.truck.battery += 1;
+    GameState.truck.battery = Math.clamp(GameState.truck.battery, 0, GameState.truck.batteryCapacity);
+  }
+
   update(): void {
     this.position.add(this.delta);
     this.delta.set(0, 0);

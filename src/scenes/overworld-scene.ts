@@ -13,6 +13,9 @@ export class OverworldScene extends Scene {
 
   batteryTexture: Texture;
 
+  chargingCost: number = 0;
+  drawChargingCost: boolean = false;
+
   constructor() {
     super();
     this.camera = new Camera();
@@ -58,7 +61,7 @@ export class OverworldScene extends Scene {
     GameState.truck.update();
     GameState.world.clearFogAt(GameState.truck.position);
 
-    if (Input.getKey('KeyE')) {
+    if (Input.getKeyDown('KeyE')) {
       for (let idx = 0; idx < GameState.world.cities.length; idx += 1) {
         const c = GameState.world.cities[idx];
         const dst = Vector2.sqrDistance(c.position, GameState.truck.position);
@@ -66,17 +69,28 @@ export class OverworldScene extends Scene {
           SceneManager.pushScene(new CityScene(c));
         }
       }
+    }
 
-      if (GameState.truck.batteryPercent < 1.0) {
-        for (let idx = 0; idx < GameState.world.chargers.length; idx += 1) {
-          const c = GameState.world.chargers[idx];
-          const dst = Vector2.sqrDistance(c.position, GameState.truck.position);
-          if (dst < 5) {
-            GameState.truck.battery += 1;
-            GameState.truck.battery = Math.clamp(GameState.truck.battery, 0, GameState.truck.batteryCapacity);
-          }
+    this.drawChargingCost = false;
+    let nearCharger = false;
+
+    for (let idx = 0; idx < GameState.world.chargers.length; idx += 1) {
+      const c = GameState.world.chargers[idx];
+      const dst = Vector2.sqrDistance(c.position, GameState.truck.position);
+      if (dst < 5) {
+        this.drawChargingCost = true;
+        nearCharger = true;
+
+        if (GameState.truck.batteryPercent < 1.0 && Input.getKey('KeyE')) {
+          GameState.truck.charge();
+          this.chargingCost += 1;
+          GameState.cash -= 1;
         }
       }
+    }
+
+    if (!nearCharger) {
+      this.chargingCost = 0;
     }
   }
 
@@ -122,10 +136,17 @@ export class OverworldScene extends Scene {
     this.camera.end();
 
     // Time
-    scr.drawText(formattedCalendarTime(), 10, 10, Color.white);
+    scr.drawText(formattedCalendarTime(), 5, 5, Color.white);
 
-    scr.drawTexture(this.batteryTexture, 10, 20);
+    // Battery indicator
+    scr.drawTexture(this.batteryTexture, 5, 15);
     scr.color(GameState.truck.batteryPercent <= 0.2 ? ENDESGA16PaletteIdx[4] : ENDESGA16PaletteIdx[15]);
-    scr.fillRect(13, 23, 24 * GameState.truck.batteryPercent, 10);
+    scr.fillRect(8, 18, 24 * GameState.truck.batteryPercent, 11);
+    scr.drawText(`${(GameState.truck.batteryPercent * 100) | 0}%`.padStart(4, ' '), 37, 20, Color.white);
+
+    // Charging cost
+    if (this.drawChargingCost) {
+      scr.drawText(`-${this.chargingCost}$`, 76, 20, Color.white);
+    }
   }
 }
