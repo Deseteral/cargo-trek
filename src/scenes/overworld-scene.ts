@@ -1,6 +1,7 @@
 import { GameState } from 'ludum-dare-54/game/game-state';
 import { formattedCalendarTime } from 'ludum-dare-54/game/world-time';
 import { CityScene } from 'ludum-dare-54/scenes/city-scene';
+import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { OverworldPauseScene } from 'ludum-dare-54/scenes/overworld-pause-scene';
 import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, SceneManager, Ponczek, Timer, Texture, Assets } from 'ponczek';
 
@@ -15,6 +16,8 @@ export class OverworldScene extends Scene {
 
   chargingCost: number = 0;
   drawChargingCost: boolean = false;
+  noBatteryTimer: Timer = new Timer();
+  noBatteryNeedsToBeTeleported: boolean = false;
 
   constructor() {
     super();
@@ -60,6 +63,28 @@ export class OverworldScene extends Scene {
 
     GameState.truck.update();
     GameState.world.clearFogAt(GameState.truck.position);
+
+    if (this.noBatteryNeedsToBeTeleported) {
+      this.noBatteryNeedsToBeTeleported = false;
+      this.noBatteryTimer.disable();
+
+      const nearestCity = GameState.world.cities
+        .map((city) => ({ city, distance: Vector2.sqrDistance(city.position, GameState.truck.position) }))
+        .sort((a, b) => a.distance - b.distance)
+        .at(0)!.city;
+
+      GameState.truck.position = nearestCity.position.copy();
+      SceneManager.pushScene(new CityScene(nearestCity));
+    }
+
+    if (GameState.truck.battery <= 0 && !this.noBatteryTimer.isActive()) {
+      this.noBatteryTimer.set(3000);
+    }
+
+    if (this.noBatteryTimer.check()) {
+      this.noBatteryNeedsToBeTeleported = true;
+      SceneManager.pushScene(new DialogBoxScene("You've ran out of battery.\nYou are going to be\ntransported to nearest city."));
+    }
 
     if (Input.getKeyDown('KeyE')) {
       for (let idx = 0; idx < GameState.world.cities.length; idx += 1) {
