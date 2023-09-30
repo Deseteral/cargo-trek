@@ -52,21 +52,21 @@ export class CityScene extends Scene {
   }
 
   completeJobs(): void {
-    const completedJobs = GameState.activeJobs.filter((job) => job.targetCity.id === this.city.id);
-    const completedJobIds = completedJobs.map((j) => j.id);
+    const completedJobs = GameState.activeJobs.filter((aj) => aj.job.targetCity.id === this.city.id);
+    const completedJobIds = completedJobs.map((aj) => aj.job.id);
 
     if (completedJobs.length === 0) {
       SceneManager.pushScene(new DialogBoxScene('You have nothing to deliver to this city'));
       return;
     }
 
-    GameState.activeJobs = GameState.activeJobs.filter((job) => job.targetCity.id !== this.city.id);
+    GameState.activeJobs = GameState.activeJobs.filter((aj) => aj.job.targetCity.id !== this.city.id);
 
     let totalCash = 0;
-    completedJobs.forEach((job) => {
-      GameState.cash += job.price;
-      GameState.points += job.price;
-      totalCash += job.price;
+    completedJobs.forEach((aj) => {
+      GameState.cash += aj.job.price;
+      GameState.points += aj.job.price;
+      totalCash += aj.job.price;
     });
 
     GameState.cargoStorage.cargo = GameState.cargoStorage.cargo.filter((c) => !completedJobIds.includes(c.parentJobId));

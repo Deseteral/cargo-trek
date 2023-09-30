@@ -2,12 +2,15 @@ import { Cargo, GameState } from 'ludum-dare-54/game/game-state';
 import { City } from 'ludum-dare-54/game/world-map';
 import { Random, Rectangle, Vector2 } from 'ponczek/math';
 
+const TIME_PER_DISTANCE = 100;
+
 export interface DeliveryJob {
   id: number,
   fromCity: City,
   targetCity: City,
   price: number,
   cargo: Cargo,
+  timeToComplete: number,
 }
 
 export abstract class DeliveryJobGenerator {
@@ -21,6 +24,7 @@ export abstract class DeliveryJobGenerator {
     for (let idx = 0; idx < targetCities.length; idx += 1) {
       const targetCity = targetCities[idx];
       const distance = Vector2.distance(fromCity.position, targetCity.position);
+      const timeToComplete = distance * TIME_PER_DISTANCE;
       const id = DeliveryJobGenerator.nextId;
 
       jobs.push({
@@ -35,6 +39,7 @@ export abstract class DeliveryJobGenerator {
             new Rectangle(200, 100, 50, 20),
           ],
         },
+        timeToComplete,
       });
 
       DeliveryJobGenerator.nextId += 1;

@@ -14,11 +14,16 @@ export interface Cargo {
   parentJobId: number,
 }
 
+export interface ActiveJob {
+  job: DeliveryJob,
+  completeUntilTime: number,
+}
+
 export class GameState {
   static seed: number;
   static world: WorldMap;
   static truck: Truck;
-  static activeJobs: DeliveryJob[];
+  static activeJobs: ActiveJob[];
   static cash: number;
   static points: number;
   static cargoStorage: CargoStorage;

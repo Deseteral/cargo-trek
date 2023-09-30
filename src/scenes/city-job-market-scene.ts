@@ -41,12 +41,16 @@ export class CityJobMarketScene extends Scene {
 
   update(): void {
     if (CargoScene.exitedWithSuccess) {
-      // Remove picked job
+      // Remove picked job from menu
       const job = this.menu.selectedValue.job;
       const idx = this.menu.cells.findIndex((row) => row[0] === this.menu.selectedValue);
       this.menu.cells.splice(idx, 1);
-      GameState.activeJobs.push(job);
       this.menu.selectPreviousRow();
+
+      GameState.activeJobs.push({
+        job,
+        completeUntilTime: GameState.time + job.timeToComplete,
+      });
 
       CargoScene.exitedWithSuccess = false;
     }
