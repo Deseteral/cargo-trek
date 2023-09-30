@@ -1,14 +1,5 @@
-import { Color, Input, Rectangle, Scene, Screen, Vector2 } from 'ponczek';
-
-interface CargoStorage {
-  bounds: Rectangle,
-  cargo: Cargo[],
-}
-
-interface Cargo {
-  position: Vector2,
-  rects: Rectangle[],
-}
+import { CargoStorage, GameState } from 'ludum-dare-54/game/game-state';
+import { Color, Input, Scene, Screen, Vector2 } from 'ponczek';
 
 export class CargoScene extends Scene {
   storage: CargoStorage;
@@ -20,13 +11,17 @@ export class CargoScene extends Scene {
 
   constructor() {
     super();
+
+    // Make copy of original CargoStorage
+    const cargo = GameState.cargoStorage.cargo.map((orgCargo) => {
+      const position = orgCargo.position.copy();
+      const rects = orgCargo.rects.map((r) => r.copy());
+      return { position, rects };
+    });
+
     this.storage = {
-      bounds: new Rectangle(10, 10, 100, 200),
-      cargo: [
-        { position: Vector2.zero(), rects: [new Rectangle(0, 0, 10, 10)] },
-        { position: Vector2.zero(), rects: [new Rectangle(0, 0, 10, 10), new Rectangle(10, 0, 10, 10), new Rectangle(0, 10, 10, 10)] },
-        { position: Vector2.zero(), rects: [new Rectangle(0, 0, 50, 50)] },
-      ],
+      bounds: GameState.cargoStorage.bounds.copy(),
+      cargo,
     };
   }
 
