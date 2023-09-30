@@ -1,7 +1,6 @@
-import { AssetDefinition, Assets, Ponczek, Random, STARTUP_AUTOPLAY, STARTUP_SKIP_SPLASH_SCREEN, Vector2 } from 'ponczek';
+import { AssetDefinition, Assets, Ponczek, Random, STARTUP_AUTOPLAY, STARTUP_SKIP_SPLASH_SCREEN } from 'ponczek';
 import { OverworldScene } from 'ludum-dare-54/scenes/overworld-scene';
 import { GameState } from 'ludum-dare-54/game/game-state';
-import { CargoScene } from 'ludum-dare-54/scenes/cargo-scene';
 import textureList from '../assets/textures.json';
 import soundList from '../assets/sounds.json';
 
@@ -13,7 +12,7 @@ import soundList from '../assets/sounds.json';
   await Ponczek.initialize(
     320 * 1,
     240 * 1,
-    () => new CargoScene(),
+    () => new OverworldScene(),
     STARTUP_SKIP_SPLASH_SCREEN | STARTUP_AUTOPLAY,
   );
 }());

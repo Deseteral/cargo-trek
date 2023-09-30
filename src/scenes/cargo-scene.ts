@@ -1,5 +1,5 @@
-import { CargoStorage, GameState } from 'ludum-dare-54/game/game-state';
-import { Color, Input, Scene, Screen, Vector2 } from 'ponczek';
+import { Cargo, CargoStorage, GameState } from 'ludum-dare-54/game/game-state';
+import { Color, Input, Scene, SceneManager, Screen, Vector2 } from 'ponczek';
 
 export class CargoScene extends Scene {
   storage: CargoStorage;
@@ -10,11 +10,18 @@ export class CargoScene extends Scene {
 
   isValidState: boolean = false;
 
-  constructor() {
+  static exitedWithSuccess: boolean = false;
+
+  constructor(newCargo: Cargo) {
     super();
 
     // Make copy of original CargoStorage
-    const cargo = GameState.cargoStorage.cargo.map((orgCargo) => {
+    const newCargoCopy: Cargo = {
+      position: newCargo.position.copy(),
+      rects: newCargo.rects.map((r) => r.copy()),
+    };
+
+    const cargoCopy = GameState.cargoStorage.cargo.map((orgCargo) => {
       const position = orgCargo.position.copy();
       const rects = orgCargo.rects.map((r) => r.copy());
       return { position, rects };
@@ -22,7 +29,7 @@ export class CargoScene extends Scene {
 
     this.storage = {
       bounds: GameState.cargoStorage.bounds.copy(),
-      cargo,
+      cargo: [...cargoCopy, newCargoCopy],
     };
   }
 
@@ -82,8 +89,14 @@ export class CargoScene extends Scene {
 
     this.isValidState = allInsideStorage && noCollisions;
 
+    if (Input.getKeyDown('Escape')) {
+      SceneManager.popScene();
+    }
+
     if (Input.getKeyDown('Enter') && this.isValidState) {
-      console.log('go go go ');
+      CargoScene.exitedWithSuccess = true;
+      GameState.cargoStorage = this.storage;
+      SceneManager.popScene();
     }
   }
 

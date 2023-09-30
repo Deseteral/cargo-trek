@@ -1,6 +1,7 @@
 import { DeliveryJob } from 'ludum-dare-54/game/delivery-job-generator';
 import { GameState } from 'ludum-dare-54/game/game-state';
 import { City } from 'ludum-dare-54/game/world-map';
+import { CargoScene } from 'ludum-dare-54/scenes/cargo-scene';
 import { Color, Screen, Input, Scene, SceneManager, ENDESGA16Palette, GridView, Vector2, ENDESGA16PaletteIdx } from 'ponczek';
 
 interface MenuItem {
@@ -39,6 +40,17 @@ export class CityJobMarketScene extends Scene {
   }
 
   update(): void {
+    if (CargoScene.exitedWithSuccess) {
+      // Remove picked job
+      const job = this.menu.selectedValue.job;
+      const idx = this.menu.cells.findIndex((row) => row[0] === this.menu.selectedValue);
+      this.menu.cells.splice(idx, 1);
+      GameState.activeJobs.push(job);
+      this.menu.selectPreviousRow();
+
+      CargoScene.exitedWithSuccess = false;
+    }
+
     if (Input.getKeyDown('Escape')) {
       SceneManager.popScene();
     }
@@ -50,14 +62,9 @@ export class CityJobMarketScene extends Scene {
       this.menu.selectPreviousRow(true);
     }
 
-    if (Input.getKeyDown('Enter')) {
-      if (this.menu.cells.length > 0) {
-        const idx = this.menu.cells.findIndex((row) => row[0] === this.menu.selectedValue);
-        const job = this.menu.selectedValue.job;
-        this.menu.cells.splice(idx, 1);
-        GameState.activeJobs.push(job);
-        this.menu.selectPreviousRow();
-      }
+    if (Input.getKeyDown('Enter') && this.menu.cells.length > 0) {
+      const job = this.menu.selectedValue.job;
+      SceneManager.pushScene(new CargoScene(job.cargo));
     }
   }
 

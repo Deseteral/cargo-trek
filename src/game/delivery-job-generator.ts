@@ -1,11 +1,12 @@
-import { GameState } from 'ludum-dare-54/game/game-state';
+import { Cargo, GameState } from 'ludum-dare-54/game/game-state';
 import { City } from 'ludum-dare-54/game/world-map';
-import { Random, Vector2 } from 'ponczek/math';
+import { Random, Rectangle, Vector2 } from 'ponczek/math';
 
 export interface DeliveryJob {
   fromCity: City,
   targetCity: City,
   price: number,
+  cargo: Cargo,
 }
 
 export abstract class DeliveryJobGenerator {
@@ -22,6 +23,12 @@ export abstract class DeliveryJobGenerator {
         fromCity,
         targetCity,
         price: distance | 0,
+        cargo: {
+          position: new Vector2(200, 100),
+          rects: [
+            new Rectangle(200, 100, 50, 20),
+          ],
+        },
       });
     }
 
