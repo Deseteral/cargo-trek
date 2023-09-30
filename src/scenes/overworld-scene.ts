@@ -53,6 +53,7 @@ export class OverworldScene extends Scene {
 
     // Map
     scr.drawTexture(GameState.world.topoTexture, 0, 0);
+    scr.drawTexture(GameState.world.topoLinesTexture, 0, 0);
     scr.drawTexture(GameState.world.roadPathTexture, 0, 0);
 
     // Fog layer

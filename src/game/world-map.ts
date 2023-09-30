@@ -1,5 +1,7 @@
 import { ENDESGA16PaletteIdx, Screen, Color, Texture, Pathfinder, Random, SimplexNoise, Vector2 } from 'ponczek';
 
+const MINIMAP_SIZE = 100;
+
 export interface City {
   name: string,
   position: Vector2,
@@ -17,7 +19,10 @@ export class WorldMap {
 
   public noiseTexture: Texture;
   public topoTexture: Texture;
+  public topoLinesTexture: Texture;
   public roadPathTexture: Texture;
+  public minimapTexture: Texture;
+
   public fogScreen: Screen;
 
   // Map generator noise values
@@ -36,7 +41,10 @@ export class WorldMap {
 
     this.noiseTexture = Texture.createEmpty(this.mapSize, this.mapSize);
     this.topoTexture = Texture.createEmpty(this.mapSize, this.mapSize);
+    this.topoLinesTexture = Texture.createEmpty(this.mapSize, this.mapSize);
     this.roadPathTexture = Texture.createEmpty(this.mapSize, this.mapSize);
+    this.minimapTexture = Texture.createEmpty(MINIMAP_SIZE, MINIMAP_SIZE);
+
     this.fogScreen = new Screen(this.mapSize, this.mapSize);
 
     this.fogScreen.color(Color.black);
@@ -100,7 +108,7 @@ export class WorldMap {
           const tt = i;
           const tol = 0.005;
           if (nn > (tt - tol) && nn < (tt + tol)) {
-            topoColor = Color.gray;
+            this.topoLinesTexture.data.setPixel(x, y, Color.gray);
           }
         }
 
@@ -109,6 +117,7 @@ export class WorldMap {
     }
     this.noiseTexture.data.commit();
     this.topoTexture.data.commit();
+    this.topoLinesTexture.data.commit();
 
     // Cities
     const sectorSize = 50 * 4;
@@ -199,6 +208,22 @@ export class WorldMap {
 
       this.roadPathTexture.data.commit();
     }
+
+    // Minimap
+    const minimapScale = (this.mapSize / MINIMAP_SIZE) | 0;
+    for (let y = 0; y < MINIMAP_SIZE; y += 1) {
+      for (let x = 0; x < MINIMAP_SIZE; x += 1) {
+        const c = this.topoTexture.data.getPixel(x * minimapScale + 1, y * minimapScale + 1);
+        this.minimapTexture.data.setPixel(x, y, c);
+      }
+    }
+
+    for (let idx = 0; idx < this.cities.length; idx += 1) {
+      const c = this.cities[idx];
+      this.minimapTexture.data.setPixel((c.position.x / minimapScale) | 0, (c.position.y / minimapScale) | 0, ENDESGA16PaletteIdx[4]);
+    }
+
+    this.minimapTexture.data.commit();
   }
 
   clearFogAt(position: Vector2): void {
