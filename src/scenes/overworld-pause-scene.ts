@@ -75,6 +75,24 @@ export class OverworldPauseScene extends Scene {
 
     if (GameState.activeJobs.length > 0) {
       this.activeJobsMenu.drawAt(new Vector2(5, 38), scr);
+
+      // Minimap
+      const selectedJob = this.activeJobsMenu.selectedValue.aj.job;
+      const targetCityPos = selectedJob.targetCity.position;
+      const minimapX = scr.width - 5 - GameState.world.minimapSize;
+      const minimapY = ((scr.height - GameState.world.minimapSize) / 2) | 0;
+
+      scr.color(ENDESGA16PaletteIdx[6]);
+      scr.drawRect(minimapX - 1, minimapY - 1, GameState.world.minimapSize + 2, GameState.world.minimapSize + 2);
+      scr.drawTexture(GameState.world.minimapTexture, minimapX, minimapY);
+
+      scr.color(ENDESGA16PaletteIdx[4]);
+      scr.drawRect(
+        minimapX + (targetCityPos.x / GameState.world.minimapScale) - 2,
+        minimapY + (targetCityPos.y / GameState.world.minimapScale) - 2,
+        5,
+        5,
+      );
     } else {
       scr.drawText('Currently you have no\njobs active', 5, 38, Color.white);
     }
