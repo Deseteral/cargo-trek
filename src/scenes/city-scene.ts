@@ -55,7 +55,7 @@ export class CityScene extends Scene {
     const completedJobIds = completedJobs.map((aj) => aj.job.id);
 
     if (completedJobs.length === 0) {
-      SceneManager.pushScene(new DialogBoxScene('You have nothing to deliver to this city'));
+      SceneManager.pushScene(new DialogBoxScene('You have nothing to deliver\nto this city'));
       return;
     }
 
