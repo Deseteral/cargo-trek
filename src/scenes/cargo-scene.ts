@@ -1,5 +1,5 @@
 import { Cargo, CargoStorage, GameState } from 'ludum-dare-54/game/game-state';
-import { Color, Input, Scene, SceneManager, Screen, Vector2 } from 'ponczek';
+import { Assets, Color, ENDESGA16PaletteIdx, Input, Scene, SceneManager, Screen, Texture, Vector2 } from 'ponczek';
 
 export class CargoScene extends Scene {
   storage: CargoStorage;
@@ -10,10 +10,16 @@ export class CargoScene extends Scene {
 
   isValidState: boolean = false;
 
+  cargoTexture: Texture;
+  cargoStorageTexture: Texture;
+
   static exitedWithSuccess: boolean = false;
 
   constructor(newCargo: Cargo) {
     super();
+
+    this.cargoTexture = Assets.texture('cargo');
+    this.cargoStorageTexture = Assets.texture('cargo-storage');
 
     // Make copy of original CargoStorage
     const newCargoCopy: Cargo = {
@@ -102,21 +108,24 @@ export class CargoScene extends Scene {
   }
 
   render(scr: Screen): void {
-    scr.clearScreen();
-    scr.color(Color.blue);
-    scr.drawRectR(this.storage.bounds);
+    scr.clearScreen(ENDESGA16PaletteIdx[10]);
 
-    scr.color(Color.green);
+    scr.color(ENDESGA16PaletteIdx[12]);
+    scr.fillRectR(this.storage.bounds);
+
+    scr.drawNineSlice(this.cargoStorageTexture, this.storage.bounds.x + 1, this.storage.bounds.y + 1, this.storage.bounds.width - 2, this.storage.bounds.height - 2, 8, 8);
+
     for (let idx = 0; idx < this.storage.cargo.length; idx += 1) {
       for (let ridx = 0; ridx < this.storage.cargo[idx].rects.length; ridx += 1) {
-        scr.drawRectR(this.storage.cargo[idx].rects[ridx]);
+        const r = this.storage.cargo[idx].rects[ridx];
+        scr.drawNineSlice(this.cargoTexture, r.x + 8, r.y + 8, r.width - 16, r.height - 16, 8, 8);
       }
     }
 
     if (this.isValidState) {
-      scr.drawText('Press enter to continue', 137, 0, Color.white);
+      scr.drawText('Press enter to continue', 136, 1, Color.white);
     } else {
-      scr.drawText('Place all cargo in storage\n          area to continue', 113, 0, Color.white);
+      scr.drawText('      Place all cargo in\nstorage area to continue', 128, 1, Color.white);
     }
   }
 }
