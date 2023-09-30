@@ -4,6 +4,17 @@ import { Random, Rectangle, Vector2 } from 'ponczek/math';
 
 const TIME_PER_DISTANCE = 100;
 
+const JOB_TYPES: string[] = [
+  'food',
+  'supplies',
+  'seeds',
+  'pizza',
+  'weapons',
+  'radioactive materials',
+  'medical supplies',
+  'water',
+];
+
 export interface DeliveryJob {
   id: number,
   fromCity: City,
@@ -11,6 +22,7 @@ export interface DeliveryJob {
   price: number,
   cargo: Cargo,
   timeToComplete: number,
+  type: string,
 }
 
 export abstract class DeliveryJobGenerator {
@@ -40,6 +52,7 @@ export abstract class DeliveryJobGenerator {
           ],
         },
         timeToComplete,
+        type: Random.default.pickOne(JOB_TYPES),
       });
 
       DeliveryJobGenerator.nextId += 1;

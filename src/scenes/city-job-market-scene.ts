@@ -2,7 +2,7 @@ import { DeliveryJob } from 'ludum-dare-54/game/delivery-job-generator';
 import { GameState } from 'ludum-dare-54/game/game-state';
 import { City } from 'ludum-dare-54/game/world-map';
 import { CargoScene } from 'ludum-dare-54/scenes/cargo-scene';
-import { Color, Screen, Input, Scene, SceneManager, ENDESGA16Palette, GridView, Vector2, ENDESGA16PaletteIdx } from 'ponczek';
+import { Color, Screen, Input, Scene, SceneManager, ENDESGA16Palette, GridView, Vector2, ENDESGA16PaletteIdx, Ponczek } from 'ponczek';
 
 interface MenuItem {
   job: DeliveryJob,
@@ -10,7 +10,7 @@ interface MenuItem {
 
 class JobMarketMenuGridView extends GridView<MenuItem> {
   constructor() {
-    super(200, 12);
+    super(Ponczek.screen.width, 12);
   }
 
   public drawCell(item: (MenuItem | null), _row: number, _column: number, x: number, y: number, isSelected: boolean, scr: Screen): void {
@@ -18,7 +18,7 @@ class JobMarketMenuGridView extends GridView<MenuItem> {
 
     const job = item.job;
     const color = isSelected ? ENDESGA16PaletteIdx[4] : Color.white;
-    const text = `${job.targetCity.name}, $${job.price}`;
+    const text = `${job.type.capitalize()} to ${job.targetCity.name}, $${job.price}`;
 
     scr.drawText(text, x, y, color);
     scr.color(color);
@@ -84,8 +84,10 @@ export class CityJobMarketScene extends Scene {
       const selectedJob = this.menu.selectedValue.job;
       const fromCityPos = selectedJob.fromCity.position;
       const targetCityPos = selectedJob.targetCity.position;
-      const minimapX = scr.width - 10 - GameState.world.minimapSize;
-      const minimapY = 10;
+      // const minimapX = scr.width - 10 - GameState.world.minimapSize;
+      // const minimapY = 10;
+      const minimapX = 10;
+      const minimapY = scr.height - 10 - GameState.world.minimapSize;
 
       scr.drawRect(minimapX - 1, minimapY - 1, GameState.world.minimapSize + 2, GameState.world.minimapSize + 2);
       scr.drawTexture(GameState.world.minimapTexture, minimapX, minimapY);

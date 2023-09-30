@@ -51,7 +51,7 @@ export class OverworldPauseScene extends Scene {
         const aj = this.activeJobsMenu.selectedValue.aj;
         const timeDiff = aj.completeUntilTime - GameState.time;
         const text = [
-          aj.job.targetCity.name,
+          `${aj.job.type.capitalize()} to ${aj.job.targetCity.name}`,
           `Payment: $${aj.job.price}`,
           '',
           timeDiff <= 0 ? 'Delayed shipment' : `Time left: ${formattedDurationTime(timeDiff)}`,
