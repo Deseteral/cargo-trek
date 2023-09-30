@@ -19,7 +19,7 @@ class CityMenuGridView extends GridView<MenuItem> {
     const color = isSelected ? Color.blue : Color.white;
     scr.drawText(item.text, x, y, color);
     scr.color(color);
-    scr.drawLine(x, y + 8, x + scr.activeFont!.getLineLengthPx(item.text), y + 8);
+    if (isSelected) scr.drawLine(x, y + 8, x + scr.activeFont!.getLineLengthPx(item.text), y + 8);
   }
 }
 
@@ -28,7 +28,7 @@ export class CityScene extends Scene {
   jobs: DeliveryJob[];
 
   menuGridView: CityMenuGridView;
-  menuGridViewPosition = new Vector2(10, 25);
+  menuGridViewPosition = new Vector2(15, 25);
 
   constructor(city: City) {
     super();
@@ -68,7 +68,7 @@ export class CityScene extends Scene {
 
   render(scr: Screen): void {
     scr.clearScreen(ENDESGA16Palette.darkBark);
-    scr.drawText(`Welcome to ${this.city.name}`, 10, 10, Color.white);
+    scr.drawText(`Welcome to ${this.city.name}!`, 10, 10, Color.white);
     this.menuGridView.drawAt(this.menuGridViewPosition, scr);
   }
 }

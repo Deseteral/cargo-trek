@@ -1,7 +1,5 @@
 import { ENDESGA16PaletteIdx, Screen, Color, Texture, Pathfinder, Random, SimplexNoise, Vector2 } from 'ponczek';
 
-const MINIMAP_SIZE = 100;
-
 export interface City {
   id: number,
   name: string,
@@ -22,7 +20,10 @@ export class WorldMap {
   public topoTexture: Texture;
   public topoLinesTexture: Texture;
   public roadPathTexture: Texture;
+
   public minimapTexture: Texture;
+  public minimapSize: number = 100;
+  public minimapScale: number;
 
   public fogScreen: Screen;
 
@@ -44,7 +45,9 @@ export class WorldMap {
     this.topoTexture = Texture.createEmpty(this.mapSize, this.mapSize);
     this.topoLinesTexture = Texture.createEmpty(this.mapSize, this.mapSize);
     this.roadPathTexture = Texture.createEmpty(this.mapSize, this.mapSize);
-    this.minimapTexture = Texture.createEmpty(MINIMAP_SIZE, MINIMAP_SIZE);
+
+    this.minimapTexture = Texture.createEmpty(this.minimapSize, this.minimapSize);
+    this.minimapScale = (this.mapSize / this.minimapSize) | 0;
 
     this.fogScreen = new Screen(this.mapSize, this.mapSize);
 
@@ -212,17 +215,16 @@ export class WorldMap {
     }
 
     // Minimap
-    const minimapScale = (this.mapSize / MINIMAP_SIZE) | 0;
-    for (let y = 0; y < MINIMAP_SIZE; y += 1) {
-      for (let x = 0; x < MINIMAP_SIZE; x += 1) {
-        const c = this.topoTexture.data.getPixel(x * minimapScale + 1, y * minimapScale + 1);
+    for (let y = 0; y < this.minimapSize; y += 1) {
+      for (let x = 0; x < this.minimapSize; x += 1) {
+        const c = this.topoTexture.data.getPixel(x * this.minimapScale + 1, y * this.minimapScale + 1);
         this.minimapTexture.data.setPixel(x, y, c);
       }
     }
 
     for (let idx = 0; idx < this.cities.length; idx += 1) {
       const c = this.cities[idx];
-      this.minimapTexture.data.setPixel((c.position.x / minimapScale) | 0, (c.position.y / minimapScale) | 0, ENDESGA16PaletteIdx[4]);
+      this.minimapTexture.data.setPixel((c.position.x / this.minimapScale) | 0, (c.position.y / this.minimapScale) | 0, ENDESGA16PaletteIdx[4]);
     }
 
     this.minimapTexture.data.commit();
