@@ -2,7 +2,7 @@ import { GameState } from 'ludum-dare-54/game/game-state';
 import { formattedCalendarTime } from 'ludum-dare-54/game/world-time';
 import { CityScene } from 'ludum-dare-54/scenes/city-scene';
 import { OverworldPauseScene } from 'ludum-dare-54/scenes/overworld-pause-scene';
-import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, SceneManager, Ponczek, Timer } from 'ponczek';
+import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, SceneManager, Ponczek, Timer, Texture, Assets } from 'ponczek';
 
 const UNTIL_NEXT_MINUTE_MS = 1;
 
@@ -11,6 +11,8 @@ export class OverworldScene extends Scene {
   mouseInWorld: Vector2 = Vector2.zero();
   worldTimeProgressionTimer: Timer;
 
+  batteryTexture: Texture;
+
   constructor() {
     super();
     this.camera = new Camera();
@@ -18,6 +20,8 @@ export class OverworldScene extends Scene {
 
     this.worldTimeProgressionTimer = new Timer();
     this.worldTimeProgressionTimer.set(UNTIL_NEXT_MINUTE_MS);
+
+    this.batteryTexture = Assets.texture('battery');
 
     // TODO: Move this to main menu scene
     Ponczek.screen.activeFont?.generateColorVariants([ENDESGA16PaletteIdx[4], ENDESGA16PaletteIdx[6]]);
@@ -101,5 +105,9 @@ export class OverworldScene extends Scene {
 
     // Time
     scr.drawText(formattedCalendarTime(), 10, 10, Color.white);
+
+    scr.drawTexture(this.batteryTexture, 10, 20);
+    scr.color(ENDESGA16PaletteIdx[15]);
+    scr.fillRect(13, 23, 24 * GameState.truck.batteryPercent, 10);
   }
 }

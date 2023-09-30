@@ -5,12 +5,19 @@ export class Truck {
   public position: Vector2;
   public delta: Vector2 = Vector2.zero();
   public speed: number;
+
   public battery: number;
+  public batteryCapacity: number;
+
+  get batteryPercent(): number {
+    return this.battery / this.batteryCapacity;
+  }
 
   constructor(position: Vector2) {
     this.position = position;
     this.speed = 0.5;
     this.battery = 100.0;
+    this.batteryCapacity = 100.0;
   }
 
   driveTowards(worldPosition: Vector2): void {
@@ -39,7 +46,6 @@ export class Truck {
   update(): void {
     this.position.add(this.delta);
     this.delta.set(0, 0);
-    console.log(this.battery);
   }
 
   render(scr: Screen): void {
