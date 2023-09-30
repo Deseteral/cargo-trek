@@ -26,7 +26,7 @@ export class WorldMap {
   private p: number = 0.19; //  0.173;
   private s: number = 0.004; // 0.015; //  0.028;
 
-  constructor(mapSize: number, seed?: number) {
+  constructor(mapSize: number, seed: number) {
     this.random = new Random(seed);
     this.noise = new SimplexNoise(this.random);
     this.mapSize = mapSize;

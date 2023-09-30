@@ -1,4 +1,4 @@
-import { WorldMap } from 'ludum-dare-54/game/world-map';
+import { GameState } from 'ludum-dare-54/game/game-state';
 import { Vector2, Screen, Ponczek, Color } from 'ponczek';
 
 export class Truck {
@@ -6,12 +6,9 @@ export class Truck {
   public delta: Vector2 = Vector2.zero();
   public speed: number;
 
-  private worldMap: WorldMap;
-
-  constructor(position: Vector2, worldMap: WorldMap) {
+  constructor(position: Vector2) {
     this.position = position;
     this.speed = 0.5;
-    this.worldMap = worldMap;
   }
 
   driveTowards(worldPosition: Vector2): void {
@@ -19,9 +16,9 @@ export class Truck {
       return;
     }
 
-    const mapIdx = this.worldMap.vecToIdx(this.position);
-    const mapTileValue = this.worldMap.tiles[mapIdx];
-    const isOnRoad = this.worldMap.roadTiles[mapIdx];
+    const mapIdx = GameState.world.vecToIdx(this.position);
+    const mapTileValue = GameState.world.tiles[mapIdx];
+    const isOnRoad = GameState.world.roadTiles[mapIdx];
     const terrainModifier = isOnRoad ? 2 : mapTileValue;
     this.delta = worldPosition.copy()
       .sub(this.position)
