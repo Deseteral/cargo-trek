@@ -15,6 +15,10 @@ export class Truck {
   }
 
   driveTowards(worldPosition: Vector2): void {
+    if ((this.position.x | 0) === worldPosition.x && (this.position.y | 0) === worldPosition.y) {
+      return;
+    }
+
     const mapIdx = this.worldMap.vecToIdx(this.position);
     const mapTileValue = this.worldMap.tiles[mapIdx];
     const isOnRoad = this.worldMap.roadTiles[mapIdx];

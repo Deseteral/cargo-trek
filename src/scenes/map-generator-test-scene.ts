@@ -1,6 +1,6 @@
 import { Truck } from 'ludum-dare-54/game/truck';
 import { WorldMap } from 'ludum-dare-54/game/world-map';
-import { Scene, Screen, Color, Vector2, Camera, Input } from 'ponczek';
+import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx } from 'ponczek';
 
 export class MapGeneratorTestScene extends Scene {
   public worldMap: WorldMap;
@@ -50,7 +50,7 @@ export class MapGeneratorTestScene extends Scene {
 
     for (let i = 0; i < this.worldMap.cities.length; i += 1) {
       const c = this.worldMap.cities[i];
-      scr.color(Color.blue);
+      scr.color(ENDESGA16PaletteIdx[4]);
       scr.fillRect(c.x - 2, c.y - 2, 4, 4);
     }
 
