@@ -2,7 +2,7 @@ import { Cargo, GameState } from 'ludum-dare-54/game/game-state';
 import { City } from 'ludum-dare-54/game/world-map';
 import { Random, Rectangle, Vector2 } from 'ponczek/math';
 
-const TIME_PER_DISTANCE = 100;
+const TIME_PER_DISTANCE = 10;
 
 const JOB_TYPES: string[] = [
   'food',
