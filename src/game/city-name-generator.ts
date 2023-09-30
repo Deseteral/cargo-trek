@@ -24,6 +24,7 @@ const postfix = [
   ' City',
   ' Falls',
   ' Valley',
+  ' Hole',
   'ville',
   'town',
   'land',
@@ -46,6 +47,7 @@ const names = [
   'Culver',
   'Tustin',
   'Oldwark',
+  'Jackson',
 ];
 
 export function generateCityName(): string {
