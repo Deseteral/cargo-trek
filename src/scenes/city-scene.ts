@@ -1,5 +1,6 @@
 import { DeliveryJob, DeliveryJobGenerator } from 'ludum-dare-54/game/delivery-job-generator';
 import { City } from 'ludum-dare-54/game/world-map';
+import { CityJobMarketScene } from 'ludum-dare-54/scenes/city-job-market-scene';
 import { Color, Input, Scene, SceneManager, Screen } from 'ponczek';
 
 export class CityScene extends Scene {
@@ -9,24 +10,20 @@ export class CityScene extends Scene {
   constructor(city: City) {
     super();
     this.city = city;
-    this.jobs = DeliveryJobGenerator.generate(5, city.id);
+    this.jobs = DeliveryJobGenerator.generate(5, city);
   }
 
   update(): void {
     if (Input.getKeyDown('Escape')) {
       SceneManager.popScene();
     }
+
+    if (Input.getKeyDown('Enter')) {
+      SceneManager.pushScene(new CityJobMarketScene(this.city, this.jobs));
+    }
   }
 
   render(scr: Screen): void {
     scr.drawText(this.city.name, 10, 10, Color.white);
-
-    for (let idx = 0; idx < this.jobs.length; idx += 1) {
-      const x = 10;
-      const y = 20 + idx * 10;
-      const j = this.jobs[idx];
-
-      scr.drawText(`${j.fromCityId} ${j.toCityId}`, x, y, Color.white);
-    }
   }
 }
