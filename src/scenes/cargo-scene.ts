@@ -4,8 +4,9 @@ import { Color, Input, Scene, Screen, Vector2 } from 'ponczek';
 export class CargoScene extends Scene {
   storage: CargoStorage;
 
-  pickedIdx: number = -1;
   pickedAt: (Vector2 | null) = null;
+  pickedIdx: number = -1;
+  pickOffset: Vector2 = Vector2.zero();
 
   isValidState: boolean = false;
 
@@ -32,6 +33,7 @@ export class CargoScene extends Scene {
         if (picked) {
           this.pickedAt = Input.pointer.copy();
           this.pickedIdx = idx;
+          this.pickOffset = this.storage.cargo[idx].position.copy().sub(Input.pointer);
           break;
         }
       }
@@ -44,11 +46,11 @@ export class CargoScene extends Scene {
       diff.sub(c.position);
 
       for (let idx = 0; idx < c.rects.length; idx += 1) {
-        c.rects[idx].left += diff.x;
-        c.rects[idx].top += diff.y;
+        c.rects[idx].x += diff.x + this.pickOffset.x;
+        c.rects[idx].y += diff.y + this.pickOffset.y;
       }
 
-      c.position.add(diff);
+      c.position.add(diff.add(this.pickOffset));
 
       this.pickedAt = Input.pointer.copy();
 
