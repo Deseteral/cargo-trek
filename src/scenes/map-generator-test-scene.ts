@@ -20,7 +20,7 @@ export class MapGeneratorTestScene extends Scene {
 
   constructor() {
     super();
-    this.random = new Random(1337);
+    this.random = new Random(12345);
     this.noise = new SimplexNoise(this.random);
     this.noiseTexture = Texture.createEmpty(MAP_SIZE, MAP_SIZE);
     this.roadPathTexture = Texture.createEmpty(MAP_SIZE, MAP_SIZE);
@@ -55,17 +55,17 @@ export class MapGeneratorTestScene extends Scene {
 
         let cc = new Color(nn, nn, nn, 1);
 
-        // if (nn > 0.88) {
-        //   cc = ENDESGA16PaletteIdx[8];
-        // } else if (nn > 0.51) {
-        //   cc = ENDESGA16PaletteIdx[9];
-        // } else if (nn > 0.33) {
-        //   cc = ENDESGA16PaletteIdx[2];
-        // } else if (nn > 0.18) {
-        //   cc = ENDESGA16PaletteIdx[3];
-        // } else {
-        //   cc = Color.white;
-        // }
+        if (nn > 0.88) {
+          cc = ENDESGA16PaletteIdx[8];
+        } else if (nn > 0.51) {
+          cc = ENDESGA16PaletteIdx[9];
+        } else if (nn > 0.33) {
+          cc = ENDESGA16PaletteIdx[2];
+        } else if (nn > 0.18) {
+          cc = ENDESGA16PaletteIdx[3];
+        } else {
+          cc = Color.white;
+        }
 
         for (let i = 0.1; i < 1; i += 0.1) {
           const tt = i;
@@ -109,25 +109,33 @@ export class MapGeneratorTestScene extends Scene {
     }
 
     // Roads
+    const roadConnectionIdx = new Set<string>();
     for (let ci = 0; ci < this.cities.length; ci += 1) {
       const current = this.cities[ci];
       const count = this.random.nextInt(0, 3);
 
       const byDistance = this.cities
-        .map((tc) => ({ tc, dist: Vector2.sqrDistance(current, tc) }))
+        .map((pos, idx) => ({ idx, dist: Vector2.sqrDistance(current, pos) }))
         .sort((a, b) => a.dist - b.dist);
 
       for (let ct = 1; ct <= count; ct += 1) {
-        this.roads.push([current, byDistance[ct].tc]);
+        roadConnectionIdx.add((ci < byDistance[ct].idx)
+          ? `${ci}-${byDistance[ct].idx}`
+          : `${byDistance[ct].idx}-${ci}`);
       }
     }
+
+    roadConnectionIdx.forEach((pp) => {
+      const [fromIdx, toIdx] = pp.split('-').map((s) => parseInt(s, 10) | 0);
+      this.roads.push([this.cities[fromIdx], this.cities[toIdx]]);
+    });
 
     // Generate paths for roads
     const pathfinder = new Pathfinder(MAP_SIZE, MAP_SIZE);
     for (let y = 0; y < MAP_SIZE; y += 1) {
       for (let x = 0; x < MAP_SIZE; x += 1) {
         const idx = x + (y * MAP_SIZE);
-        const v = Math.clamp(this.mapValueAt(x, y, this.s) / 10, 0, 1);
+        const v = this.mapValueAt(x, y, this.s);
         pathfinder.setCost(idx, v);
       }
     }
@@ -135,13 +143,17 @@ export class MapGeneratorTestScene extends Scene {
     for (let roadIdx = 0; roadIdx < this.roads.length; roadIdx += 1) {
       const from = this.roads[roadIdx][0];
       const to = this.roads[roadIdx][1];
-      const points = pathfinder.search(from.x, from.y, to.x, to.y, true);
+      const points = pathfinder.search(from.x, from.y, to.x, to.y, true, 'euclidean');
 
       for (let pi = 0; pi < points.length; pi += 1) {
-        this.roadPathTexture.data.setPixel(points[pi].x, points[pi].y, Color.black);
+        for (let yy = -1; yy <= 1; yy += 1) {
+          for (let xx = -1; xx <= 1; xx += 1) {
+            this.roadPathTexture.data.setPixel(points[pi].x + xx, points[pi].y + yy, ENDESGA16PaletteIdx[10]);
+          }
+        }
       }
+      this.roadPathTexture.data.commit();
     }
-    this.roadPathTexture.data.commit();
   }
 
   update(): void {
@@ -171,7 +183,7 @@ export class MapGeneratorTestScene extends Scene {
     for (let i = 0; i < this.cities.length; i += 1) {
       const c = this.cities[i];
       scr.color(Color.blue);
-      scr.drawRect(c.x - 1, c.y - 1, 2, 2);
+      scr.fillRect(c.x - 2, c.y - 2, 4, 4);
     }
 
     // for (let i = 0; i < this.roads.length; i += 1) {
