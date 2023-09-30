@@ -79,6 +79,13 @@ export class OverworldScene extends Scene {
     scr.drawTexture(GameState.world.topoLinesTexture, 0, 0);
     scr.drawTexture(GameState.world.roadPathTexture, 0, 0);
 
+    // Chargers
+    for (let i = 0; i < GameState.world.chargers.length; i += 1) {
+      const c = GameState.world.chargers[i];
+      scr.color(ENDESGA16PaletteIdx[15]);
+      scr.fillRect(c.position.x - 2, c.position.y - 2, 4, 4);
+    }
+
     // Fog layer
     scr._ctx.drawImage(GameState.world.fogScreen._domElement, 0, 0);
 

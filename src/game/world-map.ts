@@ -7,6 +7,10 @@ export interface City {
   position: Vector2,
 }
 
+export interface Charger {
+  position: Vector2,
+}
+
 export class WorldMap {
   private random: Random;
   private noise: SimplexNoise;
@@ -16,6 +20,7 @@ export class WorldMap {
   public tiles: number[];
   public roadTiles: boolean[];
   public cities: City[] = [];
+  public chargers: Charger[] = [];
 
   public noiseTexture: Texture;
   public topoTexture: Texture;
@@ -156,6 +161,22 @@ export class WorldMap {
       }
     }
 
+    // Chargers
+    const chargerSectorSize = 80 * 2;
+    for (let y = 0; y < this.mapSize; y += chargerSectorSize) {
+      for (let x = 0; x < this.mapSize; x += chargerSectorSize) {
+        const sx = (x + (chargerSectorSize / 4)) | 0;
+        const sy = (y + (chargerSectorSize / 4)) | 0;
+        const ex = (x + chargerSectorSize - (chargerSectorSize / 4)) | 0;
+        const ey = (y + chargerSectorSize - (chargerSectorSize / 4)) | 0;
+
+        const xx = this.random.nextInt(sx, ex);
+        const yy = this.random.nextInt(sy, ey);
+
+        this.chargers.push({ position: new Vector2(xx, yy) });
+      }
+    }
+
     // Roads
     const roadConnectionIdx = new Set<string>();
     for (let ci = 0; ci < this.cities.length; ci += 1) {
@@ -232,7 +253,7 @@ export class WorldMap {
   }
 
   clearFogAt(position: Vector2): void {
-    const radius = 20;
+    const radius = 50;
     this.fogScreen.color(Color.red);
     this.fogScreen.clearCircleV(position, radius);
   }
