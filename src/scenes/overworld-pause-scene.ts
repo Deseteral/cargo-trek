@@ -17,7 +17,7 @@ class ActiveJobsMenuGridView extends GridView<MenuItem> {
 
     const job = item.aj.job;
     const color = isSelected ? ENDESGA16PaletteIdx[4] : Color.white;
-    const text = `${job.targetCity.name}`;
+    const text = `${isSelected ? '>' : ' '}${job.targetCity.name}`;
 
     scr.drawText(text, x, y, color);
     scr.color(color);

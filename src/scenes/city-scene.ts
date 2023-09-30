@@ -19,7 +19,7 @@ class CityMenuGridView extends GridView<MenuItem> {
     if (!item) return;
 
     const color = isSelected ? ENDESGA16PaletteIdx[4] : Color.white;
-    scr.drawText(item.text, x, y, color);
+    scr.drawText(`${isSelected ? '>' : ' '}${item.text}`, x, y, color);
     scr.color(color);
     if (isSelected) scr.drawLine(x, y + 8, x + scr.activeFont!.getLineLengthPx(item.text), y + 8);
   }
