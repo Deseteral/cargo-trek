@@ -30,7 +30,6 @@ export class CityScene extends Scene {
   jobs: DeliveryJob[];
 
   menu: CityMenuGridView;
-  menuPosition = new Vector2(15, 25);
 
   constructor(city: City) {
     super();
@@ -40,7 +39,7 @@ export class CityScene extends Scene {
     this.menu = new CityMenuGridView();
     this.menu.cells = [
       [{
-        text: 'Complete jobs',
+        text: 'Complete deliveries',
         action: () => this.completeJobs(),
       }],
       [{
@@ -73,7 +72,7 @@ export class CityScene extends Scene {
 
     SceneManager.pushScene(new DialogBoxScene(`Completed ${completedJobs.length} jobs for $${totalCash}.`));
 
-    console.log('Completed jobs', completedJobs);
+    console.log('Completed deliveries', completedJobs);
   }
 
   update(): void {
@@ -96,6 +95,6 @@ export class CityScene extends Scene {
   render(scr: Screen): void {
     scr.clearScreen(ENDESGA16Palette.darkBark);
     scr.drawText(`Welcome to ${this.city.name}!`, 10, 10, Color.white);
-    this.menu.drawAt(this.menuPosition, scr);
+    this.menu.drawAt(new Vector2(15, 30), scr);
   }
 }

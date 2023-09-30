@@ -29,7 +29,6 @@ class JobMarketMenuGridView extends GridView<MenuItem> {
 export class CityJobMarketScene extends Scene {
   city: City;
   menu: JobMarketMenuGridView;
-  menuPosition = new Vector2(10, 10);
 
   constructor(city: City, jobs: DeliveryJob[]) {
     super();
@@ -75,7 +74,7 @@ export class CityJobMarketScene extends Scene {
   render(scr: Screen): void {
     scr.clearScreen(ENDESGA16Palette.darkBark);
 
-    this.menu.drawAt(this.menuPosition, scr);
+    this.menu.drawAt(new Vector2(5, 5), scr);
 
     if (this.menu.cells.length > 0) {
       // Minimap
@@ -84,10 +83,8 @@ export class CityJobMarketScene extends Scene {
       const selectedJob = this.menu.selectedValue.job;
       const fromCityPos = selectedJob.fromCity.position;
       const targetCityPos = selectedJob.targetCity.position;
-      // const minimapX = scr.width - 10 - GameState.world.minimapSize;
-      // const minimapY = 10;
-      const minimapX = 10;
-      const minimapY = scr.height - 10 - GameState.world.minimapSize;
+      const minimapX = 5;
+      const minimapY = scr.height - 5 - GameState.world.minimapSize;
 
       scr.drawRect(minimapX - 1, minimapY - 1, GameState.world.minimapSize + 2, GameState.world.minimapSize + 2);
       scr.drawTexture(GameState.world.minimapTexture, minimapX, minimapY);
