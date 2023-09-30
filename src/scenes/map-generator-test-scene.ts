@@ -40,6 +40,8 @@ export class MapGeneratorTestScene extends Scene {
     if (Input.getKey('KeyF')) {
       this.truck.driveTowards(this.mouseInWorld);
     }
+
+    this.truck.update();
   }
 
   render(scr: Screen): void {
@@ -56,9 +58,7 @@ export class MapGeneratorTestScene extends Scene {
       scr.fillRect(c.x - 2, c.y - 2, 4, 4);
     }
 
-    // Truck
-    scr.color(Color.black);
-    scr.drawRect((this.truck.position.x | 0) - 1, (this.truck.position.y | 0) - 1, 2, 2);
+    this.truck.render(scr);
 
     this.camera.end();
   }
