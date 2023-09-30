@@ -1,6 +1,7 @@
 import { Truck } from 'ludum-dare-54/game/truck';
 import { WorldMap } from 'ludum-dare-54/game/world-map';
-import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color } from 'ponczek';
+import { CityScene } from 'ludum-dare-54/scenes/city-scene';
+import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, Ponczek, SceneManager } from 'ponczek';
 
 export class OverworldScene extends Scene {
   public worldMap: WorldMap;
@@ -29,10 +30,11 @@ export class OverworldScene extends Scene {
     // ImGui.SliderFloat('s', (n = this.s) => this.s = n, 0, 0.028);
     // ImGui.End();
 
-    if (Input.getKey('KeyA')) this.camera.position.x -= 1;
-    if (Input.getKey('KeyD')) this.camera.position.x += 1;
-    if (Input.getKey('KeyW')) this.camera.position.y -= 1;
-    if (Input.getKey('KeyS')) this.camera.position.y += 1;
+    const cameraSpeed = 1;
+    if (Input.getKey('KeyA')) this.camera.position.x -= cameraSpeed;
+    if (Input.getKey('KeyD')) this.camera.position.x += cameraSpeed;
+    if (Input.getKey('KeyW')) this.camera.position.y -= cameraSpeed;
+    if (Input.getKey('KeyS')) this.camera.position.y += cameraSpeed;
 
     this.camera.screenToWorld(Input.pointer, this.mouseInWorld);
 
@@ -41,8 +43,17 @@ export class OverworldScene extends Scene {
     }
 
     this.truck.update();
-
     this.worldMap.clearFogAt(this.truck.position);
+
+    if (Input.getKeyDown('KeyE')) {
+      for (let idx = 0; idx < this.worldMap.cities.length; idx += 1) {
+        const c = this.worldMap.cities[idx];
+        const dst = Vector2.sqrDistance(c.position, this.truck.position);
+        if (dst < 3) {
+          SceneManager.pushScene(new CityScene(c));
+        }
+      }
+    }
   }
 
   render(scr: Screen): void {

@@ -135,7 +135,7 @@ export class WorldMap {
         }
 
         this.cities.push({
-          name: 'City',
+          name: `City ${this.cities.length}`,
           position: new Vector2(mx, my),
         });
       }
