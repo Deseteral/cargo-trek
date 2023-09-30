@@ -57,7 +57,8 @@ export class WorldMap {
       for (let x = 0; x < this.mapSize; x += 1) {
         const nn = this.mapValueAt(x, y, this.s);
 
-        this.noiseTexture.data.setPixel(x, y, new Color(nn, nn, nn, 1));
+        const noiseColor = new Color(nn, nn, nn, 1);
+        this.noiseTexture.data.setPixel(x, y, noiseColor);
 
         let topoColor = new Color(nn, nn, nn, 1);
         if (nn > 0.88) {
