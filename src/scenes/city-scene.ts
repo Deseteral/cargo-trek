@@ -62,17 +62,35 @@ export class CityScene extends Scene {
     GameState.activeJobs = GameState.activeJobs.filter((aj) => aj.job.targetCity.id !== this.city.id);
 
     let totalCash = 0;
+    let late = false;
     completedJobs.forEach((aj) => {
-      GameState.cash += aj.job.price;
-      GameState.points += aj.job.price;
-      totalCash += aj.job.price;
+      let payment = aj.job.price;
+
+      const timeDiff = aj.completeUntilTime - GameState.time;
+
+      if (timeDiff < 0) {
+        payment /= 2;
+        late = true;
+      }
+
+      GameState.cash += payment;
+      GameState.points += payment;
+      totalCash += payment;
     });
 
     GameState.cargoStorage.cargo = GameState.cargoStorage.cargo.filter((c) => !completedJobIds.includes(c.parentJobId));
 
-    SceneManager.pushScene(new DialogBoxScene(`Completed ${completedJobs.length} jobs for $${totalCash}.`));
+    const text = [
+      `Completed ${completedJobs.length} jobs for $${totalCash}.`,
+    ];
 
-    console.log('Completed deliveries', completedJobs);
+    if (late) {
+      text.push('', 'You have received smaller payment', 'because some deliveries were late.');
+    } else {
+      text.push('', 'All deliveries were on time.');
+    }
+
+    SceneManager.pushScene(new DialogBoxScene(text.join('\n')));
   }
 
   update(): void {
