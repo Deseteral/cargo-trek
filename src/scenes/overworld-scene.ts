@@ -1,5 +1,7 @@
 import { GameState } from 'ludum-dare-54/game/game-state';
+import { formattedCalendarTime } from 'ludum-dare-54/game/world-time';
 import { CityScene } from 'ludum-dare-54/scenes/city-scene';
+import { OverworldPauseScene } from 'ludum-dare-54/scenes/overworld-pause-scene';
 import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, SceneManager, Ponczek, Timer } from 'ponczek';
 
 const UNTIL_NEXT_MINUTE_MS = 1;
@@ -28,6 +30,10 @@ export class OverworldScene extends Scene {
     // ImGui.SliderFloat('p', (n = this.p) => this.p = n, 0, 1);
     // ImGui.SliderFloat('s', (n = this.s) => this.s = n, 0, 0.028);
     // ImGui.End();
+
+    if (Input.getKeyDown('Escape')) {
+      SceneManager.pushScene(new OverworldPauseScene());
+    }
 
     if (this.worldTimeProgressionTimer.checkSet(UNTIL_NEXT_MINUTE_MS)) {
       GameState.time += 1;
@@ -94,17 +100,6 @@ export class OverworldScene extends Scene {
     this.camera.end();
 
     // Time
-    scr.drawText(this.formattedTime(), 10, 10, Color.white);
-  }
-
-  formattedTime(): string {
-    let t = GameState.time;
-    const day = (t / (60 * 24)) | 0;
-    t -= day * (60 * 24);
-    const hour = ((t / 60) | 0);
-    t -= hour * 60;
-    const minute = t;
-
-    return `Day ${day}, ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+    scr.drawText(formattedCalendarTime(), 10, 10, Color.white);
   }
 }
