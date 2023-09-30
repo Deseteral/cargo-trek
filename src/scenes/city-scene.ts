@@ -2,6 +2,7 @@ import { DeliveryJob, DeliveryJobGenerator } from 'ludum-dare-54/game/delivery-j
 import { GameState } from 'ludum-dare-54/game/game-state';
 import { City } from 'ludum-dare-54/game/world-map';
 import { CityJobMarketScene } from 'ludum-dare-54/scenes/city-job-market-scene';
+import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { Color, ENDESGA16Palette, ENDESGA16PaletteIdx, GridView, Input, Random, Scene, SceneManager, Screen, Vector2 } from 'ponczek';
 
 interface MenuItem {
@@ -52,12 +53,23 @@ export class CityScene extends Scene {
 
   completeJobs(): void {
     const completedJobs = GameState.activeJobs.filter((job) => job.targetCity.id === this.city.id);
+
+    if (completedJobs.length === 0) {
+      SceneManager.pushScene(new DialogBoxScene('You have nothing to deliver to this city'));
+      return;
+    }
+
     GameState.activeJobs = GameState.activeJobs.filter((job) => job.targetCity.id !== this.city.id);
+
+    let totalCash = 0;
 
     completedJobs.forEach((job) => {
       GameState.cash += job.price;
       GameState.points += job.price;
+      totalCash += job.price;
     });
+
+    SceneManager.pushScene(new DialogBoxScene(`Completed ${completedJobs.length} jobs for $${totalCash}.`));
 
     console.log('Completed jobs', completedJobs);
   }
