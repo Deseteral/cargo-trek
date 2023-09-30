@@ -53,6 +53,7 @@ export class CityScene extends Scene {
 
   completeJobs(): void {
     const completedJobs = GameState.activeJobs.filter((job) => job.targetCity.id === this.city.id);
+    const completedJobIds = completedJobs.map((j) => j.id);
 
     if (completedJobs.length === 0) {
       SceneManager.pushScene(new DialogBoxScene('You have nothing to deliver to this city'));
@@ -62,12 +63,13 @@ export class CityScene extends Scene {
     GameState.activeJobs = GameState.activeJobs.filter((job) => job.targetCity.id !== this.city.id);
 
     let totalCash = 0;
-
     completedJobs.forEach((job) => {
       GameState.cash += job.price;
       GameState.points += job.price;
       totalCash += job.price;
     });
+
+    GameState.cargoStorage.cargo = GameState.cargoStorage.cargo.filter((c) => !completedJobIds.includes(c.parentJobId));
 
     SceneManager.pushScene(new DialogBoxScene(`Completed ${completedJobs.length} jobs for $${totalCash}.`));
 

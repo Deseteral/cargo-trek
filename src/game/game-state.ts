@@ -11,6 +11,7 @@ export interface CargoStorage {
 export interface Cargo {
   position: Vector2,
   rects: Rectangle[],
+  parentJobId: number,
 }
 
 export class GameState {
@@ -38,11 +39,7 @@ export class GameState {
 
     GameState.cargoStorage = {
       bounds: new Rectangle(10, 10, 100, 200),
-      cargo: [
-        { position: Vector2.zero(), rects: [new Rectangle(0, 0, 10, 10)] },
-        { position: Vector2.zero(), rects: [new Rectangle(0, 0, 10, 10), new Rectangle(10, 0, 10, 10), new Rectangle(0, 10, 10, 10)] },
-        { position: Vector2.zero(), rects: [new Rectangle(0, 0, 50, 50)] },
-      ],
+      cargo: [],
     };
   }
 }

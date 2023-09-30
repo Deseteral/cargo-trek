@@ -17,14 +17,15 @@ export class CargoScene extends Scene {
 
     // Make copy of original CargoStorage
     const newCargoCopy: Cargo = {
+      parentJobId: newCargo.parentJobId,
       position: newCargo.position.copy(),
       rects: newCargo.rects.map((r) => r.copy()),
     };
 
-    const cargoCopy = GameState.cargoStorage.cargo.map((orgCargo) => {
+    const cargoCopy: Cargo[] = GameState.cargoStorage.cargo.map((orgCargo) => {
       const position = orgCargo.position.copy();
       const rects = orgCargo.rects.map((r) => r.copy());
-      return { position, rects };
+      return { parentJobId: orgCargo.parentJobId, position, rects };
     });
 
     this.storage = {
