@@ -1,14 +1,19 @@
+import { Truck } from 'ludum-dare-54/game/truck';
 import { WorldMap } from 'ludum-dare-54/game/world-map';
 import { Scene, Screen, Color, Vector2, Camera, Input } from 'ponczek';
 
 export class MapGeneratorTestScene extends Scene {
-  private worldMap: WorldMap;
-  private camera: Camera;
+  public worldMap: WorldMap;
+  public camera: Camera;
+  public truck: Truck;
+
+  private mouseInWorld: Vector2 = Vector2.zero();
 
   constructor() {
     super();
-    this.worldMap = new WorldMap(400 * 4);
-    this.camera = new Camera(new Vector2(300, 300));
+    this.worldMap = new WorldMap(400);
+    this.camera = new Camera(new Vector2(200, 200));
+    this.truck = new Truck(new Vector2(10, 10), this.worldMap);
 
     this.worldMap.generate();
   }
@@ -25,6 +30,16 @@ export class MapGeneratorTestScene extends Scene {
     if (Input.getKey('KeyD')) this.camera.position.x += 1;
     if (Input.getKey('KeyW')) this.camera.position.y -= 1;
     if (Input.getKey('KeyS')) this.camera.position.y += 1;
+
+    this.camera.screenToWorld(Input.pointer, this.mouseInWorld);
+
+    ImGui.Begin('M');
+    ImGui.Text(`${this.mouseInWorld.x} ${this.mouseInWorld.y}`);
+    ImGui.End();
+
+    if (Input.getKey('KeyF')) {
+      this.truck.driveTowards(this.mouseInWorld);
+    }
   }
 
   render(scr: Screen): void {
@@ -40,6 +55,10 @@ export class MapGeneratorTestScene extends Scene {
       scr.color(Color.blue);
       scr.fillRect(c.x - 2, c.y - 2, 4, 4);
     }
+
+    // Truck
+    scr.color(Color.black);
+    scr.drawRect((this.truck.position.x | 0) - 1, (this.truck.position.y | 0) - 1, 2, 2);
 
     this.camera.end();
   }

@@ -4,11 +4,10 @@ import textureList from '../assets/textures.json';
 import soundList from '../assets/sounds.json';
 
 (async function main(): Promise<void> {
-  Ponczek.debugMode = true;
   await Assets.loadAssets(textureList as AssetDefinition[], soundList as AssetDefinition[]);
   await Ponczek.initialize(
-    320 * 2,
-    240 * 2,
+    320 * 1,
+    240 * 1,
     () => new MapGeneratorTestScene(),
     STARTUP_SKIP_SPLASH_SCREEN | STARTUP_AUTOPLAY,
   );

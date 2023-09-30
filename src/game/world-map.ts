@@ -8,8 +8,9 @@ export class WorldMap {
 
   public mapSize: number;
 
-  public cities: Vector2[] = [];
+  public tiles: number[];
   public roadTiles: boolean[];
+  public cities: Vector2[] = [];
 
   public noiseTexture: Texture;
   public topoTexture: Texture;
@@ -26,6 +27,7 @@ export class WorldMap {
     this.noise = new SimplexNoise(this.random);
     this.mapSize = mapSize;
 
+    this.tiles = new Array(this.mapSize * this.mapSize).fill(0);
     this.roadTiles = new Array(this.mapSize * this.mapSize).fill(false);
 
     this.noiseTexture = Texture.createEmpty(this.mapSize, this.mapSize);
@@ -33,7 +35,17 @@ export class WorldMap {
     this.roadPathTexture = Texture.createEmpty(this.mapSize, this.mapSize);
   }
 
-  mapValueAt(x: number, y: number, scale: number): number {
+  vecToIdx(vec: Vector2): number {
+    return this.posToIdx(vec.x | 0, vec.y | 0);
+  }
+
+  posToIdx(x: number, y: number): number {
+    const idx = x + (y * this.mapSize);
+    if (idx < 0 || idx > (this.mapSize * this.mapSize)) return -1;
+    return idx;
+  }
+
+  noiseValueAt(x: number, y: number, scale: number): number {
     // Borders
     if (x === 0 || y === 0 || x === this.mapSize - 1 || y === this.mapSize - 1) {
       return 0;
@@ -55,7 +67,10 @@ export class WorldMap {
     // Terrain
     for (let y = 0; y < this.mapSize; y += 1) {
       for (let x = 0; x < this.mapSize; x += 1) {
-        const nn = this.mapValueAt(x, y, this.s);
+        const nn = this.noiseValueAt(x, y, this.s);
+
+        const idx = this.posToIdx(x, y);
+        this.tiles[idx] = nn;
 
         const noiseColor = new Color(nn, nn, nn, 1);
         this.noiseTexture.data.setPixel(x, y, noiseColor);
@@ -102,7 +117,7 @@ export class WorldMap {
 
         for (let yy = sy; yy < ey; yy += 1) {
           for (let xx = sx; xx < ex; xx += 1) {
-            const vv = this.mapValueAt(xx, yy, this.s);
+            const vv = this.noiseValueAt(xx, yy, this.s);
             if (vv > mm) {
               mm = vv;
               mx = xx;
@@ -143,7 +158,7 @@ export class WorldMap {
     for (let y = 0; y < this.mapSize; y += 1) {
       for (let x = 0; x < this.mapSize; x += 1) {
         const idx = x + (y * this.mapSize);
-        const v = this.mapValueAt(x, y, this.s);
+        const v = this.noiseValueAt(x, y, this.s);
         pathfinder.setCost(idx, v);
       }
     }
@@ -158,8 +173,8 @@ export class WorldMap {
           for (let xx = -1; xx <= 1; xx += 1) {
             const x = points[pi].x + xx;
             const y = points[pi].y + yy;
-            const idx = x + (y * this.mapSize);
-            if (idx < 0 || idx > (this.mapSize * this.mapSize)) continue;
+            const idx = this.posToIdx(x, y);
+            if (idx === -1) continue;
             this.roadPathTexture.data.setPixel(x, y, ENDESGA16PaletteIdx[10]);
             this.roadTiles[idx] = true;
           }
