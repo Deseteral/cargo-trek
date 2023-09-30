@@ -94,7 +94,7 @@ export class OverworldPauseScene extends Scene {
         5,
       );
     } else {
-      scr.drawText('Currently you have no\njobs active', 5, 38, Color.white);
+      scr.drawText('Currently you have no\nactive jobs', 5, 38, Color.white);
     }
   }
 }

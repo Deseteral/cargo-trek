@@ -5,14 +5,20 @@ export class Truck {
   public position: Vector2;
   public delta: Vector2 = Vector2.zero();
   public speed: number;
+  public battery: number;
 
   constructor(position: Vector2) {
     this.position = position;
     this.speed = 0.5;
+    this.battery = 100.0;
   }
 
   driveTowards(worldPosition: Vector2): void {
     if ((this.position.x | 0) === worldPosition.x && (this.position.y | 0) === worldPosition.y) {
+      return;
+    }
+
+    if (this.battery <= 0) {
       return;
     }
 
@@ -25,11 +31,15 @@ export class Truck {
       .normalize()
       .mul(terrainModifier)
       .mul(this.speed);
+
+    const a = 0.1;
+    this.battery -= (a * (1 / terrainModifier));
   }
 
   update(): void {
     this.position.add(this.delta);
     this.delta.set(0, 0);
+    console.log(this.battery);
   }
 
   render(scr: Screen): void {
