@@ -28,6 +28,7 @@ export interface SerializedGameData {
   truckPositionY: number,
   truckBattery: number,
   truckBatteryCapacity: number,
+  activeJobs: ({ job: SerializedDeliveryJob, completeUntilTime: number })[],
   cash: number,
   points: number,
   cargoStorageCargo: SerializedCargo[],
@@ -89,13 +90,13 @@ export class GameState {
   }
 
   static serialize(): SerializedGameData {
-    console.log(GameState.upgrades);
     return {
       seed: GameState.seed,
       truckPositionX: GameState.truck.position.x,
       truckPositionY: GameState.truck.position.y,
       truckBattery: GameState.truck.battery,
       truckBatteryCapacity: GameState.truck.batteryCapacity,
+      activeJobs: GameState.activeJobs.map(({ job, completeUntilTime }) => ({ job: serializeDeliveryJob(job), completeUntilTime })),
       cash: GameState.cash,
       points: GameState.points,
       cargoStorageCargo: GameState.cargoStorage.cargo.map((c) => serializeCargo(c)),
@@ -117,12 +118,11 @@ export class GameState {
     GameState.truck.battery = data.truckBattery;
     GameState.truck.batteryCapacity = data.truckBatteryCapacity;
 
-    GameState.activeJobs = []; // TODO
+    GameState.activeJobs = data.activeJobs.map(({ job, completeUntilTime }) => ({ job: deserializeDeliveryJob(job), completeUntilTime }));
 
     GameState.cash = data.cash;
     GameState.points = data.points;
 
-    console.log(data.upgrades);
     GameState.cargoStorage = {
       bounds: getCargoStorageForLevel(data.upgrades.cargoLevel),
       cargo: data.cargoStorageCargo.map((c) => deserializeCargo(c)),
@@ -157,5 +157,39 @@ function deserializeCargo(data: SerializedCargo): Cargo {
     position: new Vector2(data.positionX, data.positionY),
     rects: data.rects.map(({ x, y, w, h }) => new Rectangle(x, y, w, h)),
     parentJobId: data.parentJobId,
+  };
+}
+
+interface SerializedDeliveryJob {
+  id: number,
+  fromCityId: number,
+  targetCityId: number,
+  price: number,
+  cargo: SerializedCargo,
+  timeToComplete: number,
+  type: string,
+}
+
+function serializeDeliveryJob(dj: DeliveryJob): SerializedDeliveryJob {
+  return {
+    id: dj.id,
+    fromCityId: dj.fromCityId,
+    targetCityId: dj.targetCityId,
+    price: dj.price,
+    cargo: serializeCargo(dj.cargo),
+    timeToComplete: dj.timeToComplete,
+    type: dj.type,
+  };
+}
+
+function deserializeDeliveryJob(data: SerializedDeliveryJob): DeliveryJob {
+  return {
+    id: data.id,
+    fromCityId: data.fromCityId,
+    targetCityId: data.targetCityId,
+    price: data.price,
+    cargo: deserializeCargo(data.cargo),
+    timeToComplete: data.timeToComplete,
+    type: data.type,
   };
 }
