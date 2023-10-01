@@ -139,7 +139,8 @@ export class CityScene extends Scene {
 
   render(scr: Screen): void {
     scr.clearScreen(ENDESGA16Palette.darkBark);
-    scr.drawText(`Welcome to ${this.city.name}!`, 5, 5, Color.white);
+    scr.drawText('Welcome to ', 5, 5, Color.white);
+    scr.drawText(this.city.name, 5 + 'Welcome to '.length * scr.activeFont!.charWidth, 5, ENDESGA16PaletteIdx[6]);
     this.menu.drawAt(new Vector2(10, 25), scr);
 
     scr.drawText(`${formattedCalendarTime()}  $${GameState.cash | 0}`, 5, scr.height - 12, Color.white);

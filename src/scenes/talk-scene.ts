@@ -1,5 +1,5 @@
 import { City } from 'ludum-dare-54/game/world-map';
-import { ENDESGA16PaletteIdx, Input, Random, Scene, SceneManager, Screen } from 'ponczek';
+import { Color, ENDESGA16PaletteIdx, Input, Random, Scene, SceneManager, Screen } from 'ponczek';
 
 export class TalkScene extends Scene {
   text: string;
@@ -36,7 +36,7 @@ export class TalkScene extends Scene {
     const conversation: string[] = [
       "We were running low on supplies, and your arrival couldn't have been more timely.",
       "You must have stories to tell from all your trips. Swing by the diner when you're done, and we'll chat over a cup of coffee.",
-      "We're ready to roll up our sleeves and help with the unloading.",
+      "We're ready to roll up our sleeves and help you with the unloading.",
       `We're a tight-knit bunch up here in ${city.name}.`,
       'Life is simple and peaceful here.',
       "Your deliveries keep our gardens blooming, and now we look forward to gathering at the local cafe to share stories after a hard day's work.",
@@ -77,6 +77,6 @@ export class TalkScene extends Scene {
 
   render(scr: Screen): void {
     scr.clearScreen(ENDESGA16PaletteIdx[3]);
-    scr.drawTextInRect(this.text, 2, 4, scr.width - 4, scr.height - 4, ENDESGA16PaletteIdx[1]);
+    scr.drawTextInRect(this.text, 2, 4, scr.width - 4, scr.height - 4, Color.white);
   }
 }
