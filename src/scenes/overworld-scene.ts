@@ -106,6 +106,7 @@ export class OverworldScene extends Scene {
         .at(0)!.city;
 
       GameState.truck.position = nearestCity.position.copy();
+      this.lookAtTruck();
       GameState.time += (60 * 24);
       SceneManager.pushScene(new CityScene(nearestCity));
     }
@@ -200,9 +201,6 @@ export class OverworldScene extends Scene {
       scr.fillRect(c.position.x - 2, c.position.y - 2, 4, 4);
     }
 
-    // Trucks
-    GameState.truck.render(scr);
-
     // Clouds
     for (let idx = 0; idx < this.clouds.length; idx += 1) {
       const c = this.clouds[idx];
@@ -224,6 +222,9 @@ export class OverworldScene extends Scene {
       scr.color(ENDESGA16PaletteIdx[5]);
       scr.fillRect(c.position.x - 2, c.position.y - 2, 4, 4);
     }
+
+    // Truck
+    GameState.truck.render(scr);
 
     // City names
     for (let i = 0; i < GameState.world.cities.length; i += 1) {
