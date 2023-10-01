@@ -11,27 +11,27 @@ export interface Upgrades {
 }
 
 export function getCargoStorageForLevel(level: number): Rectangle {
-  if (level === -1) {
+  if (level === 0) {
     return new Rectangle(10, 100, 30, 30);
   }
 
-  if (level === 0) {
+  if (level === 1) {
     return new Rectangle(10, 80, 35, 70);
   }
 
-  if (level === 1) {
+  if (level === 2) {
     return new Rectangle(10, 80, 50, 85);
   }
 
-  if (level === 2) {
+  if (level === 3) {
     return new Rectangle(10, 80, 80, 90);
   }
 
-  if (level === 3) {
+  if (level === 4) {
     return new Rectangle(10, 50, 100, 140);
   }
 
-  if (level === 4) {
+  if (level === 5) {
     return new Rectangle(10, 25, 120, 200);
   }
 
@@ -39,7 +39,7 @@ export function getCargoStorageForLevel(level: number): Rectangle {
 }
 
 export const UPGRADE_PRICES = {
-  cargoLevel: [500, 2500, 7000, 15500, 20000],
+  cargoLevel: [0, 500, 2500, 7000, 15500, 20000],
   terrainPack: 800,
   speedBoost: 300,
   batteryLevel: [200, 400, 550, 625, 680, 725, 790, 810, 870, 900, 960, 1060],

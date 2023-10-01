@@ -43,17 +43,17 @@ export class UpgradeGarageScene extends Scene {
 
   private getCells(): MenuItem[][] {
     return [
-      GameState.upgrades.cargoLevel < UPGRADE_PRICES.cargoLevel.length ? [{
-        text: `Level ${GameState.upgrades.cargoLevel + 1} cargo hold upgrade ($${UPGRADE_PRICES.cargoLevel[GameState.upgrades.cargoLevel]})`,
+      (GameState.upgrades.cargoLevel + 1) < UPGRADE_PRICES.cargoLevel.length ? [{
+        text: `Level ${GameState.upgrades.cargoLevel + 1} cargo hold upgrade ($${UPGRADE_PRICES.cargoLevel[GameState.upgrades.cargoLevel + 1]})`,
         description: 'Larger cargo hold for your truck.',
         action: () => {
-          const price = UPGRADE_PRICES.cargoLevel[GameState.upgrades.cargoLevel];
+          const price = UPGRADE_PRICES.cargoLevel[GameState.upgrades.cargoLevel + 1];
           if (GameState.cash < price) {
             SceneManager.pushScene(new DialogBoxScene("You don't have enough money."));
             return;
           }
 
-          GameState.cargoStorage.bounds = getCargoStorageForLevel(GameState.upgrades.cargoLevel);
+          GameState.cargoStorage.bounds = getCargoStorageForLevel(GameState.upgrades.cargoLevel + 1);
           GameState.cash -= price;
           GameState.upgrades.cargoLevel += 1;
 

@@ -1,5 +1,6 @@
 import { GameState } from 'ludum-dare-54/game/game-state';
 import { formattedCalendarTime } from 'ludum-dare-54/game/world-time';
+import { drawCursor } from 'ludum-dare-54/gfx/cursor';
 import { CityScene } from 'ludum-dare-54/scenes/city-scene';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { OverworldPauseScene } from 'ludum-dare-54/scenes/overworld-pause-scene';
