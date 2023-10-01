@@ -69,6 +69,9 @@ export abstract class DeliveryJobGenerator {
     }
 
     return Random.default.pickOne([
+      [new Rectangle(200, 100, 25, 25)],
+      [new Rectangle(200, 100, 25, 25)],
+      [new Rectangle(200, 100, 25, 25)],
       [new Rectangle(200, 100, 50, 20)],
       [new Rectangle(200, 100, 70, 20), new Rectangle(203, 80, 20, 20)],
       [new Rectangle(200, 100, 70, 70)],
