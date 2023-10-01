@@ -2,6 +2,7 @@ import { ActiveJob, GameState } from 'ludum-dare-54/game/game-state';
 import { UPGRADE_PRICES } from 'ludum-dare-54/game/upgrades';
 import { formattedCalendarTime, formattedDurationTime } from 'ludum-dare-54/game/world-time';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
+import { OverworldScene } from 'ludum-dare-54/scenes/overworld-scene';
 import { Color, Datastore, ENDESGA16PaletteIdx, GridView, Input, Scene, SceneManager, Screen, Vector2 } from 'ponczek';
 
 interface MenuItem {
@@ -53,8 +54,12 @@ export class OverworldPauseScene extends Scene {
 
   selectedMenu: SelectedMenu = 'menu';
 
-  constructor() {
+  parent: OverworldScene;
+
+  constructor(parent: OverworldScene) {
     super();
+
+    this.parent = parent;
 
     this.menu = new OverworldPauseMenuGridView();
     this.menu.cells = [
@@ -86,6 +91,7 @@ export class OverworldPauseScene extends Scene {
             return;
           }
           GameState.load();
+          parent.lookAtTruck();
           SceneManager.pushScene(new DialogBoxScene('Game loaded!'));
         },
       }],

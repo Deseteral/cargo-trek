@@ -23,12 +23,16 @@ export class OverworldScene extends Scene {
   constructor() {
     super();
     this.camera = new Camera();
-    this.camera.lookAt(GameState.truck.position);
+    this.lookAtTruck();
 
     this.worldTimeProgressionTimer = new Timer();
     this.worldTimeProgressionTimer.set(UNTIL_NEXT_MINUTE_MS);
 
     this.batteryTexture = Assets.texture('battery');
+  }
+
+  lookAtTruck(): void {
+    this.camera.lookAt(GameState.truck.position);
   }
 
   update(): void {
@@ -40,7 +44,7 @@ export class OverworldScene extends Scene {
     // ImGui.End();
 
     if (Input.getKeyDown('Escape')) {
-      SceneManager.pushScene(new OverworldPauseScene());
+      SceneManager.pushScene(new OverworldPauseScene(this));
     }
 
     if (this.worldTimeProgressionTimer.checkSet(UNTIL_NEXT_MINUTE_MS)) {
@@ -60,6 +64,8 @@ export class OverworldScene extends Scene {
     } else {
       GameState.truck.stopDriving();
     }
+
+    if (Input.getKeyDown('KeyQ')) this.lookAtTruck();
 
     GameState.truck.update();
     GameState.world.clearFogAt(GameState.truck.position);
