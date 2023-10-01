@@ -6,9 +6,9 @@
 >
 > Your role is essential in delivering goods to our local communities. Your job makes a difference!"
 
-You're a new hire at local delivery company "Cargo Trek" where you will be a truck driver delivering goods to local communities living in small towns.
+You're a new hire at local delivery company "Cargo Trek" where you will be a truck driver delivering goods to communities living in small towns.
 
-Manage your truck and cargo, discover procedurally generated map and complete delivery jobs from local towns.
+Manage your truck and cargo, discover procedurally generated map and complete delivery jobs from nearby towns.
 
 ![Cover image](promo_assets/itch_cover.png?raw=true "Cover image")
 
