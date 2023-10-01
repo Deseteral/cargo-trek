@@ -1,8 +1,9 @@
 import { GameState } from 'ludum-dare-54/game/game-state';
+import { DialogBox } from 'ludum-dare-54/gfx/dialog-box';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { HowToPlayScene } from 'ludum-dare-54/scenes/how-to-play-scene';
 import { OverworldScene } from 'ludum-dare-54/scenes/overworld-scene';
-import { Assets, Color, Datastore, ENDESGA16PaletteIdx, GridView, Input, Random, ReplaceColorEffect, Scene, SceneManager, Screen, SoundPlayer, Texture, Vector2 } from 'ponczek';
+import { Assets, Color, Datastore, ENDESGA16PaletteIdx, GridView, Input, Ponczek, Random, ReplaceColorEffect, Scene, SceneManager, Screen, SoundPlayer, Texture, Vector2 } from 'ponczek';
 
 interface MenuItem {
   text: string,
@@ -30,6 +31,9 @@ export class MainMenuScene extends Scene {
   menu: MainMenuGridView;
   frameTexture: Texture;
 
+  creatingNewGame: boolean = false;
+  loadingGame: boolean = false;
+
   constructor() {
     super();
 
@@ -40,21 +44,29 @@ export class MainMenuScene extends Scene {
       [{
         text: 'New game',
         action: () => {
-          GameState.create(Random.default.nextInt(0, 9999));
-          SceneManager.clearStack(new OverworldScene());
+          this.creatingNewGame = true;
+
+          setTimeout(() => {
+            GameState.create(Random.default.nextInt(0, 9999));
+            SceneManager.clearStack(new OverworldScene());
+          }, 0);
         },
       }],
       [{
         text: 'Load game',
         action: () => {
-          if (!Datastore.exists()) {
-            SceneManager.pushScene(new DialogBoxScene('There is no saved game.'));
-            return;
-          }
-          GameState.load();
-          const overworld = new OverworldScene();
-          overworld.lookAtTruck();
-          SceneManager.pushScene(overworld);
+          this.loadingGame = true;
+          setTimeout(() => {
+            this.loadingGame = false;
+            if (!Datastore.exists()) {
+              SceneManager.pushScene(new DialogBoxScene('There is no saved game.'));
+              return;
+            }
+            GameState.load();
+            const overworld = new OverworldScene();
+            overworld.lookAtTruck();
+            SceneManager.pushScene(overworld);
+          }, 0);
         },
       }],
       [{
@@ -104,5 +116,13 @@ export class MainMenuScene extends Scene {
     this.menu.drawAt(new Vector2(x, y), scr);
 
     scr.drawText('Created in 48 hours for Ludum Dare 54', 1, scr.height - 10, ENDESGA16PaletteIdx[1]);
+
+    if (this.loadingGame) {
+      DialogBox.drawBox('Loading...', Ponczek.screen);
+    }
+
+    if (this.creatingNewGame) {
+      DialogBox.drawBox('Generating new world', Ponczek.screen);
+    }
   }
 }
