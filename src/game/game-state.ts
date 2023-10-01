@@ -35,6 +35,7 @@ export class GameState {
   static distanceDriven: number;
   static isAdvancedPlayer: boolean;
   static upgrades: Upgrades;
+  static visitedCityIds: number[];
 
   static create(seed: number): void {
     GameState.seed = seed;
@@ -70,6 +71,7 @@ export class GameState {
     GameState.completedJobs = 0;
     GameState.distanceDriven = 0;
     GameState.isAdvancedPlayer = false;
+    GameState.visitedCityIds = [];
   }
 
   static save(): void {
@@ -89,6 +91,7 @@ export class GameState {
       distanceDriven: GameState.distanceDriven,
       isAdvancedPlayer: GameState.isAdvancedPlayer,
       upgrades: GameState.upgrades,
+      visitedCityIds: GameState.visitedCityIds,
     };
 
     Datastore.write(data);
@@ -122,6 +125,7 @@ export class GameState {
     GameState.distanceDriven = data.distanceDriven;
     GameState.isAdvancedPlayer = data.isAdvancedPlayer;
     GameState.upgrades = data.upgrades;
+    GameState.visitedCityIds = data.visitedCityIds;
   }
 }
 
@@ -141,6 +145,7 @@ export interface SerializedGameData {
   distanceDriven: number,
   isAdvancedPlayer: boolean,
   upgrades: Upgrades,
+  visitedCityIds: number[],
 }
 
 interface SerializedCargo {

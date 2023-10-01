@@ -166,8 +166,12 @@ export class OverworldScene extends Scene {
     // Cities
     for (let i = 0; i < GameState.world.cities.length; i += 1) {
       const c = GameState.world.cities[i];
-      scr.color(ENDESGA16PaletteIdx[4]);
-      scr.fillRect(c.position.x - 3, c.position.y - 3, 6, 6);
+
+      if (GameState.visitedCityIds.includes(c.id)) {
+        scr.color(ENDESGA16PaletteIdx[4]);
+        scr.fillRect(c.position.x - 3, c.position.y - 3, 6, 6);
+      }
+
       scr.color(ENDESGA16PaletteIdx[5]);
       scr.fillRect(c.position.x - 2, c.position.y - 2, 4, 4);
     }

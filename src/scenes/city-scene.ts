@@ -59,6 +59,10 @@ export class CityScene extends Scene {
     this.menu.cellMargin.set(1, 1);
 
     GameState.truck.battery = GameState.truck.batteryCapacity;
+
+    if (!GameState.visitedCityIds.includes(city.id)) {
+      GameState.visitedCityIds.push(city.id);
+    }
   }
 
   completeJobs(): void {
