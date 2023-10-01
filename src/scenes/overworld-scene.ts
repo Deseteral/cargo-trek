@@ -3,10 +3,17 @@ import { formattedCalendarTime } from 'ludum-dare-54/game/world-time';
 import { CityScene } from 'ludum-dare-54/scenes/city-scene';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { OverworldPauseScene } from 'ludum-dare-54/scenes/overworld-pause-scene';
-import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, SceneManager, Timer, Texture, Assets, SoundPlayer, SoundPlaybackId } from 'ponczek';
+import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, SceneManager, Timer, Texture, Assets, SoundPlayer, SoundPlaybackId, Random } from 'ponczek';
 
 const UNTIL_NEXT_MINUTE_MS = 1;
 const CHARGE_PRICE = 0.2;
+
+interface Cloud {
+  position: Vector2,
+  speed: Vector2,
+  scale: number,
+  flip: number,
+}
 
 export class OverworldScene extends Scene {
   camera: Camera;
@@ -23,6 +30,9 @@ export class OverworldScene extends Scene {
 
   backgroundMusic: (SoundPlaybackId | null) = null;
 
+  cloudTexture: Texture;
+  clouds: Cloud[];
+
   constructor() {
     super();
     this.camera = new Camera();
@@ -34,6 +44,17 @@ export class OverworldScene extends Scene {
     this.batteryTexture = Assets.texture('battery');
 
     this.backgroundMusic = SoundPlayer.playSound('overworld_m', true);
+
+    this.cloudTexture = Assets.texture('cloud');
+    this.clouds = [];
+    for (let i = 0; i < 130; i += 1) {
+      const x = Random.default.nextInt(0, GameState.world.mapSize);
+      const y = Random.default.nextInt(0, GameState.world.mapSize);
+      const scale = Random.default.nextFloat(0.25, 2);
+      const flip = Random.default.nextInt(0, 3);
+      const speed = Vector2.right().mul(Random.default.nextFloat(0.01, 0.04));
+      this.clouds.push({ position: new Vector2(x, y), speed, scale, flip });
+    }
   }
 
   lookAtTruck(): void {
@@ -148,6 +169,12 @@ export class OverworldScene extends Scene {
         this.chargingSound = null;
       }
     }
+
+    for (let idx = 0; idx < this.clouds.length; idx += 1) {
+      const cpos = this.clouds[idx].position;
+      cpos.add(this.clouds[idx].speed);
+      if (cpos.x > GameState.world.mapSize) cpos.x = -(this.cloudTexture.width * this.clouds[idx].scale);
+    }
   }
 
   render(scr: Screen): void {
@@ -173,6 +200,15 @@ export class OverworldScene extends Scene {
       scr.fillRect(c.position.x - 2, c.position.y - 2, 4, 4);
     }
 
+    // Trucks
+    GameState.truck.render(scr);
+
+    // Clouds
+    for (let idx = 0; idx < this.clouds.length; idx += 1) {
+      const c = this.clouds[idx];
+      scr.drawTexture(this.cloudTexture, c.position.x, c.position.y, this.cloudTexture.width * c.scale, this.cloudTexture.height * c.scale, c.flip);
+    }
+
     // Fog layer
     scr._ctx.drawImage(GameState.world.fogScreen._domElement, 0, 0);
 
@@ -188,9 +224,6 @@ export class OverworldScene extends Scene {
       scr.color(ENDESGA16PaletteIdx[5]);
       scr.fillRect(c.position.x - 2, c.position.y - 2, 4, 4);
     }
-
-    // Trucks
-    GameState.truck.render(scr);
 
     // City names
     for (let i = 0; i < GameState.world.cities.length; i += 1) {
