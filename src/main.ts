@@ -9,6 +9,6 @@ import soundList from '../assets/sounds.json';
     320 * 1,
     240 * 1,
     () => new InitScene(),
-    STARTUP_SKIP_SPLASH_SCREEN | STARTUP_AUTOPLAY,
+    STARTUP_SKIP_SPLASH_SCREEN,
   );
 }());

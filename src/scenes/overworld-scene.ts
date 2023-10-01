@@ -57,6 +57,8 @@ export class OverworldScene extends Scene {
 
     if (Input.pointerLeftPressed) {
       GameState.truck.driveTowards(this.mouseInWorld);
+    } else {
+      GameState.truck.stopDriving();
     }
 
     GameState.truck.update();
