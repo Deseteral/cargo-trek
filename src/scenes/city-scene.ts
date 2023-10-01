@@ -4,6 +4,7 @@ import { City } from 'ludum-dare-54/game/world-map';
 import { formattedCalendarTime } from 'ludum-dare-54/game/world-time';
 import { CityJobMarketScene } from 'ludum-dare-54/scenes/city-job-market-scene';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
+import { TalkScene } from 'ludum-dare-54/scenes/talk-scene';
 import { UpgradeGarageScene } from 'ludum-dare-54/scenes/upgrade-garage-scene';
 import { Color, ENDESGA16Palette, ENDESGA16PaletteIdx, GridView, Input, Random, Scene, SceneManager, Screen, SoundPlayer, Vector2 } from 'ponczek';
 
@@ -54,6 +55,10 @@ export class CityScene extends Scene {
       [{
         text: 'Drive to truck workshop',
         action: () => SceneManager.pushScene(new UpgradeGarageScene()),
+      }],
+      [{
+        text: 'Talk to a local',
+        action: () => SceneManager.pushScene(new TalkScene(this.city)),
       }],
     ];
     this.menu.cellMargin.set(1, 1);
