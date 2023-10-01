@@ -1,7 +1,7 @@
 import { GameState } from 'ludum-dare-54/game/game-state';
 import { UPGRADE_PRICES, getCargoStorageForLevel } from 'ludum-dare-54/game/upgrades';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
-import { Color, ENDESGA16Palette, ENDESGA16PaletteIdx, GridView, Input, Ponczek, Scene, SceneManager, Screen, Vector2 } from 'ponczek';
+import { Color, ENDESGA16Palette, ENDESGA16PaletteIdx, GridView, Input, Ponczek, Scene, SceneManager, Screen, SoundPlayer, Vector2 } from 'ponczek';
 
 // TODO: This could land in Ponczek utils.
 function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
@@ -183,9 +183,11 @@ export class UpgradeGarageScene extends Scene {
     if (this.menu.cells.length > 0) {
       if (Input.getKeyDown('KeyS')) {
         this.menu.selectNextRow(true);
+        SoundPlayer.playSound('menu');
       }
       if (Input.getKeyDown('KeyW')) {
         this.menu.selectPreviousRow(true);
+        SoundPlayer.playSound('menu');
       }
 
       if (Input.getKeyDown('Enter')) {

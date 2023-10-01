@@ -5,7 +5,7 @@ import { formattedCalendarTime } from 'ludum-dare-54/game/world-time';
 import { CityJobMarketScene } from 'ludum-dare-54/scenes/city-job-market-scene';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { UpgradeGarageScene } from 'ludum-dare-54/scenes/upgrade-garage-scene';
-import { Color, ENDESGA16Palette, ENDESGA16PaletteIdx, GridView, Input, Random, Scene, SceneManager, Screen, Vector2 } from 'ponczek';
+import { Color, ENDESGA16Palette, ENDESGA16PaletteIdx, GridView, Input, Random, Scene, SceneManager, Screen, SoundPlayer, Vector2 } from 'ponczek';
 
 interface MenuItem {
   text: string,
@@ -117,9 +117,11 @@ export class CityScene extends Scene {
 
     if (Input.getKeyDown('KeyS')) {
       this.menu.selectNextRow(true);
+      SoundPlayer.playSound('menu');
     }
     if (Input.getKeyDown('KeyW')) {
       this.menu.selectPreviousRow(true);
+      SoundPlayer.playSound('menu');
     }
   }
 

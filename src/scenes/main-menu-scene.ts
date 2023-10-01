@@ -1,7 +1,8 @@
 import { GameState } from 'ludum-dare-54/game/game-state';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
+import { HowToPlayScene } from 'ludum-dare-54/scenes/how-to-play-scene';
 import { OverworldScene } from 'ludum-dare-54/scenes/overworld-scene';
-import { Assets, Color, Datastore, ENDESGA16PaletteIdx, GridView, Input, Random, ReplaceColorEffect, Scene, SceneManager, Screen, Texture, Vector2 } from 'ponczek';
+import { Assets, Color, Datastore, ENDESGA16PaletteIdx, GridView, Input, Random, ReplaceColorEffect, Scene, SceneManager, Screen, SoundPlayer, Texture, Vector2 } from 'ponczek';
 
 interface MenuItem {
   text: string,
@@ -58,7 +59,9 @@ export class MainMenuScene extends Scene {
       }],
       [{
         text: 'How to play',
-        action: () => { },
+        action: () => {
+          SceneManager.pushScene(new HowToPlayScene());
+        },
       }],
     ];
 
@@ -77,9 +80,11 @@ export class MainMenuScene extends Scene {
   update(): void {
     if (Input.getKeyDown('KeyS')) {
       this.menu.selectNextRow(true);
+      SoundPlayer.playSound('menu');
     }
     if (Input.getKeyDown('KeyW')) {
       this.menu.selectPreviousRow(true);
+      SoundPlayer.playSound('menu');
     }
     if (Input.getKeyDown('Enter')) {
       this.menu.selectedValue.action();

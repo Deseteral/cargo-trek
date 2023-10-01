@@ -3,7 +3,7 @@ import { UPGRADE_PRICES } from 'ludum-dare-54/game/upgrades';
 import { formattedCalendarTime, formattedDurationTime } from 'ludum-dare-54/game/world-time';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { OverworldScene } from 'ludum-dare-54/scenes/overworld-scene';
-import { Color, Datastore, ENDESGA16PaletteIdx, GridView, Input, Scene, SceneManager, Screen, Vector2 } from 'ponczek';
+import { Color, Datastore, ENDESGA16PaletteIdx, GridView, Input, Scene, SceneManager, Screen, SoundPlayer, Vector2 } from 'ponczek';
 
 interface MenuItem {
   text: string,
@@ -115,20 +115,20 @@ export class OverworldPauseScene extends Scene {
     if (Input.getKeyDown('KeyS')) {
       if (this.selectedMenu === 'menu') {
         this.menu.selectNextRow(true);
+        SoundPlayer.playSound('menu');
       } else if (this.selectedMenu === 'activeJobs' && GameState.activeJobs.length > 0) {
         this.activeJobsMenu.selectNextRow(true);
-      } else if (this.selectedMenu === 'truckUpgrades') {
-        this.activeJobsMenu.selectNextRow(true);
+        SoundPlayer.playSound('menu');
       }
     }
 
     if (Input.getKeyDown('KeyW')) {
       if (this.selectedMenu === 'menu') {
         this.menu.selectPreviousRow(true);
+        SoundPlayer.playSound('menu');
       } else if (this.selectedMenu === 'activeJobs' && GameState.activeJobs.length > 0) {
         this.activeJobsMenu.selectPreviousRow(true);
-      } else if (this.selectedMenu === 'truckUpgrades') {
-        this.activeJobsMenu.selectPreviousRow(true);
+        SoundPlayer.playSound('menu');
       }
     }
 

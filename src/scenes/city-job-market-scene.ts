@@ -2,7 +2,7 @@ import { DeliveryJob } from 'ludum-dare-54/game/delivery-job-generator';
 import { GameState } from 'ludum-dare-54/game/game-state';
 import { City } from 'ludum-dare-54/game/world-map';
 import { CargoScene } from 'ludum-dare-54/scenes/cargo-scene';
-import { Color, Screen, Input, Scene, SceneManager, ENDESGA16Palette, GridView, Vector2, ENDESGA16PaletteIdx, Ponczek } from 'ponczek';
+import { Color, Screen, Input, Scene, SceneManager, ENDESGA16Palette, GridView, Vector2, ENDESGA16PaletteIdx, Ponczek, SoundPlayer } from 'ponczek';
 
 interface MenuItem {
   job: DeliveryJob,
@@ -61,9 +61,11 @@ export class CityJobMarketScene extends Scene {
 
     if (Input.getKeyDown('KeyS')) {
       this.menu.selectNextRow(true);
+      SoundPlayer.playSound('menu');
     }
     if (Input.getKeyDown('KeyW')) {
       this.menu.selectPreviousRow(true);
+      SoundPlayer.playSound('menu');
     }
 
     if (Input.getKeyDown('Enter') && this.menu.cells.length > 0) {
