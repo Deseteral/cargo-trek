@@ -65,6 +65,7 @@ export class GameState {
       speedBoost: false,
       batteryLevel: 0,
       highEfficiency: false,
+      fastCharging: false,
     };
   }
 }

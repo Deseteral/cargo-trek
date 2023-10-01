@@ -1,5 +1,5 @@
 import { GameState } from 'ludum-dare-54/game/game-state';
-import { UPGRADE_PRICES } from 'ludum-dare-54/game/upgrades';
+import { UPGRADE_PRICES, getCargoStorageForLevel } from 'ludum-dare-54/game/upgrades';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { Color, ENDESGA16Palette, ENDESGA16PaletteIdx, GridView, Input, Ponczek, Scene, SceneManager, Screen, Vector2 } from 'ponczek';
 
@@ -10,6 +10,8 @@ function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
 
 interface MenuItem {
   text: string,
+  description: string,
+  action: () => void,
 }
 
 class UpgradeGarageMenuGridView extends GridView<MenuItem> {
@@ -40,11 +42,93 @@ export class UpgradeGarageScene extends Scene {
 
   private getCells(): MenuItem[][] {
     return [
-      GameState.upgrades.cargoLevel <= 5 ? [{ text: `Level ${GameState.upgrades.cargoLevel + 1} cargo hold upgrade ($${UPGRADE_PRICES.cargoLevel[GameState.upgrades.cargoLevel]})` }] : null,
-      !GameState.upgrades.terrainPack ? [{ text: `Rough terrain pack ($${UPGRADE_PRICES.terrainPack})` }] : null,
-      !GameState.upgrades.speedBoost ? [{ text: `Speed boost ($${UPGRADE_PRICES.speedBoost})` }] : null,
-      GameState.upgrades.batteryLevel <= 4 ? [{ text: `+25 kWh battery ($${UPGRADE_PRICES.batteryLevel[GameState.upgrades.batteryLevel]})` }] : null,
-      !GameState.upgrades.highEfficiency ? [{ text: `High efficiency motors ($${UPGRADE_PRICES.highEfficiency})` }] : null,
+      GameState.upgrades.cargoLevel < UPGRADE_PRICES.cargoLevel.length ? [{
+        text: `Level ${GameState.upgrades.cargoLevel + 1} cargo hold upgrade ($${UPGRADE_PRICES.cargoLevel[GameState.upgrades.cargoLevel]})`,
+        description: 'Larger cargo hold for your truck.',
+        action: () => {
+          const price = UPGRADE_PRICES.cargoLevel[GameState.upgrades.cargoLevel];
+          if (GameState.cash < price) {
+            SceneManager.pushScene(new DialogBoxScene("You don't have enough money."));
+            return;
+          }
+
+          GameState.cargoStorage.bounds = getCargoStorageForLevel(GameState.upgrades.cargoLevel);
+          GameState.cash -= price;
+          GameState.upgrades.cargoLevel += 1;
+        },
+      }] : null,
+      !GameState.upgrades.terrainPack ? [{
+        text: `Rough terrain pack ($${UPGRADE_PRICES.terrainPack})`,
+        description: 'Allows you to drive faster on steeper terrain.',
+        action: () => {
+          const price = UPGRADE_PRICES.terrainPack;
+          if (GameState.cash < price) {
+            SceneManager.pushScene(new DialogBoxScene("You don't have enough money."));
+            return;
+          }
+
+          GameState.upgrades.terrainPack = true;
+          GameState.cash -= UPGRADE_PRICES.terrainPack;
+        },
+      }] : null,
+      !GameState.upgrades.speedBoost ? [{
+        text: `Speed boost ($${UPGRADE_PRICES.speedBoost})`,
+        description: 'Higher power motors for your truck.',
+        action: () => {
+          const price = UPGRADE_PRICES.speedBoost;
+          if (GameState.cash < price) {
+            SceneManager.pushScene(new DialogBoxScene("You don't have enough money."));
+            return;
+          }
+
+          GameState.upgrades.speedBoost = true;
+          GameState.cash -= price;
+        },
+      }] : null,
+      GameState.upgrades.batteryLevel < UPGRADE_PRICES.batteryLevel.length ? [{
+        text: `+25 kWh battery ($${UPGRADE_PRICES.batteryLevel[GameState.upgrades.batteryLevel]})`,
+        description: 'Additional battery pack installed on the truck.',
+        action: () => {
+          const price = UPGRADE_PRICES.batteryLevel[GameState.upgrades.batteryLevel];
+          if (GameState.cash < price) {
+            SceneManager.pushScene(new DialogBoxScene("You don't have enough money."));
+            return;
+          }
+
+          GameState.upgrades.batteryLevel += 1;
+          GameState.truck.battery += 25;
+          GameState.truck.batteryCapacity += 25;
+          GameState.cash -= price;
+        },
+      }] : null,
+      !GameState.upgrades.highEfficiency ? [{
+        text: `High efficiency motors ($${UPGRADE_PRICES.highEfficiency})`,
+        description: 'More efficient motors will use less energy when driving.',
+        action: () => {
+          const price = UPGRADE_PRICES.highEfficiency;
+          if (GameState.cash < price) {
+            SceneManager.pushScene(new DialogBoxScene("You don't have enough money."));
+            return;
+          }
+
+          GameState.upgrades.highEfficiency = true;
+          GameState.cash -= price;
+        },
+      }] : null,
+      !GameState.upgrades.fastCharging ? [{
+        text: `High voltage charging system ($${UPGRADE_PRICES.fastCharging})`,
+        description: 'Higher voltage architecture allows for faster charging speeds.',
+        action: () => {
+          const price = UPGRADE_PRICES.fastCharging;
+          if (GameState.cash < price) {
+            SceneManager.pushScene(new DialogBoxScene("You don't have enough money."));
+            return;
+          }
+
+          GameState.upgrades.fastCharging = true;
+          GameState.cash -= price;
+        },
+      }] : null,
     ].filter(notEmpty);
   }
 
