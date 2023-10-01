@@ -63,13 +63,6 @@ export class OverworldScene extends Scene {
   }
 
   update(): void {
-    // ImGui.Begin('M');
-    // ImGui.SliderFloat('o', (n = this.om) => this.om = (n | 0), 1, 20);
-    // ImGui.SliderFloat('l', (n = this.l) => this.l = n, 0, 20);
-    // ImGui.SliderFloat('p', (n = this.p) => this.p = n, 0, 1);
-    // ImGui.SliderFloat('s', (n = this.s) => this.s = n, 0, 0.028);
-    // ImGui.End();
-
     if (Input.getKeyDown('Escape')) {
       SceneManager.pushScene(new OverworldPauseScene(this));
     }

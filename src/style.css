@@ -20,13 +20,3 @@ canvas {
   cursor: none;
   image-rendering: pixelated;
 }
-
-#imgui-canvas {
-  cursor: default;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-}
