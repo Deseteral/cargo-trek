@@ -123,7 +123,7 @@ export class MainMenuScene extends Scene {
     }
 
     if (this.creatingNewGame) {
-      DialogBox.drawBox('Generating new world', scr);
+      DialogBox.drawBox('Generating new world...', scr);
     }
   }
 }
