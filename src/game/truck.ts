@@ -29,7 +29,7 @@ export class Truck {
     this.drivingSoundGain = this.audioContext.createGain();
     // this.drivingSound.connect(this.drivingSoundGain);
     this.drivingSoundGain.connect(this.audioContext.destination);
-    this.drivingSoundGain.gain.value = 0.5;
+    this.drivingSoundGain.gain.value = 0.4;
     this.drivingSound.start();
   }
 

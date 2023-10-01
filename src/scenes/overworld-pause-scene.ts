@@ -250,6 +250,7 @@ export class OverworldPauseScene extends Scene {
       const x = 1;
       let y = 5;
       let completed = false;
+      let percent = '';
 
       scr.drawText('Quests', x, y, ENDESGA16PaletteIdx[6]);
       y += 20;
@@ -257,14 +258,24 @@ export class OverworldPauseScene extends Scene {
       scr.drawText('Visit all towns', x, y, Color.white);
       y += lineHeight;
       completed = GameState.visitedCityIds.length === GameState.world.cities.length;
-      scr.drawText(`${GameState.visitedCityIds.length}/${GameState.world.cities.length}`, x + 5, y, ENDESGA16PaletteIdx[completed ? 9 : 12]);
+      percent = this.formatPercent(GameState.visitedCityIds.length / GameState.world.cities.length);
+      scr.drawText(`${GameState.visitedCityIds.length}/${GameState.world.cities.length} (${percent})`, x + 5, y, ENDESGA16PaletteIdx[completed ? 9 : 12]);
+      y += lineHeight;
+      y += lineHeight;
+
+      scr.drawText('Visit all chargers', x, y, Color.white);
+      y += lineHeight;
+      completed = GameState.visitedChargerIds.length === GameState.world.chargers.length;
+      percent = this.formatPercent(GameState.visitedChargerIds.length / GameState.world.chargers.length);
+      scr.drawText(`${GameState.visitedChargerIds.length}/${GameState.world.chargers.length} (${percent})`, x + 5, y, ENDESGA16PaletteIdx[completed ? 9 : 12]);
       y += lineHeight;
       y += lineHeight;
 
       scr.drawText('Drive 100k km', x, y, Color.white);
       y += lineHeight;
       completed = GameState.distanceDriven >= 100000;
-      scr.drawText(`${GameState.distanceDriven | 0}/100 000 km`, x + 5, y, ENDESGA16PaletteIdx[completed ? 9 : 12]);
+      percent = this.formatPercent(GameState.distanceDriven / 100000);
+      scr.drawText(`${GameState.distanceDriven | 0}/100000 km (${percent})`, x + 5, y, ENDESGA16PaletteIdx[completed ? 9 : 12]);
       y += lineHeight;
       y += lineHeight;
     }
@@ -300,5 +311,9 @@ export class OverworldPauseScene extends Scene {
         }
       }
     }
+  }
+
+  formatPercent(n: number): string {
+    return `${n.toFixed(2)}%`;
   }
 }

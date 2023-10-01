@@ -117,6 +117,11 @@ export class OverworldScene extends Scene {
         if (GameState.truck.batteryPercent < 1.0 && Input.getKey('KeyE')) {
           if (GameState.cash >= CHARGE_PRICE) {
             GameState.truck.charge();
+
+            if (!GameState.visitedChargerIds.includes(c.id)) {
+              GameState.visitedChargerIds.push(c.id);
+            }
+
             if (!this.chargingSound) {
               this.chargingSound = SoundPlayer.playSound('charging', true, 0.4);
             }
@@ -154,8 +159,12 @@ export class OverworldScene extends Scene {
     // Chargers
     for (let i = 0; i < GameState.world.chargers.length; i += 1) {
       const c = GameState.world.chargers[i];
-      scr.color(ENDESGA16PaletteIdx[15]);
-      scr.fillRect(c.position.x - 3, c.position.y - 3, 6, 6);
+
+      if (GameState.visitedChargerIds.includes(c.id)) {
+        scr.color(ENDESGA16PaletteIdx[15]);
+        scr.fillRect(c.position.x - 3, c.position.y - 3, 6, 6);
+      }
+
       scr.color(ENDESGA16PaletteIdx[14]);
       scr.fillRect(c.position.x - 2, c.position.y - 2, 4, 4);
     }

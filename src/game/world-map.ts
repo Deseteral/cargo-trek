@@ -8,6 +8,7 @@ export interface City {
 }
 
 export interface Charger {
+  id: number,
   position: Vector2,
 }
 
@@ -173,7 +174,7 @@ export class WorldMap {
         const xx = this.random.nextInt(sx, ex);
         const yy = this.random.nextInt(sy, ey);
 
-        this.chargers.push({ position: new Vector2(xx, yy) });
+        this.chargers.push({ id: this.chargers.length, position: new Vector2(xx, yy) });
       }
     }
 
