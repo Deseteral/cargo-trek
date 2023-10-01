@@ -110,6 +110,7 @@ export class CityScene extends Scene {
     }
 
     SceneManager.pushScene(new DialogBoxScene(text.join('\n')));
+    SoundPlayer.playSound('payment', false, 0.8);
   }
 
   update(): void {
