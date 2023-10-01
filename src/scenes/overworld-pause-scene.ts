@@ -180,6 +180,10 @@ export class OverworldPauseScene extends Scene {
   }
 
   render(scr: Screen): void {
+    // Background shadow
+    scr.color(new Color(0, 0, 0, 0.75));
+    scr.fillRect(0, 0, scr.width, scr.height);
+
     // Background frame
     scr.color(ENDESGA16PaletteIdx[3]);
     scr.fillRect(0, 0, 200, scr.height);
@@ -190,7 +194,7 @@ export class OverworldPauseScene extends Scene {
     if (this.selectedMenu === 'menu') {
       // Date time, cash
       scr.drawText(formattedCalendarTime(), 1, 3, Color.white);
-      scr.drawText(`$${GameState.cash | 0}`, 1, 12, Color.white);
+      scr.drawText(`$${GameState.cash | 0}`, 1, 13, Color.white);
 
       // Menu
       this.menu.drawAt(new Vector2(5, 38), scr);
