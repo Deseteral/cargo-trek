@@ -4,7 +4,7 @@ import { DeliveryJob } from 'ludum-dare-54/game/delivery-job-generator';
 import { Truck } from 'ludum-dare-54/game/truck';
 import { Upgrades, getCargoStorageForLevel } from 'ludum-dare-54/game/upgrades';
 import { WorldMap } from 'ludum-dare-54/game/world-map';
-import { Rectangle, Vector2 } from 'ponczek';
+import { Color, Rectangle, Vector2 } from 'ponczek';
 
 export interface CargoStorage {
   bounds: Rectangle,
@@ -24,6 +24,7 @@ export interface ActiveJob {
 
 export interface SerializedGameData {
   seed: number,
+  fogMap: string[],
   truckPositionX: number,
   truckPositionY: number,
   truckBattery: number,
@@ -92,6 +93,7 @@ export class GameState {
   static serialize(): SerializedGameData {
     return {
       seed: GameState.seed,
+      fogMap: serializeFogMap(),
       truckPositionX: GameState.truck.position.x,
       truckPositionY: GameState.truck.position.y,
       truckBattery: GameState.truck.battery,
@@ -113,6 +115,7 @@ export class GameState {
 
     GameState.world = new WorldMap(data.seed);
     GameState.world.generate();
+    deserializeFogMap(data.fogMap);
 
     GameState.truck = new Truck(new Vector2(data.truckPositionX, data.truckPositionY));
     GameState.truck.battery = data.truckBattery;
@@ -192,4 +195,33 @@ function deserializeDeliveryJob(data: SerializedDeliveryJob): DeliveryJob {
     timeToComplete: data.timeToComplete,
     type: data.type,
   };
+}
+
+function serializeFogMap(): string[] {
+  const out: Color = Color.red;
+  const lines: string[] = [];
+
+  for (let y = 0; y < GameState.world.mapSize; y += 1) {
+    let line = '';
+
+    for (let x = 0; x < GameState.world.mapSize; x += 1) {
+      GameState.world.fogScreen.getPixel(x, y, out);
+      line += (out.a === 0) ? '0' : '1';
+    }
+
+    lines.push(line);
+  }
+
+  return lines;
+}
+
+function deserializeFogMap(data: string[]): void {
+  for (let y = 0; y < GameState.world.mapSize; y += 1) {
+    for (let x = 0; x < GameState.world.mapSize; x += 1) {
+      const v = data[y][x];
+      if (v === '0') {
+        GameState.world.fogScreen.clearPixel(x, y);
+      }
+    }
+  }
 }
