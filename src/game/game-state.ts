@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
+
 import { DeliveryJob } from 'ludum-dare-54/game/delivery-job-generator';
 import { Truck } from 'ludum-dare-54/game/truck';
 import { Upgrades, getCargoStorageForLevel } from 'ludum-dare-54/game/upgrades';
@@ -28,6 +30,7 @@ export interface SerializedGameData {
   truckBatteryCapacity: number,
   cash: number,
   points: number,
+  cargoStorageCargo: SerializedCargo[],
   time: number,
   completedJobs: number,
   distanceDriven: number,
@@ -63,8 +66,18 @@ export class GameState {
     GameState.cash = 100000;
     GameState.points = 0;
 
+    GameState.upgrades = {
+      cargoLevel: 4,
+      terrainPack: false,
+      speedBoost: false,
+      batteryLevel: 0,
+      highEfficiency: false,
+      fastCharging: false,
+      gps: false,
+    };
+
     GameState.cargoStorage = {
-      bounds: getCargoStorageForLevel(4),
+      bounds: getCargoStorageForLevel(GameState.upgrades.cargoLevel),
       cargo: [],
     };
 
@@ -73,19 +86,10 @@ export class GameState {
     GameState.completedJobs = 0;
     GameState.distanceDriven = 0;
     GameState.isAdvancedPlayer = false;
-
-    GameState.upgrades = {
-      cargoLevel: 0,
-      terrainPack: false,
-      speedBoost: false,
-      batteryLevel: 0,
-      highEfficiency: false,
-      fastCharging: false,
-      gps: false,
-    };
   }
 
   static serialize(): SerializedGameData {
+    console.log(GameState.upgrades);
     return {
       seed: GameState.seed,
       truckPositionX: GameState.truck.position.x,
@@ -94,6 +98,7 @@ export class GameState {
       truckBatteryCapacity: GameState.truck.batteryCapacity,
       cash: GameState.cash,
       points: GameState.points,
+      cargoStorageCargo: GameState.cargoStorage.cargo.map((c) => serializeCargo(c)),
       time: GameState.time,
       completedJobs: GameState.completedJobs,
       distanceDriven: GameState.distanceDriven,
@@ -117,9 +122,10 @@ export class GameState {
     GameState.cash = data.cash;
     GameState.points = data.points;
 
+    console.log(data.upgrades);
     GameState.cargoStorage = {
       bounds: getCargoStorageForLevel(data.upgrades.cargoLevel),
-      cargo: [], // TODO
+      cargo: data.cargoStorageCargo.map((c) => deserializeCargo(c)),
     };
 
     GameState.time = data.time;
@@ -128,4 +134,28 @@ export class GameState {
     GameState.isAdvancedPlayer = data.isAdvancedPlayer;
     GameState.upgrades = data.upgrades;
   }
+}
+
+interface SerializedCargo {
+  positionX: number,
+  positionY: number,
+  rects: ({ x: number, y: number, w: number, h: number })[],
+  parentJobId: number,
+}
+
+function serializeCargo(cargo: Cargo): SerializedCargo {
+  return {
+    positionX: cargo.position.x,
+    positionY: cargo.position.y,
+    rects: cargo.rects.map((r) => ({ x: r.x, y: r.y, w: r.width, h: r.height })),
+    parentJobId: cargo.parentJobId,
+  };
+}
+
+function deserializeCargo(data: SerializedCargo): Cargo {
+  return {
+    position: new Vector2(data.positionX, data.positionY),
+    rects: data.rects.map(({ x, y, w, h }) => new Rectangle(x, y, w, h)),
+    parentJobId: data.parentJobId,
+  };
 }
