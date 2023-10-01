@@ -116,6 +116,18 @@ export class OverworldPauseScene extends Scene {
           }, 0);
         },
       }],
+      [null],
+      [{
+        text: 'Turn music on/off',
+        action: () => {
+          if (parent.backgroundMusic) {
+            SoundPlayer.stopSound(parent.backgroundMusic);
+            this.parent.backgroundMusic = null;
+          } else {
+            this.parent.backgroundMusic = SoundPlayer.playSound('overworld_m');
+          }
+        },
+      }],
     ];
 
     this.activeJobsMenu = new ActiveJobsMenuGridView();

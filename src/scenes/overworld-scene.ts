@@ -21,6 +21,8 @@ export class OverworldScene extends Scene {
   noBatteryNeedsToBeTeleported: boolean = false;
   chargingSound: (SoundPlaybackId | null) = null;
 
+  backgroundMusic: (SoundPlaybackId | null) = null;
+
   constructor() {
     super();
     this.camera = new Camera();
@@ -31,7 +33,7 @@ export class OverworldScene extends Scene {
 
     this.batteryTexture = Assets.texture('battery');
 
-    SoundPlayer.playSound('overworld_m', true);
+    this.backgroundMusic = SoundPlayer.playSound('overworld_m', true);
   }
 
   lookAtTruck(): void {
