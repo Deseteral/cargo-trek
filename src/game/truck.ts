@@ -15,7 +15,7 @@ export class Truck {
 
   constructor(position: Vector2) {
     this.position = position;
-    this.speed = 0.5;
+    this.speed = 0.2;
     this.battery = 100.0;
     this.batteryCapacity = 100.0;
   }
@@ -30,21 +30,23 @@ export class Truck {
     }
 
     const mapIdx = GameState.world.vecToIdx(this.position);
-    const mapTileValue = GameState.world.tiles[mapIdx];
+    const mapTileValue = !GameState.upgrades.terrainPack
+      ? GameState.world.tiles[mapIdx] * 1.75
+      : GameState.world.tiles[mapIdx];
     const isOnRoad = GameState.world.roadTiles[mapIdx];
     const terrainModifier = isOnRoad ? 2 : mapTileValue;
     this.delta = worldPosition.copy()
       .sub(this.position)
       .normalize()
       .mul(terrainModifier)
-      .mul(this.speed);
+      .mul(!GameState.upgrades.speedBoost ? (this.speed * 1.75) : this.speed);
 
-    const a = 0.1;
-    this.battery -= (a * (1 / terrainModifier));
+    const efficiency = GameState.upgrades.highEfficiency ? 0.04 : 0.1;
+    this.battery -= (efficiency * (1 / terrainModifier));
   }
 
   charge(): void {
-    GameState.truck.battery += 1;
+    GameState.truck.battery += GameState.upgrades.fastCharging ? 0.5 : 0.2;
     GameState.truck.battery = Math.clamp(GameState.truck.battery, 0, GameState.truck.batteryCapacity);
   }
 
