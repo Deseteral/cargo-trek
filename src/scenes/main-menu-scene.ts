@@ -1,6 +1,7 @@
 import { GameState } from 'ludum-dare-54/game/game-state';
 import { DialogBox } from 'ludum-dare-54/gfx/dialog-box';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
+import { EmailScene } from 'ludum-dare-54/scenes/email-scene';
 import { HowToPlayScene } from 'ludum-dare-54/scenes/how-to-play-scene';
 import { OverworldScene } from 'ludum-dare-54/scenes/overworld-scene';
 import { Assets, Color, Datastore, ENDESGA16PaletteIdx, GridView, Input, Random, ReplaceColorEffect, Scene, SceneManager, Screen, SoundPlayer, Texture, Vector2 } from 'ponczek';
@@ -49,7 +50,7 @@ export class MainMenuScene extends Scene {
           setTimeout(() => {
             this.creatingNewGame = false;
             GameState.create(Random.default.nextInt(0, 9999));
-            SceneManager.clearStack(new OverworldScene());
+            SceneManager.clearStack(new EmailScene());
           }, 0);
         },
       }],

@@ -13,6 +13,7 @@ export class InitScene extends Scene {
         ENDESGA16PaletteIdx[12],
         ENDESGA16PaletteIdx[9],
         ENDESGA16PaletteIdx[1],
+        ENDESGA16PaletteIdx[10],
       ]);
 
       DialogBox.init();
