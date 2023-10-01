@@ -91,7 +91,7 @@ export class OverworldScene extends Scene {
 
     if (this.noBatteryTimer.check()) {
       this.noBatteryNeedsToBeTeleported = true;
-      SceneManager.pushScene(new DialogBoxScene("You've ran out of battery.\nYou are going to be\ntransported to nearest city."));
+      SceneManager.pushScene(new DialogBoxScene("You've ran out of battery.\nYou will be transported\nto the nearest city."));
     }
 
     if (Input.getKeyDown('KeyE')) {
@@ -118,7 +118,7 @@ export class OverworldScene extends Scene {
           if (GameState.cash >= CHARGE_PRICE) {
             GameState.truck.charge();
             if (!this.chargingSound) {
-              this.chargingSound = SoundPlayer.playSound('charging', true);
+              this.chargingSound = SoundPlayer.playSound('charging', true, 0.4);
             }
             this.chargingCost += CHARGE_PRICE;
             GameState.cash -= CHARGE_PRICE;
