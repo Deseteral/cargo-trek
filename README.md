@@ -15,6 +15,8 @@ Manage your truck and cargo, discover procedurally generated map and complete de
 My game for [Ludum Dare 54](https://ldjam.com/events/ludum-dare/54/cargo-trek).
 You can play it on [my itch.io page](https://deseteral.itch.io/cargo-trek).
 
+Made using my custom framework [ponczek](https://github.com/Deseteral/ponczek).
+
 ## Building
 ```sh
 yarn install
