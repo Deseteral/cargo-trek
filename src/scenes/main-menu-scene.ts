@@ -47,6 +47,7 @@ export class MainMenuScene extends Scene {
           this.creatingNewGame = true;
 
           setTimeout(() => {
+            this.creatingNewGame = false;
             GameState.create(Random.default.nextInt(0, 9999));
             SceneManager.clearStack(new OverworldScene());
           }, 0);
@@ -118,11 +119,11 @@ export class MainMenuScene extends Scene {
     scr.drawText('Created in 48 hours for Ludum Dare 54', 1, scr.height - 10, ENDESGA16PaletteIdx[1]);
 
     if (this.loadingGame) {
-      DialogBox.drawBox('Loading...', Ponczek.screen);
+      DialogBox.drawBox('Loading...', scr);
     }
 
     if (this.creatingNewGame) {
-      DialogBox.drawBox('Generating new world', Ponczek.screen);
+      DialogBox.drawBox('Generating new world', scr);
     }
   }
 }

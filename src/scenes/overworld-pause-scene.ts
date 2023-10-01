@@ -1,6 +1,7 @@
 import { ActiveJob, GameState } from 'ludum-dare-54/game/game-state';
 import { UPGRADE_PRICES } from 'ludum-dare-54/game/upgrades';
 import { formattedCalendarTime, formattedDurationTime } from 'ludum-dare-54/game/world-time';
+import { DialogBox } from 'ludum-dare-54/gfx/dialog-box';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { OverworldScene } from 'ludum-dare-54/scenes/overworld-scene';
 import { Color, Datastore, ENDESGA16PaletteIdx, GridView, Input, Scene, SceneManager, Screen, SoundPlayer, Vector2 } from 'ponczek';
@@ -56,6 +57,9 @@ export class OverworldPauseScene extends Scene {
 
   parent: OverworldScene;
 
+  savingGame: boolean = false;
+  loadingGame: boolean = false;
+
   constructor(parent: OverworldScene) {
     super();
 
@@ -85,20 +89,31 @@ export class OverworldPauseScene extends Scene {
       [{
         text: 'Save game',
         action: () => {
-          GameState.save();
-          SceneManager.pushScene(new DialogBoxScene('Game saved!'));
+          this.savingGame = true;
+
+          setTimeout(() => {
+            this.savingGame = false;
+            GameState.save();
+            SceneManager.pushScene(new DialogBoxScene('Game saved!'));
+          }, 0);
         },
       }],
       [{
         text: 'Load game',
         action: () => {
-          if (!Datastore.exists()) {
-            SceneManager.pushScene(new DialogBoxScene('There is no saved game.'));
-            return;
-          }
-          GameState.load();
-          parent.lookAtTruck();
-          SceneManager.pushScene(new DialogBoxScene('Game loaded!'));
+          this.loadingGame = true;
+
+          setTimeout(() => {
+            this.loadingGame = false;
+
+            if (!Datastore.exists()) {
+              SceneManager.pushScene(new DialogBoxScene('There is no saved game.'));
+              return;
+            }
+            GameState.load();
+            parent.lookAtTruck();
+            SceneManager.pushScene(new DialogBoxScene('Game loaded!'));
+          }, 0);
         },
       }],
     ];
@@ -326,6 +341,14 @@ export class OverworldPauseScene extends Scene {
           );
         }
       }
+    }
+
+    if (this.loadingGame) {
+      DialogBox.drawBox('Loading...', scr);
+    }
+
+    if (this.savingGame) {
+      DialogBox.drawBox('Saving...', scr);
     }
   }
 
