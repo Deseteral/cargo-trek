@@ -1,5 +1,6 @@
 import { DeliveryJob } from 'ludum-dare-54/game/delivery-job-generator';
 import { Truck } from 'ludum-dare-54/game/truck';
+import { Upgrades, getCargoStorageForLevel } from 'ludum-dare-54/game/upgrades';
 import { WorldMap } from 'ludum-dare-54/game/world-map';
 import { Rectangle, Vector2 } from 'ponczek';
 
@@ -31,6 +32,7 @@ export class GameState {
   static completedJobs: number;
   static distanceDriven: number;
   static isAdvancedPlayer: boolean;
+  static upgrades: Upgrades;
 
   static create(seed: number): void {
     GameState.seed = seed;
@@ -47,7 +49,7 @@ export class GameState {
     GameState.points = 0;
 
     GameState.cargoStorage = {
-      bounds: new Rectangle(10, 100, 30, 30),
+      bounds: getCargoStorageForLevel(0),
       cargo: [],
     };
 
@@ -56,5 +58,13 @@ export class GameState {
     GameState.completedJobs = 0;
     GameState.distanceDriven = 0;
     GameState.isAdvancedPlayer = false;
+
+    GameState.upgrades = {
+      cargoLevel: 0,
+      terrainPack: false,
+      speedBoost: false,
+      batteryLevel: 0,
+      highEfficiency: false,
+    };
   }
 }
