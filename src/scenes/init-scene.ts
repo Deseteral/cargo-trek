@@ -11,6 +11,7 @@ export class InitScene extends Scene {
         ENDESGA16PaletteIdx[4],
         ENDESGA16PaletteIdx[6],
         ENDESGA16PaletteIdx[12],
+        ENDESGA16PaletteIdx[9],
       ]);
 
       GameState.create(Random.default.nextInt(0, 9999));

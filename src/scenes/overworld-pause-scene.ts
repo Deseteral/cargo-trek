@@ -1,4 +1,5 @@
 import { ActiveJob, GameState } from 'ludum-dare-54/game/game-state';
+import { UPGRADE_PRICES } from 'ludum-dare-54/game/upgrades';
 import { formattedCalendarTime, formattedDurationTime } from 'ludum-dare-54/game/world-time';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { Color, ENDESGA16PaletteIdx, GridView, Input, Scene, SceneManager, Screen, Vector2 } from 'ponczek';
@@ -43,7 +44,7 @@ class ActiveJobsMenuGridView extends GridView<ActiveJob> {
   }
 }
 
-type SelectedMenu = 'menu' | 'activeJobs';
+type SelectedMenu = 'menu' | 'activeJobs' | 'truckUpgrades';
 
 export class OverworldPauseScene extends Scene {
   menu: OverworldPauseMenuGridView;
@@ -65,7 +66,7 @@ export class OverworldPauseScene extends Scene {
       [{
         text: 'Truck upgrades',
         action: () => {
-          console.log('asd');
+          this.selectedMenu = 'truckUpgrades';
         },
       }],
     ];
@@ -80,6 +81,8 @@ export class OverworldPauseScene extends Scene {
         SceneManager.popScene();
       } else if (this.selectedMenu === 'activeJobs') {
         this.selectedMenu = 'menu';
+      } else if (this.selectedMenu === 'truckUpgrades') {
+        this.selectedMenu = 'menu';
       }
     }
 
@@ -88,6 +91,8 @@ export class OverworldPauseScene extends Scene {
         this.menu.selectNextRow(true);
       } else if (this.selectedMenu === 'activeJobs' && GameState.activeJobs.length > 0) {
         this.activeJobsMenu.selectNextRow(true);
+      } else if (this.selectedMenu === 'truckUpgrades') {
+        this.activeJobsMenu.selectNextRow(true);
       }
     }
 
@@ -95,6 +100,8 @@ export class OverworldPauseScene extends Scene {
       if (this.selectedMenu === 'menu') {
         this.menu.selectPreviousRow(true);
       } else if (this.selectedMenu === 'activeJobs' && GameState.activeJobs.length > 0) {
+        this.activeJobsMenu.selectPreviousRow(true);
+      } else if (this.selectedMenu === 'truckUpgrades') {
         this.activeJobsMenu.selectPreviousRow(true);
       }
     }
@@ -132,8 +139,8 @@ export class OverworldPauseScene extends Scene {
 
     if (this.selectedMenu === 'menu') {
       // Date time, cash
-      scr.drawText(formattedCalendarTime(), 1, 1, Color.white);
-      scr.drawText(`$${GameState.cash | 0}`, 1, 11, Color.white);
+      scr.drawText(formattedCalendarTime(), 1, 3, Color.white);
+      scr.drawText(`$${GameState.cash | 0}`, 1, 12, Color.white);
 
       // Menu
       this.menu.drawAt(new Vector2(5, 38), scr);
@@ -152,32 +159,85 @@ export class OverworldPauseScene extends Scene {
       }
     }
 
+    if (this.selectedMenu === 'truckUpgrades') {
+      const lineHeight = 10;
+      const x = 1;
+      let y = 5;
+
+      scr.drawText('Truck upgrades', x, y, ENDESGA16PaletteIdx[6]);
+      y += 20;
+
+      scr.drawText('Cargo hold level', x, y, Color.white);
+      y += lineHeight;
+      scr.drawText(`${GameState.upgrades.cargoLevel}/${UPGRADE_PRICES.cargoLevel.length}`, x + 5, y, ENDESGA16PaletteIdx[12]);
+      y += lineHeight;
+      y += lineHeight;
+
+      scr.drawText('Battery capacity', x, y, Color.white);
+      y += lineHeight;
+      scr.drawText(`${GameState.truck.batteryCapacity} kWh`, x + 5, y, ENDESGA16PaletteIdx[12]);
+      y += lineHeight;
+      y += lineHeight;
+
+      scr.drawText('Rough terrain pack', x, y, Color.white);
+      y += lineHeight;
+      scr.drawText(GameState.upgrades.terrainPack ? 'installed' : 'not installed', x + 5, y, ENDESGA16PaletteIdx[GameState.upgrades.terrainPack ? 9 : 12]);
+      y += lineHeight;
+      y += lineHeight;
+
+      scr.drawText('Speed boost', x, y, Color.white);
+      y += lineHeight;
+      scr.drawText(GameState.upgrades.speedBoost ? 'installed' : 'not installed', x + 5, y, ENDESGA16PaletteIdx[GameState.upgrades.speedBoost ? 9 : 12]);
+      y += lineHeight;
+      y += lineHeight;
+
+      scr.drawText('High efficiency motors', x, y, Color.white);
+      y += lineHeight;
+      scr.drawText(GameState.upgrades.highEfficiency ? 'installed' : 'not installed', x + 5, y, ENDESGA16PaletteIdx[GameState.upgrades.highEfficiency ? 9 : 12]);
+      y += lineHeight;
+      y += lineHeight;
+
+      scr.drawText('High voltage charging', x, y, Color.white);
+      y += lineHeight;
+      scr.drawText(GameState.upgrades.fastCharging ? 'installed' : 'not installed', x + 5, y, ENDESGA16PaletteIdx[GameState.upgrades.fastCharging ? 9 : 12]);
+      y += lineHeight;
+      y += lineHeight;
+
+      scr.drawText('GPS navigation', x, y, Color.white);
+      y += lineHeight;
+      scr.drawText(GameState.upgrades.gps ? 'installed' : 'not installed', x + 5, y, ENDESGA16PaletteIdx[GameState.upgrades.gps ? 9 : 12]);
+      y += lineHeight;
+      y += lineHeight;
+    }
+
     // Minimap
-    if (GameState.upgrades.gps || (this.selectedMenu === 'activeJobs' && GameState.activeJobs.length > 0)) {
-      const minimapX = scr.width - 5 - GameState.world.minimapSize;
-      const minimapY = ((scr.height - GameState.world.minimapSize) / 2) | 0;
+    {
+      if (GameState.upgrades.gps || (this.selectedMenu === 'activeJobs' && GameState.activeJobs.length > 0)) {
+        const minimapX = scr.width - 5 - GameState.world.minimapSize;
+        const minimapY = ((scr.height - GameState.world.minimapSize) / 2) | 0;
 
-      scr.color(ENDESGA16PaletteIdx[6]);
-      scr.drawRect(minimapX - 1, minimapY - 1, GameState.world.minimapSize + 2, GameState.world.minimapSize + 2);
-      scr.drawTexture(GameState.world.minimapTexture, minimapX, minimapY);
+        scr.color(ENDESGA16PaletteIdx[6]);
+        scr.drawRect(minimapX - 1, minimapY - 1, GameState.world.minimapSize + 2, GameState.world.minimapSize + 2);
+        scr.drawTexture(GameState.world.minimapTexture, minimapX, minimapY);
 
-      if (GameState.upgrades.gps) {
-        scr.color(Color.white);
-        scr.drawLine(minimapX + (GameState.truck.position.x / GameState.world.minimapScale) - 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) - 1, minimapX + (GameState.truck.position.x / GameState.world.minimapScale) + 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) + 1);
-        scr.drawLine(minimapX + (GameState.truck.position.x / GameState.world.minimapScale) + 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) - 1, minimapX + (GameState.truck.position.x / GameState.world.minimapScale) - 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) + 1);
-      }
+        if (GameState.upgrades.gps) {
+          scr.color(Color.white);
+          scr.drawLine(minimapX + (GameState.truck.position.x / GameState.world.minimapScale) - 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) - 1, minimapX + (GameState.truck.position.x / GameState.world.minimapScale) + 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) + 1);
+          scr.drawLine(minimapX + (GameState.truck.position.x / GameState.world.minimapScale) + 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) - 1, minimapX + (GameState.truck.position.x / GameState.world.minimapScale) - 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) + 1);
+        }
 
-      if (this.selectedMenu === 'activeJobs' && GameState.activeJobs.length > 0) {
-        const selectedJob = this.activeJobsMenu.selectedValue.job;
-        const targetCityPos = selectedJob.targetCity.position;
+        if (this.selectedMenu === 'activeJobs' && GameState.activeJobs.length > 0) {
+          const selectedJob = this.activeJobsMenu.selectedValue.job;
+          const targetCityPos = selectedJob.targetCity.position;
 
-        scr.color(ENDESGA16PaletteIdx[4]);
-        scr.drawRect(
-          minimapX + (targetCityPos.x / GameState.world.minimapScale) - 2,
-          minimapY + (targetCityPos.y / GameState.world.minimapScale) - 2,
-          5,
-          5,
-        );
+          scr.color(ENDESGA16PaletteIdx[4]);
+          scr.drawRect(
+            minimapX + (targetCityPos.x / GameState.world.minimapScale) - 2,
+            minimapY + (targetCityPos.y / GameState.world.minimapScale) - 2,
+            5,
+            5,
+          );
+        }
       }
     }
   }
