@@ -3,7 +3,7 @@ import { DialogBox } from 'ludum-dare-54/gfx/dialog-box';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { HowToPlayScene } from 'ludum-dare-54/scenes/how-to-play-scene';
 import { OverworldScene } from 'ludum-dare-54/scenes/overworld-scene';
-import { Assets, Color, Datastore, ENDESGA16PaletteIdx, GridView, Input, Ponczek, Random, ReplaceColorEffect, Scene, SceneManager, Screen, SoundPlayer, Texture, Vector2 } from 'ponczek';
+import { Assets, Color, Datastore, ENDESGA16PaletteIdx, GridView, Input, Random, ReplaceColorEffect, Scene, SceneManager, Screen, SoundPlayer, Texture, Vector2 } from 'ponczek';
 
 interface MenuItem {
   text: string,
@@ -91,11 +91,11 @@ export class MainMenuScene extends Scene {
   }
 
   update(): void {
-    if (Input.getKeyDown('KeyS')) {
+    if (Input.getKeyDown('KeyS') || Input.getKeyDown('ArrowDown')) {
       this.menu.selectNextRow(true);
       SoundPlayer.playSound('menu');
     }
-    if (Input.getKeyDown('KeyW')) {
+    if (Input.getKeyDown('KeyW') || Input.getKeyDown('ArrowUp')) {
       this.menu.selectPreviousRow(true);
       SoundPlayer.playSound('menu');
     }

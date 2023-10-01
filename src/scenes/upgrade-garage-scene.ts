@@ -181,11 +181,11 @@ export class UpgradeGarageScene extends Scene {
     }
 
     if (this.menu.cells.length > 0) {
-      if (Input.getKeyDown('KeyS')) {
+      if (Input.getKeyDown('KeyS') || Input.getKeyDown('ArrowDown')) {
         this.menu.selectNextRow(true);
         SoundPlayer.playSound('menu');
       }
-      if (Input.getKeyDown('KeyW')) {
+      if (Input.getKeyDown('KeyW') || Input.getKeyDown('ArrowUp')) {
         this.menu.selectPreviousRow(true);
         SoundPlayer.playSound('menu');
       }

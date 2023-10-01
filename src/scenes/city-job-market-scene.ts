@@ -59,11 +59,11 @@ export class CityJobMarketScene extends Scene {
       SceneManager.popScene();
     }
 
-    if (Input.getKeyDown('KeyS')) {
+    if (Input.getKeyDown('KeyS') || Input.getKeyDown('ArrowDown')) {
       this.menu.selectNextRow(true);
       SoundPlayer.playSound('menu');
     }
-    if (Input.getKeyDown('KeyW')) {
+    if (Input.getKeyDown('KeyW') || Input.getKeyDown('ArrowUp')) {
       this.menu.selectPreviousRow(true);
       SoundPlayer.playSound('menu');
     }

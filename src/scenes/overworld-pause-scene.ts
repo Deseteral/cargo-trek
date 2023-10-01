@@ -135,7 +135,7 @@ export class OverworldPauseScene extends Scene {
       }
     }
 
-    if (Input.getKeyDown('KeyS')) {
+    if (Input.getKeyDown('KeyS') || Input.getKeyDown('ArrowDown')) {
       if (this.selectedMenu === 'menu') {
         this.menu.selectNextRow(true);
         SoundPlayer.playSound('menu');
@@ -145,7 +145,7 @@ export class OverworldPauseScene extends Scene {
       }
     }
 
-    if (Input.getKeyDown('KeyW')) {
+    if (Input.getKeyDown('KeyW') || Input.getKeyDown('ArrowUp')) {
       if (this.selectedMenu === 'menu') {
         this.menu.selectPreviousRow(true);
         SoundPlayer.playSound('menu');
