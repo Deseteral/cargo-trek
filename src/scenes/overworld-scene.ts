@@ -30,6 +30,8 @@ export class OverworldScene extends Scene {
     this.worldTimeProgressionTimer.set(UNTIL_NEXT_MINUTE_MS);
 
     this.batteryTexture = Assets.texture('battery');
+
+    SoundPlayer.playSound('overworld_m', true);
   }
 
   lookAtTruck(): void {
