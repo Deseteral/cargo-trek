@@ -9,9 +9,16 @@ const JOB_TYPES: string[] = [
   'supplies',
   'seeds',
   'pizza',
-  'radioactive materials',
   'medical supplies',
   'water',
+  'building materials',
+  'clothing',
+  'mail',
+  'books',
+  'special cargo',
+  'firewood',
+  'chemicals',
+  'tech devices',
 ];
 
 export interface DeliveryJob {
