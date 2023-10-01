@@ -174,6 +174,8 @@ export class WorldMap {
         const xx = this.random.nextInt(sx, ex);
         const yy = this.random.nextInt(sy, ey);
 
+        if (xx < 0 || y < 0 || x >= this.mapSize || y >= this.mapSize) continue;
+
         this.chargers.push({ id: this.chargers.length, position: new Vector2(xx, yy) });
       }
     }
