@@ -10,7 +10,31 @@ export interface Upgrades {
 }
 
 export function getCargoStorageForLevel(level: number): Rectangle {
-  return new Rectangle(10, 100, 30, 30); // this is for -1, starting bounds
+  if (level === -1) {
+    return new Rectangle(10, 100, 30, 30);
+  }
+
+  if (level === 0) {
+    return new Rectangle(10, 80, 35, 70);
+  }
+
+  if (level === 1) {
+    return new Rectangle(10, 80, 50, 85);
+  }
+
+  if (level === 2) {
+    return new Rectangle(10, 80, 80, 90);
+  }
+
+  if (level === 3) {
+    return new Rectangle(10, 50, 100, 140);
+  }
+
+  if (level === 4) {
+    return new Rectangle(10, 25, 120, 200);
+  }
+
+  throw new Error('what?');
 }
 
 export const UPGRADE_PRICES = {

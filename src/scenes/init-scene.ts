@@ -14,6 +14,7 @@ export class InitScene extends Scene {
       ]);
 
       GameState.create(Random.default.nextInt(0, 9999));
+
       SceneManager.clearStack(new OverworldScene());
 
       this.init = false;
