@@ -154,6 +154,8 @@ export class WorldMap {
           }
         }
 
+        if (mx < 0 || my < 0 || mx >= this.mapSize || my >= this.mapSize) continue;
+
         this.cities.push({
           id: this.cities.length,
           name: generateCityName(this.random),
@@ -174,7 +176,7 @@ export class WorldMap {
         const xx = this.random.nextInt(sx, ex);
         const yy = this.random.nextInt(sy, ey);
 
-        if (xx < 0 || y < 0 || x >= this.mapSize || y >= this.mapSize) continue;
+        if (xx < 0 || yy < 0 || xx >= this.mapSize || yy >= this.mapSize) continue;
 
         this.chargers.push({ id: this.chargers.length, position: new Vector2(xx, yy) });
       }
