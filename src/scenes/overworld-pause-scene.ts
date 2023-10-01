@@ -271,11 +271,27 @@ export class OverworldPauseScene extends Scene {
       y += lineHeight;
       y += lineHeight;
 
+      scr.drawText('Complete 128 deliveries', x, y, Color.white);
+      y += lineHeight;
+      completed = GameState.completedJobs >= 128;
+      percent = this.formatPercent(GameState.completedJobs / 128);
+      scr.drawText(`${GameState.completedJobs}/${128} (${percent})`, x + 5, y, ENDESGA16PaletteIdx[completed ? 9 : 12]);
+      y += lineHeight;
+      y += lineHeight;
+
+      scr.drawText('Earn $1M from deliveries', x, y, Color.white);
+      y += lineHeight;
+      completed = GameState.cash >= 1_000_000;
+      percent = this.formatPercent(GameState.points / 1_000_000);
+      scr.drawText(`$${GameState.points | 0}/$1M (${percent})`, x + 5, y, ENDESGA16PaletteIdx[completed ? 9 : 12]);
+      y += lineHeight;
+      y += lineHeight;
+
       scr.drawText('Drive 100k km', x, y, Color.white);
       y += lineHeight;
       completed = GameState.distanceDriven >= 100000;
       percent = this.formatPercent(GameState.distanceDriven / 100000);
-      scr.drawText(`${GameState.distanceDriven | 0}/100000 km (${percent})`, x + 5, y, ENDESGA16PaletteIdx[completed ? 9 : 12]);
+      scr.drawText(`${GameState.distanceDriven | 0}/100K km (${percent})`, x + 5, y, ENDESGA16PaletteIdx[completed ? 9 : 12]);
       y += lineHeight;
       y += lineHeight;
     }
@@ -314,6 +330,6 @@ export class OverworldPauseScene extends Scene {
   }
 
   formatPercent(n: number): string {
-    return `${n.toFixed(2)}%`;
+    return `${(n * 100).toFixed(2)}%`;
   }
 }
