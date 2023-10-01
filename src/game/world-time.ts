@@ -19,5 +19,7 @@ export function formattedDurationTime(timeDiff: number): string {
   t -= hour * 60;
   const minute = t | 0;
 
-  return `${day} days, ${hour.toString().padStart(2, '0')}h ${minute.toString().padStart(2, '0')}m`;
+  const multiple = day === 1 ? '' : 's';
+
+  return `${day} day${multiple}, ${hour.toString().padStart(2, '0')}h ${minute.toString().padStart(2, '0')}m`;
 }

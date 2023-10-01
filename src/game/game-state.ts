@@ -45,11 +45,11 @@ export class GameState {
 
     GameState.activeJobs = [];
 
-    GameState.cash = 100;
+    GameState.cash = 100000;
     GameState.points = 0;
 
     GameState.cargoStorage = {
-      bounds: getCargoStorageForLevel(-1),
+      bounds: getCargoStorageForLevel(4),
       cargo: [],
     };
 
@@ -66,7 +66,7 @@ export class GameState {
       batteryLevel: 0,
       highEfficiency: false,
       fastCharging: false,
-      gps: true,
+      gps: false,
     };
   }
 }
