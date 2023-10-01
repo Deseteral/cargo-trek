@@ -1,4 +1,5 @@
 import { Cargo, CargoStorage, GameState } from 'ludum-dare-54/game/game-state';
+import { drawCursor } from 'ludum-dare-54/gfx/cursor';
 import { Assets, Color, ENDESGA16PaletteIdx, Input, Scene, SceneManager, Screen, Texture, Vector2 } from 'ponczek';
 
 export class CargoScene extends Scene {
@@ -127,5 +128,7 @@ export class CargoScene extends Scene {
     } else {
       scr.drawText('      Place all cargo in\nstorage area to continue', 128, 1, Color.white);
     }
+
+    drawCursor(scr);
   }
 }
