@@ -42,7 +42,7 @@ export class WorldMap {
   constructor(seed: number) {
     this.random = new Random(seed);
     this.noise = new SimplexNoise(this.random);
-    this.mapSize = 400;
+    this.mapSize = 400 * 3;
 
     this.tiles = new Array(this.mapSize * this.mapSize).fill(0);
     this.roadTiles = new Array(this.mapSize * this.mapSize).fill(false);

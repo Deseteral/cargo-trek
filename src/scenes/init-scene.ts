@@ -16,7 +16,7 @@ export class InitScene extends Scene {
         ENDESGA16PaletteIdx[1],
       ]);
 
-      GameState.create(Random.default.nextInt(0, 9999));
+      // GameState.create(Random.default.nextInt(0, 9999));
 
       SceneManager.clearStack(new MainMenuScene());
 

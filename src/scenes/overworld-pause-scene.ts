@@ -149,7 +149,7 @@ export class OverworldPauseScene extends Scene {
     const targetCity = GameState.world.cities.find((c) => c.id === aj.job.targetCityId)!;
     const text = [
       `${aj.job.type.capitalize()} to ${targetCity.name}`,
-      `Payment: $${aj.job.price}`,
+      `Payment: $${aj.job.price | 0}`,
       '',
       timeDiff <= 0 ? 'Delayed shipment' : `Time left: ${formattedDurationTime(timeDiff)}`,
     ].join('\n');

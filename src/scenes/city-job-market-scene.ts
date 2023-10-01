@@ -19,7 +19,7 @@ class JobMarketMenuGridView extends GridView<MenuItem> {
     const job = item.job;
     const color = isSelected ? ENDESGA16PaletteIdx[4] : Color.white;
     const targetCity = GameState.world.cities.find((c) => c.id === job.targetCityId)!;
-    const text = `${job.type.capitalize()} to ${targetCity.name}, $${job.price}`;
+    const text = `${job.type.capitalize()} to ${targetCity.name}, $${job.price | 0}`;
 
     scr.drawText(text, x, y, color);
     scr.color(color);

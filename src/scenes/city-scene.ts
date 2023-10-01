@@ -36,7 +36,7 @@ export class CityScene extends Scene {
 
   constructor(city: City) {
     super();
-    GameState.save();
+    // GameState.save();
 
     this.city = city;
     this.jobs = DeliveryJobGenerator.generate(Random.default.nextInt(2, 5), city);
@@ -96,7 +96,7 @@ export class CityScene extends Scene {
     GameState.isAdvancedPlayer = GameState.completedJobs >= 5;
 
     const text = [
-      `Completed ${completedJobs.length} jobs for $${totalCash}.`,
+      `Completed ${completedJobs.length} jobs for $${totalCash | 0}.`,
     ];
 
     if (late) {

@@ -215,5 +215,7 @@ export class UpgradeGarageScene extends Scene {
     } else {
       scr.drawText('Your truck has all upgrades installed.', 8, 20, Color.white);
     }
+
+    scr.drawText(`$${GameState.cash | 0}`, 5, scr.height - 12, Color.white);
   }
 }

@@ -198,7 +198,7 @@ export class OverworldScene extends Scene {
     // Charging cost
     if (this.drawChargingCost) {
       const notEnoughCashText = GameState.cash < CHARGE_PRICE ? ' Not enough money to charge' : '';
-      scr.drawText(`-${this.chargingCost | 0}$${notEnoughCashText}`, 76, 20, Color.white);
+      scr.drawText(`-$${this.chargingCost | 0}${notEnoughCashText}`, 76, 20, Color.white);
     }
   }
 }
