@@ -9,7 +9,6 @@ const JOB_TYPES: string[] = [
   'supplies',
   'seeds',
   'pizza',
-  'weapons',
   'radioactive materials',
   'medical supplies',
   'water',
