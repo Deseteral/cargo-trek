@@ -3,11 +3,12 @@ import { Vector2, Screen, Ponczek, Color } from 'ponczek';
 
 export class Truck {
   public position: Vector2;
-  public delta: Vector2 = Vector2.zero();
-  public speed: number;
 
-  public battery: number;
-  public batteryCapacity: number;
+  public delta: Vector2 = Vector2.zero();
+  public speed: number = 0.2;
+
+  public battery: number = 100;
+  public batteryCapacity: number = 100;
 
   audioContext: AudioContext;
   drivingSound: OscillatorNode;
@@ -20,9 +21,6 @@ export class Truck {
 
   constructor(position: Vector2) {
     this.position = position;
-    this.speed = 0.2;
-    this.battery = 100.0;
-    this.batteryCapacity = 100.0;
 
     // const AudioContext = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new AudioContext();

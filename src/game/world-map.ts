@@ -39,10 +39,10 @@ export class WorldMap {
   private p: number = 0.19; //  0.173;
   private s: number = 0.004; // 0.015; //  0.028;
 
-  constructor(mapSize: number, seed: number) {
+  constructor(seed: number) {
     this.random = new Random(seed);
     this.noise = new SimplexNoise(this.random);
-    this.mapSize = mapSize;
+    this.mapSize = 400;
 
     this.tiles = new Array(this.mapSize * this.mapSize).fill(0);
     this.roadTiles = new Array(this.mapSize * this.mapSize).fill(false);
@@ -155,7 +155,7 @@ export class WorldMap {
 
         this.cities.push({
           id: this.cities.length,
-          name: generateCityName(),
+          name: generateCityName(this.random),
           position: new Vector2(mx, my),
         });
       }

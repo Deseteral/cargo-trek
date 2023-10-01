@@ -20,6 +20,21 @@ export interface ActiveJob {
   completeUntilTime: number,
 }
 
+export interface SerializedGameData {
+  seed: number,
+  truckPositionX: number,
+  truckPositionY: number,
+  truckBattery: number,
+  truckBatteryCapacity: number,
+  cash: number,
+  points: number,
+  time: number,
+  completedJobs: number,
+  distanceDriven: number,
+  isAdvancedPlayer: boolean,
+  upgrades: Upgrades,
+}
+
 export class GameState {
   static seed: number;
   static world: WorldMap;
@@ -37,7 +52,7 @@ export class GameState {
   static create(seed: number): void {
     GameState.seed = seed;
 
-    GameState.world = new WorldMap(400, seed);
+    GameState.world = new WorldMap(seed);
     GameState.world.generate();
 
     const firstCityPos = GameState.world.cities[0].position.copy();
@@ -68,5 +83,49 @@ export class GameState {
       fastCharging: false,
       gps: false,
     };
+  }
+
+  static serialize(): SerializedGameData {
+    return {
+      seed: GameState.seed,
+      truckPositionX: GameState.truck.position.x,
+      truckPositionY: GameState.truck.position.y,
+      truckBattery: GameState.truck.battery,
+      truckBatteryCapacity: GameState.truck.batteryCapacity,
+      cash: GameState.cash,
+      points: GameState.points,
+      time: GameState.time,
+      completedJobs: GameState.completedJobs,
+      distanceDriven: GameState.distanceDriven,
+      isAdvancedPlayer: GameState.isAdvancedPlayer,
+      upgrades: GameState.upgrades,
+    };
+  }
+
+  static deserialize(data: SerializedGameData): void {
+    GameState.seed = data.seed;
+
+    GameState.world = new WorldMap(data.seed);
+    GameState.world.generate();
+
+    GameState.truck = new Truck(new Vector2(data.truckPositionX, data.truckPositionY));
+    GameState.truck.battery = data.truckBattery;
+    GameState.truck.batteryCapacity = data.truckBatteryCapacity;
+
+    GameState.activeJobs = []; // TODO
+
+    GameState.cash = data.cash;
+    GameState.points = data.points;
+
+    GameState.cargoStorage = { // TODO
+      bounds: getCargoStorageForLevel(4),
+      cargo: [],
+    };
+
+    GameState.time = data.time;
+    GameState.completedJobs = data.completedJobs;
+    GameState.distanceDriven = data.distanceDriven;
+    GameState.isAdvancedPlayer = data.isAdvancedPlayer;
+    GameState.upgrades = data.upgrades;
   }
 }

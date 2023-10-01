@@ -50,7 +50,6 @@ const names = [
   'Jackson',
 ];
 
-export function generateCityName(): string {
-  const r = Random.default;
+export function generateCityName(r: Random): string {
   return r.pickOne(prefix) + r.pickOne(names) + r.pickOne(postfix);
 }
