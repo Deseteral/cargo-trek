@@ -1,3 +1,4 @@
+import { DialogBox } from 'ludum-dare-54/gfx/dialog-box';
 import { MainMenuScene } from 'ludum-dare-54/scenes/main-menu-scene';
 import { ENDESGA16PaletteIdx, Ponczek, Scene, SceneManager, Screen } from 'ponczek';
 
@@ -13,6 +14,8 @@ export class InitScene extends Scene {
         ENDESGA16PaletteIdx[9],
         ENDESGA16PaletteIdx[1],
       ]);
+
+      DialogBox.init();
 
       SceneManager.clearStack(new MainMenuScene());
 
