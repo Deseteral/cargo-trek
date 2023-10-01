@@ -36,6 +36,8 @@ export class CityScene extends Scene {
 
   constructor(city: City) {
     super();
+    GameState.save();
+
     this.city = city;
     this.jobs = DeliveryJobGenerator.generate(Random.default.nextInt(2, 5), city);
 
