@@ -63,7 +63,7 @@ export class GameState {
     };
 
     GameState.cargoStorage = {
-      bounds: getCargoStorageForLevel(GameState.upgrades.cargoLevel),
+      bounds: getCargoStorageForLevel(-1),
       cargo: [],
     };
 
