@@ -51,7 +51,7 @@ export class Truck {
     }
 
     const mapIdx = GameState.world.vecToIdx(this.position);
-    const mapTileValue = !GameState.upgrades.terrainPack
+    const mapTileValue = GameState.upgrades.terrainPack
       ? GameState.world.tiles[mapIdx] * 1.75
       : GameState.world.tiles[mapIdx];
     const isOnRoad = GameState.world.roadTiles[mapIdx];
@@ -60,7 +60,7 @@ export class Truck {
       .sub(this.position)
       .normalize()
       .mul(terrainModifier)
-      .mul(!GameState.upgrades.speedBoost ? (this.speed * 1.75) : this.speed);
+      .mul(GameState.upgrades.speedBoost ? (this.speed * 1.75) : this.speed);
 
     this.drivingSound.frequency.setValueAtTime(90 + (100 * (this.delta.copy().sqrMagnitude * 2)), this.audioContext.currentTime);
 
