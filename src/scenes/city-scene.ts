@@ -1,6 +1,7 @@
 import { DeliveryJob, DeliveryJobGenerator } from 'ludum-dare-54/game/delivery-job-generator';
 import { GameState } from 'ludum-dare-54/game/game-state';
 import { City } from 'ludum-dare-54/game/world-map';
+import { formattedCalendarTime } from 'ludum-dare-54/game/world-time';
 import { CityJobMarketScene } from 'ludum-dare-54/scenes/city-job-market-scene';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { UpgradeGarageScene } from 'ludum-dare-54/scenes/upgrade-garage-scene';
@@ -20,9 +21,10 @@ class CityMenuGridView extends GridView<MenuItem> {
     if (!item) return;
 
     const color = isSelected ? ENDESGA16PaletteIdx[4] : Color.white;
-    scr.drawText(`${isSelected ? '>' : ' '}${item.text}`, x, y, color);
+    const text = `${isSelected ? '>' : ' '}${item.text}`;
+    scr.drawText(text, x, y, color);
     scr.color(color);
-    if (isSelected) scr.drawLine(x, y + 8, x + scr.activeFont!.getLineLengthPx(item.text), y + 8);
+    if (isSelected) scr.drawLine(x, y + 8, x + scr.activeFont!.getLineLengthPx(text), y + 8);
   }
 }
 
@@ -121,7 +123,9 @@ export class CityScene extends Scene {
 
   render(scr: Screen): void {
     scr.clearScreen(ENDESGA16Palette.darkBark);
-    scr.drawText(`Welcome to ${this.city.name}!`, 10, 10, Color.white);
-    this.menu.drawAt(new Vector2(15, 30), scr);
+    scr.drawText(`Welcome to ${this.city.name}!`, 5, 5, Color.white);
+    this.menu.drawAt(new Vector2(10, 25), scr);
+
+    scr.drawText(`${formattedCalendarTime()}  $${GameState.cash}`, 5, scr.height - 12, Color.white);
   }
 }

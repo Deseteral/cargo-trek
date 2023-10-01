@@ -1,4 +1,4 @@
-import { Color, ENDESGA16Palette, ENDESGA16PaletteIdx, GridView, Input, Ponczek, Scene, Screen, Vector2 } from 'ponczek';
+import { Color, ENDESGA16Palette, ENDESGA16PaletteIdx, GridView, Input, Ponczek, Scene, SceneManager, Screen, Vector2 } from 'ponczek';
 
 interface MenuItem {
   text: string,
@@ -37,6 +37,10 @@ export class UpgradeGarageScene extends Scene {
   }
 
   update(): void {
+    if (Input.getKeyDown('Escape')) {
+      SceneManager.popScene();
+    }
+
     if (Input.getKeyDown('KeyS')) {
       this.menu.selectNextRow(true);
     }
