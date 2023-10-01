@@ -3,7 +3,7 @@ import { formattedCalendarTime } from 'ludum-dare-54/game/world-time';
 import { CityScene } from 'ludum-dare-54/scenes/city-scene';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { OverworldPauseScene } from 'ludum-dare-54/scenes/overworld-pause-scene';
-import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, SceneManager, Timer, Texture, Assets } from 'ponczek';
+import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, SceneManager, Timer, Texture, Assets, SoundPlayer, SoundPlaybackId } from 'ponczek';
 
 const UNTIL_NEXT_MINUTE_MS = 1;
 const CHARGE_PRICE = 0.2;
@@ -19,6 +19,7 @@ export class OverworldScene extends Scene {
   drawChargingCost: boolean = false;
   noBatteryTimer: Timer = new Timer();
   noBatteryNeedsToBeTeleported: boolean = false;
+  chargingSound: (SoundPlaybackId | null) = null;
 
   constructor() {
     super();
@@ -116,8 +117,16 @@ export class OverworldScene extends Scene {
         if (GameState.truck.batteryPercent < 1.0 && Input.getKey('KeyE')) {
           if (GameState.cash >= CHARGE_PRICE) {
             GameState.truck.charge();
+            if (!this.chargingSound) {
+              this.chargingSound = SoundPlayer.playSound('charging', true);
+            }
             this.chargingCost += CHARGE_PRICE;
             GameState.cash -= CHARGE_PRICE;
+          }
+        } else {
+          if (this.chargingSound) {
+            SoundPlayer.stopSound(this.chargingSound);
+            this.chargingSound = null;
           }
         }
       }
@@ -125,6 +134,10 @@ export class OverworldScene extends Scene {
 
     if (!nearCharger) {
       this.chargingCost = 0;
+      if (this.chargingSound) {
+        SoundPlayer.stopSound(this.chargingSound);
+        this.chargingSound = null;
+      }
     }
   }
 
