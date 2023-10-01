@@ -4,7 +4,7 @@ import { DeliveryJob } from 'ludum-dare-54/game/delivery-job-generator';
 import { Truck } from 'ludum-dare-54/game/truck';
 import { Upgrades, getCargoStorageForLevel } from 'ludum-dare-54/game/upgrades';
 import { WorldMap } from 'ludum-dare-54/game/world-map';
-import { Color, Rectangle, Vector2 } from 'ponczek';
+import { Color, Datastore, Rectangle, Vector2 } from 'ponczek';
 
 export interface CargoStorage {
   bounds: Rectangle,
@@ -20,24 +20,6 @@ export interface Cargo {
 export interface ActiveJob {
   job: DeliveryJob,
   completeUntilTime: number,
-}
-
-export interface SerializedGameData {
-  seed: number,
-  fogMap: string[],
-  truckPositionX: number,
-  truckPositionY: number,
-  truckBattery: number,
-  truckBatteryCapacity: number,
-  activeJobs: ({ job: SerializedDeliveryJob, completeUntilTime: number })[],
-  cash: number,
-  points: number,
-  cargoStorageCargo: SerializedCargo[],
-  time: number,
-  completedJobs: number,
-  distanceDriven: number,
-  isAdvancedPlayer: boolean,
-  upgrades: Upgrades,
 }
 
 export class GameState {
@@ -90,8 +72,8 @@ export class GameState {
     GameState.isAdvancedPlayer = false;
   }
 
-  static serialize(): SerializedGameData {
-    return {
+  static save(): void {
+    const data: SerializedGameData = {
       seed: GameState.seed,
       fogMap: serializeFogMap(),
       truckPositionX: GameState.truck.position.x,
@@ -108,9 +90,13 @@ export class GameState {
       isAdvancedPlayer: GameState.isAdvancedPlayer,
       upgrades: GameState.upgrades,
     };
+
+    Datastore.write(data);
   }
 
-  static deserialize(data: SerializedGameData): void {
+  static load(): void {
+    const data = Datastore.read<SerializedGameData>()!;
+
     GameState.seed = data.seed;
 
     GameState.world = new WorldMap(data.seed);
@@ -137,6 +123,24 @@ export class GameState {
     GameState.isAdvancedPlayer = data.isAdvancedPlayer;
     GameState.upgrades = data.upgrades;
   }
+}
+
+export interface SerializedGameData {
+  seed: number,
+  fogMap: string[],
+  truckPositionX: number,
+  truckPositionY: number,
+  truckBattery: number,
+  truckBatteryCapacity: number,
+  activeJobs: ({ job: SerializedDeliveryJob, completeUntilTime: number })[],
+  cash: number,
+  points: number,
+  cargoStorageCargo: SerializedCargo[],
+  time: number,
+  completedJobs: number,
+  distanceDriven: number,
+  isAdvancedPlayer: boolean,
+  upgrades: Upgrades,
 }
 
 interface SerializedCargo {

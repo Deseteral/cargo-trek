@@ -1,9 +1,9 @@
-import { GameState, SerializedGameData } from 'ludum-dare-54/game/game-state';
+import { GameState } from 'ludum-dare-54/game/game-state';
 import { formattedCalendarTime } from 'ludum-dare-54/game/world-time';
 import { CityScene } from 'ludum-dare-54/scenes/city-scene';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { OverworldPauseScene } from 'ludum-dare-54/scenes/overworld-pause-scene';
-import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, SceneManager, Timer, Texture, Assets, Datastore } from 'ponczek';
+import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, SceneManager, Timer, Texture, Assets } from 'ponczek';
 
 const UNTIL_NEXT_MINUTE_MS = 1;
 const CHARGE_PRICE = 0.2;
@@ -38,16 +38,6 @@ export class OverworldScene extends Scene {
     // ImGui.SliderFloat('p', (n = this.p) => this.p = n, 0, 1);
     // ImGui.SliderFloat('s', (n = this.s) => this.s = n, 0, 0.028);
     // ImGui.End();
-
-    if (Input.getKeyDown('KeyO')) {
-      const data = GameState.serialize();
-      Datastore.write(data);
-    }
-
-    if (Input.getKeyDown('KeyP')) {
-      const data = Datastore.read<SerializedGameData>();
-      GameState.deserialize(data!);
-    }
 
     if (Input.getKeyDown('Escape')) {
       SceneManager.pushScene(new OverworldPauseScene());

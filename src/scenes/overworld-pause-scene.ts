@@ -2,7 +2,7 @@ import { ActiveJob, GameState } from 'ludum-dare-54/game/game-state';
 import { UPGRADE_PRICES } from 'ludum-dare-54/game/upgrades';
 import { formattedCalendarTime, formattedDurationTime } from 'ludum-dare-54/game/world-time';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
-import { Color, ENDESGA16PaletteIdx, GridView, Input, Scene, SceneManager, Screen, Vector2 } from 'ponczek';
+import { Color, Datastore, ENDESGA16PaletteIdx, GridView, Input, Scene, SceneManager, Screen, Vector2 } from 'ponczek';
 
 interface MenuItem {
   text: string,
@@ -68,6 +68,25 @@ export class OverworldPauseScene extends Scene {
         text: 'Truck upgrades',
         action: () => {
           this.selectedMenu = 'truckUpgrades';
+        },
+      }],
+      [null],
+      [{
+        text: 'Save game',
+        action: () => {
+          GameState.save();
+          SceneManager.pushScene(new DialogBoxScene('Game saved!'));
+        },
+      }],
+      [{
+        text: 'Load game',
+        action: () => {
+          if (!Datastore.exists()) {
+            SceneManager.pushScene(new DialogBoxScene('There is no saved game.'));
+            return;
+          }
+          GameState.load();
+          SceneManager.pushScene(new DialogBoxScene('Game loaded!'));
         },
       }],
     ];
