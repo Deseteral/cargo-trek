@@ -50,6 +50,7 @@ export class Truck {
 
   update(): void {
     this.position.add(this.delta);
+    GameState.distanceDriven += this.delta.magnitude;
     this.delta.set(0, 0);
   }
 

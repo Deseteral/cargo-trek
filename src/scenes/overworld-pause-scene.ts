@@ -96,5 +96,7 @@ export class OverworldPauseScene extends Scene {
     } else {
       scr.drawText('Currently you have no\nactive jobs', 5, 38, Color.white);
     }
+
+    scr.drawText(`Distance driven: ${GameState.distanceDriven | 0} km`, 1, scr.height - 10, Color.white);
   }
 }

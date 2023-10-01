@@ -29,6 +29,7 @@ export class GameState {
   static cargoStorage: CargoStorage;
   static time: number;
   static completedJobs: number;
+  static distanceDriven: number;
 
   static create(seed: number): void {
     GameState.seed = seed;
@@ -52,5 +53,7 @@ export class GameState {
     GameState.time = 0;
 
     GameState.completedJobs = 0;
+
+    GameState.distanceDriven = 0;
   }
 }
