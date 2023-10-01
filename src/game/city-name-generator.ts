@@ -16,18 +16,7 @@ const prefix = [
   'Oak ',
   'Mount ',
   'Mc',
-];
-
-const postfix = [
-  '',
-  ' Hills',
-  ' City',
-  ' Falls',
-  ' Valley',
-  ' Hole',
-  'ville',
-  'town',
-  'land',
+  'Misty ',
 ];
 
 const names = [
@@ -48,6 +37,43 @@ const names = [
   'Tustin',
   'Oldwark',
   'Jackson',
+  'Willow',
+  'Spring',
+  'Red',
+  'Stone',
+  'Cedar',
+  'Maple',
+  'Thorn',
+  'Meadow',
+  'Oak',
+  'Birch',
+  'Ember',
+  'Brook',
+  'Elm',
+  'Rusty',
+  'Ivy',
+  'Fern',
+  'Evergreen',
+];
+
+const postfix = [
+  '',
+  ' Hills',
+  ' City',
+  ' Falls',
+  ' Valley',
+  ' Hole',
+  ' Springs',
+  ' Heights',
+  ' Junction',
+  'ville',
+  'town',
+  'land',
+  'brook',
+  'view',
+  'wood',
+  'crest',
+  'vale',
 ];
 
 export function generateCityName(r: Random): string {
