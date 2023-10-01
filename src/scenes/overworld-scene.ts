@@ -6,6 +6,7 @@ import { OverworldPauseScene } from 'ludum-dare-54/scenes/overworld-pause-scene'
 import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, SceneManager, Timer, Texture, Assets } from 'ponczek';
 
 const UNTIL_NEXT_MINUTE_MS = 1;
+const CHARGE_PRICE = 0.2;
 
 export class OverworldScene extends Scene {
   camera: Camera;
@@ -105,9 +106,11 @@ export class OverworldScene extends Scene {
         nearCharger = true;
 
         if (GameState.truck.batteryPercent < 1.0 && Input.getKey('KeyE')) {
-          GameState.truck.charge();
-          this.chargingCost += 1;
-          GameState.cash -= 1;
+          if (GameState.cash >= CHARGE_PRICE) {
+            GameState.truck.charge();
+            this.chargingCost += CHARGE_PRICE;
+            GameState.cash -= CHARGE_PRICE;
+          }
         }
       }
     }
@@ -169,7 +172,8 @@ export class OverworldScene extends Scene {
 
     // Charging cost
     if (this.drawChargingCost) {
-      scr.drawText(`-${this.chargingCost}$`, 76, 20, Color.white);
+      const notEnoughCashText = GameState.cash < CHARGE_PRICE ? ' Not enough money to charge' : '';
+      scr.drawText(`-${this.chargingCost | 0}$${notEnoughCashText}`, 76, 20, Color.white);
     }
   }
 }

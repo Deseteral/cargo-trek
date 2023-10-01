@@ -69,7 +69,7 @@ export class OverworldPauseScene extends Scene {
     scr.drawLine(200, 0, 200, scr.height);
 
     scr.drawText(formattedCalendarTime(), 1, 1, Color.white);
-    scr.drawText(`$${GameState.cash}`, 1, 11, Color.white);
+    scr.drawText(`$${GameState.cash | 0}`, 1, 11, Color.white);
 
     scr.drawText('Active jobs', 1, 28, ENDESGA16PaletteIdx[6]);
 

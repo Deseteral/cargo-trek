@@ -128,6 +128,6 @@ export class CityScene extends Scene {
     scr.drawText(`Welcome to ${this.city.name}!`, 5, 5, Color.white);
     this.menu.drawAt(new Vector2(10, 25), scr);
 
-    scr.drawText(`${formattedCalendarTime()}  $${GameState.cash}`, 5, scr.height - 12, Color.white);
+    scr.drawText(`${formattedCalendarTime()}  $${GameState.cash | 0}`, 5, scr.height - 12, Color.white);
   }
 }
