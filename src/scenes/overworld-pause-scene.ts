@@ -47,7 +47,7 @@ class ActiveJobsMenuGridView extends GridView<ActiveJob> {
   }
 }
 
-type SelectedMenu = 'menu' | 'activeJobs' | 'truckUpgrades' | 'quests';
+type SelectedMenu = 'menu' | 'activeJobs' | 'truckUpgrades' | 'quests' | 'help';
 
 export class OverworldPauseScene extends Scene {
   menu: OverworldPauseMenuGridView;
@@ -128,6 +128,12 @@ export class OverworldPauseScene extends Scene {
           }
         },
       }],
+      [{
+        text: 'Help',
+        action: () => {
+          this.selectedMenu = 'help';
+        },
+      }],
     ];
 
     this.activeJobsMenu = new ActiveJobsMenuGridView();
@@ -143,6 +149,8 @@ export class OverworldPauseScene extends Scene {
       } else if (this.selectedMenu === 'truckUpgrades') {
         this.selectedMenu = 'menu';
       } else if (this.selectedMenu === 'quests') {
+        this.selectedMenu = 'menu';
+      } else if (this.selectedMenu === 'help') {
         this.selectedMenu = 'menu';
       }
     }
@@ -210,9 +218,6 @@ export class OverworldPauseScene extends Scene {
 
       // Menu
       this.menu.drawAt(new Vector2(5, 38), scr);
-
-      // Odometer
-      scr.drawText(`Distance driven: ${GameState.distanceDriven | 0} km`, 1, scr.height - 10, Color.white);
     }
 
     if (this.selectedMenu === 'activeJobs') {
@@ -327,35 +332,55 @@ export class OverworldPauseScene extends Scene {
       y += lineHeight;
     }
 
+    if (this.selectedMenu === 'help') {
+      const text = [
+        'WASD| map scroll',
+        '    | menu navigation',
+        ' LMB| drive',
+        '   E| enter town',
+        '    | truck charging',
+        '   Q| look at truck',
+        ' Esc| go back',
+        '    | open pause menu',
+        '',
+        'Take delivery jobs in towns. Each delivery earns you money. Late deliveries are paid less.',
+        '',
+        'Chargers are marked as blue squares on the map. Charging in towns is free, unlike chargers in the wild.',
+        '',
+        'You can purchase truck upgrades in towns.',
+        '',
+        'Remember to save your progress! Have fun!',
+      ].join('\n');
+      scr.drawTextInRect(text, 0, 2, 200, scr.height - 4, Color.white);
+    }
+
     // Minimap
-    {
-      if (GameState.upgrades.gps || (this.selectedMenu === 'activeJobs' && GameState.activeJobs.length > 0)) {
-        const minimapX = scr.width - 5 - GameState.world.minimapSize;
-        const minimapY = ((scr.height - GameState.world.minimapSize) / 2) | 0;
+    if (GameState.upgrades.gps || (this.selectedMenu === 'activeJobs' && GameState.activeJobs.length > 0)) {
+      const minimapX = scr.width - 8 - GameState.world.minimapSize;
+      const minimapY = ((scr.height - GameState.world.minimapSize) / 2) | 0;
 
-        scr.color(ENDESGA16PaletteIdx[6]);
-        scr.drawRect(minimapX - 1, minimapY - 1, GameState.world.minimapSize + 2, GameState.world.minimapSize + 2);
-        scr.drawTexture(GameState.world.minimapTexture, minimapX, minimapY);
+      scr.color(ENDESGA16PaletteIdx[6]);
+      scr.drawRect(minimapX - 1, minimapY - 1, GameState.world.minimapSize + 2, GameState.world.minimapSize + 2);
+      scr.drawTexture(GameState.world.minimapTexture, minimapX, minimapY);
 
-        if (GameState.upgrades.gps) {
-          scr.color(Color.white);
-          scr.drawLine(minimapX + (GameState.truck.position.x / GameState.world.minimapScale) - 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) - 1, minimapX + (GameState.truck.position.x / GameState.world.minimapScale) + 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) + 1);
-          scr.drawLine(minimapX + (GameState.truck.position.x / GameState.world.minimapScale) + 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) - 1, minimapX + (GameState.truck.position.x / GameState.world.minimapScale) - 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) + 1);
-        }
+      if (GameState.upgrades.gps) {
+        scr.color(Color.white);
+        scr.drawLine(minimapX + (GameState.truck.position.x / GameState.world.minimapScale) - 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) - 1, minimapX + (GameState.truck.position.x / GameState.world.minimapScale) + 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) + 1);
+        scr.drawLine(minimapX + (GameState.truck.position.x / GameState.world.minimapScale) + 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) - 1, minimapX + (GameState.truck.position.x / GameState.world.minimapScale) - 1, minimapY + (GameState.truck.position.y / GameState.world.minimapScale) + 1);
+      }
 
-        if (this.selectedMenu === 'activeJobs' && GameState.activeJobs.length > 0) {
-          const selectedJob = this.activeJobsMenu.selectedValue.job;
-          const targetCity = GameState.world.cities.find((c) => c.id === selectedJob.targetCityId)!;
-          const targetCityPos = targetCity.position;
+      if (this.selectedMenu === 'activeJobs' && GameState.activeJobs.length > 0) {
+        const selectedJob = this.activeJobsMenu.selectedValue.job;
+        const targetCity = GameState.world.cities.find((c) => c.id === selectedJob.targetCityId)!;
+        const targetCityPos = targetCity.position;
 
-          scr.color(ENDESGA16PaletteIdx[4]);
-          scr.drawRect(
-            minimapX + (targetCityPos.x / GameState.world.minimapScale) - 2,
-            minimapY + (targetCityPos.y / GameState.world.minimapScale) - 2,
-            5,
-            5,
-          );
-        }
+        scr.color(ENDESGA16PaletteIdx[4]);
+        scr.drawRect(
+          minimapX + (targetCityPos.x / GameState.world.minimapScale) - 2,
+          minimapY + (targetCityPos.y / GameState.world.minimapScale) - 2,
+          5,
+          5,
+        );
       }
     }
 

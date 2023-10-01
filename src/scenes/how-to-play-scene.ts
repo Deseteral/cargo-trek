@@ -7,7 +7,7 @@ export class HowToPlayScene extends Scene {
     'Your journey starts with small truck but as you complete more deliveries you will be able to afford various upgrades.',
     '',
     "The truck you're driving is a battery electric vehicle.",
-    "You will need to charge its battery on the chargers found in the world or while you're staying in towns.",
+    "You will need to charge its battery at the chargers found in the world or while you're staying in towns.",
     '',
     'On the map view use WASD to scroll the map. The truck will move towards cursor when you press left mouse button.',
     'If you lose sight of the truck press Q to center the view on it.',
