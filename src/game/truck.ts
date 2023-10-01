@@ -29,7 +29,7 @@ export class Truck {
 
     this.drivingSound = new OscillatorNode(this.audioContext, { type: 'sine', frequency: 120 });
     this.drivingSoundGain = this.audioContext.createGain();
-    this.drivingSoundGain.gain.value = 0.01;
+    this.drivingSoundGain.gain.value = 0.0001;
     this.drivingSound.connect(this.drivingSoundGain);
     this.drivingSound.start();
   }

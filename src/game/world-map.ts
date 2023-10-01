@@ -116,7 +116,7 @@ export class WorldMap {
 
         for (let i = 0.1; i < 1; i += 0.1) {
           const tt = i;
-          const tol = 0.005;
+          const tol = 0.003;
           if (nn > (tt - tol) && nn < (tt + tol)) {
             this.topoLinesTexture.data.setPixel(x, y, Color.gray);
           }
@@ -214,10 +214,11 @@ export class WorldMap {
       const from = roads[roadIdx][0];
       const to = roads[roadIdx][1];
       const points = pathfinder.search(from.x, from.y, to.x, to.y, true, 'euclidean');
+      const roadRadius = 2;
 
       for (let pi = 0; pi < points.length; pi += 1) {
-        for (let yy = -1; yy <= 1; yy += 1) {
-          for (let xx = -1; xx <= 1; xx += 1) {
+        for (let yy = -roadRadius; yy <= roadRadius; yy += 1) {
+          for (let xx = -roadRadius; xx <= roadRadius; xx += 1) {
             const x = points[pi].x + xx;
             const y = points[pi].y + yy;
             const idx = this.posToIdx(x, y);

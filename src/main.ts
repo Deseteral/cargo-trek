@@ -1,4 +1,4 @@
-import { AssetDefinition, Assets, Ponczek, STARTUP_AUTOPLAY, STARTUP_SKIP_SPLASH_SCREEN } from 'ponczek';
+import { AssetDefinition, Assets, Ponczek, STARTUP_SKIP_SPLASH_SCREEN } from 'ponczek';
 import { InitScene } from 'ludum-dare-54/scenes/init-scene';
 import textureList from '../assets/textures.json';
 import soundList from '../assets/sounds.json';
