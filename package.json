@@ -1,13 +1,12 @@
 {
-  "name": "ludum-dare-54",
+  "name": "cargo-trek",
   "version": "1.0.0",
-  "description": "New game template for ponczek game framework",
   "author": "Deseteral <github.com/deseteral>",
   "license": "MIT",
-  "homepage": "https://github.com/Deseteral/ludum-dare-54#readme",
+  "homepage": "https://github.com/Deseteral/cargo-trek#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Deseteral/ludum-dare-54.git"
+    "url": "https://github.com/Deseteral/cargo-trek.git"
   },
   "scripts": {
     "test": "npm run test:type-check && npm run test:lint",
