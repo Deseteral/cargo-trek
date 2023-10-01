@@ -57,6 +57,7 @@ export class UpgradeGarageScene extends Scene {
           GameState.cash -= price;
           GameState.upgrades.cargoLevel += 1;
 
+          SoundPlayer.playSound('upgrade');
           SceneManager.pushScene(new DialogBoxScene(`You've purchased\n${this.menu.selectedValue.text}`));
           this.menu.cells = this.getCells();
           this.scrollToFirstItem();
@@ -75,6 +76,7 @@ export class UpgradeGarageScene extends Scene {
           GameState.upgrades.terrainPack = true;
           GameState.cash -= UPGRADE_PRICES.terrainPack;
 
+          SoundPlayer.playSound('upgrade');
           SceneManager.pushScene(new DialogBoxScene(`You've purchased\n${this.menu.selectedValue.text}`));
           this.menu.cells = this.getCells();
           this.scrollToFirstItem();
@@ -93,6 +95,7 @@ export class UpgradeGarageScene extends Scene {
           GameState.upgrades.speedBoost = true;
           GameState.cash -= price;
 
+          SoundPlayer.playSound('upgrade');
           SceneManager.pushScene(new DialogBoxScene(`You've purchased\n${this.menu.selectedValue.text}`));
           this.menu.cells = this.getCells();
           this.scrollToFirstItem();
@@ -113,6 +116,7 @@ export class UpgradeGarageScene extends Scene {
           GameState.truck.batteryCapacity += 25;
           GameState.cash -= price;
 
+          SoundPlayer.playSound('upgrade');
           SceneManager.pushScene(new DialogBoxScene(`You've purchased\n${this.menu.selectedValue.text}`));
           this.menu.cells = this.getCells();
           this.scrollToFirstItem();
@@ -131,6 +135,7 @@ export class UpgradeGarageScene extends Scene {
           GameState.upgrades.highEfficiency = true;
           GameState.cash -= price;
 
+          SoundPlayer.playSound('upgrade');
           SceneManager.pushScene(new DialogBoxScene(`You've purchased\n${this.menu.selectedValue.text}`));
           this.menu.cells = this.getCells();
           this.scrollToFirstItem();
@@ -149,6 +154,7 @@ export class UpgradeGarageScene extends Scene {
           GameState.upgrades.fastCharging = true;
           GameState.cash -= price;
 
+          SoundPlayer.playSound('upgrade');
           SceneManager.pushScene(new DialogBoxScene(`You've purchased\n${this.menu.selectedValue.text}`));
           this.menu.cells = this.getCells();
           this.scrollToFirstItem();
@@ -167,6 +173,7 @@ export class UpgradeGarageScene extends Scene {
           GameState.upgrades.gps = true;
           GameState.cash -= price;
 
+          SoundPlayer.playSound('upgrade');
           SceneManager.pushScene(new DialogBoxScene(`You've purchased\n${this.menu.selectedValue.text}`));
           this.menu.cells = this.getCells();
           this.scrollToFirstItem();
