@@ -47,7 +47,7 @@ export class GameState {
     GameState.points = 0;
 
     GameState.cargoStorage = {
-      bounds: new Rectangle(8, 8, 100, 200),
+      bounds: new Rectangle(10, 100, 30, 30),
       cargo: [],
     };
 

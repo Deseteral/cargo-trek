@@ -51,9 +51,7 @@ export abstract class DeliveryJobGenerator {
         cargo: {
           parentJobId: id,
           position: new Vector2(200, 100),
-          rects: [
-            new Rectangle(200, 100, 50, 20),
-          ],
+          rects: this.generateCargoRects(),
         },
         timeToComplete,
         type: Random.default.pickOne(JOB_TYPES),
@@ -63,5 +61,19 @@ export abstract class DeliveryJobGenerator {
     }
 
     return jobs;
+  }
+
+  private static generateCargoRects(): Rectangle[] {
+    if (!GameState.isAdvancedPlayer) {
+      return [new Rectangle(200, 100, 25, 25)];
+    }
+
+    return Random.default.pickOne([
+      [new Rectangle(200, 100, 50, 20)],
+      [new Rectangle(200, 100, 70, 20), new Rectangle(203, 80, 20, 20)],
+      [new Rectangle(200, 100, 70, 70)],
+      [new Rectangle(200, 100, 13, 80)],
+      [new Rectangle(200, 100, 20, 70), new Rectangle(180, 103, 20, 20), new Rectangle(220, 132, 20, 35)],
+    ]);
   }
 }
