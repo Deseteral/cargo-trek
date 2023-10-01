@@ -30,7 +30,7 @@ export class OverworldScene extends Scene {
     this.batteryTexture = Assets.texture('battery');
 
     // TODO: Move this to main menu scene
-    Ponczek.screen.activeFont?.generateColorVariants([ENDESGA16PaletteIdx[4], ENDESGA16PaletteIdx[6]]);
+    Ponczek.screen.activeFont?.generateColorVariants([ENDESGA16PaletteIdx[4], ENDESGA16PaletteIdx[6], ENDESGA16PaletteIdx[12]]);
   }
 
   update(): void {

@@ -26,7 +26,7 @@ export class DialogBoxScene extends Scene {
   }
 
   update(): void {
-    if (Input.getKeyDown('Escape')) {
+    if (Input.getKeyDown('Escape') || Input.getKeyDown('Enter')) {
       SceneManager.popScene();
     }
   }

@@ -37,6 +37,7 @@ export class UpgradeGarageScene extends Scene {
   constructor() {
     super();
     this.menu = new UpgradeGarageMenuGridView();
+    this.menu.withCellClipping = false;
     this.menu.cells = this.getCells();
   }
 
@@ -55,11 +56,15 @@ export class UpgradeGarageScene extends Scene {
           GameState.cargoStorage.bounds = getCargoStorageForLevel(GameState.upgrades.cargoLevel);
           GameState.cash -= price;
           GameState.upgrades.cargoLevel += 1;
+
+          SceneManager.pushScene(new DialogBoxScene(`You've purchased\n${this.menu.selectedValue.text}`));
+          this.menu.cells = this.getCells();
+          this.scrollToFirstItem();
         },
       }] : null,
       !GameState.upgrades.terrainPack ? [{
         text: `Rough terrain pack ($${UPGRADE_PRICES.terrainPack})`,
-        description: 'Allows you to drive faster on steeper terrain.',
+        description: 'Allows you to drive faster on\nsteeper terrain.',
         action: () => {
           const price = UPGRADE_PRICES.terrainPack;
           if (GameState.cash < price) {
@@ -69,11 +74,15 @@ export class UpgradeGarageScene extends Scene {
 
           GameState.upgrades.terrainPack = true;
           GameState.cash -= UPGRADE_PRICES.terrainPack;
+
+          SceneManager.pushScene(new DialogBoxScene(`You've purchased\n${this.menu.selectedValue.text}`));
+          this.menu.cells = this.getCells();
+          this.scrollToFirstItem();
         },
       }] : null,
       !GameState.upgrades.speedBoost ? [{
         text: `Speed boost ($${UPGRADE_PRICES.speedBoost})`,
-        description: 'Higher power motors for your truck.',
+        description: 'High power motors for your truck.',
         action: () => {
           const price = UPGRADE_PRICES.speedBoost;
           if (GameState.cash < price) {
@@ -83,11 +92,15 @@ export class UpgradeGarageScene extends Scene {
 
           GameState.upgrades.speedBoost = true;
           GameState.cash -= price;
+
+          SceneManager.pushScene(new DialogBoxScene(`You've purchased\n${this.menu.selectedValue.text}`));
+          this.menu.cells = this.getCells();
+          this.scrollToFirstItem();
         },
       }] : null,
       GameState.upgrades.batteryLevel < UPGRADE_PRICES.batteryLevel.length ? [{
         text: `+25 kWh battery ($${UPGRADE_PRICES.batteryLevel[GameState.upgrades.batteryLevel]})`,
-        description: 'Additional battery pack installed on the truck.',
+        description: 'Additional battery pack installed\non the truck.',
         action: () => {
           const price = UPGRADE_PRICES.batteryLevel[GameState.upgrades.batteryLevel];
           if (GameState.cash < price) {
@@ -99,11 +112,15 @@ export class UpgradeGarageScene extends Scene {
           GameState.truck.battery += 25;
           GameState.truck.batteryCapacity += 25;
           GameState.cash -= price;
+
+          SceneManager.pushScene(new DialogBoxScene(`You've purchased\n${this.menu.selectedValue.text}`));
+          this.menu.cells = this.getCells();
+          this.scrollToFirstItem();
         },
       }] : null,
       !GameState.upgrades.highEfficiency ? [{
         text: `High efficiency motors ($${UPGRADE_PRICES.highEfficiency})`,
-        description: 'More efficient motors will use less energy when driving.',
+        description: 'More efficient motors will use\nless energy when driving.',
         action: () => {
           const price = UPGRADE_PRICES.highEfficiency;
           if (GameState.cash < price) {
@@ -113,11 +130,15 @@ export class UpgradeGarageScene extends Scene {
 
           GameState.upgrades.highEfficiency = true;
           GameState.cash -= price;
+
+          SceneManager.pushScene(new DialogBoxScene(`You've purchased\n${this.menu.selectedValue.text}`));
+          this.menu.cells = this.getCells();
+          this.scrollToFirstItem();
         },
       }] : null,
       !GameState.upgrades.fastCharging ? [{
         text: `High voltage charging system ($${UPGRADE_PRICES.fastCharging})`,
-        description: 'Higher voltage architecture allows for faster charging speeds.',
+        description: 'Higher voltage architecture allows\nfor faster charging speeds.',
         action: () => {
           const price = UPGRADE_PRICES.fastCharging;
           if (GameState.cash < price) {
@@ -127,6 +148,10 @@ export class UpgradeGarageScene extends Scene {
 
           GameState.upgrades.fastCharging = true;
           GameState.cash -= price;
+
+          SceneManager.pushScene(new DialogBoxScene(`You've purchased\n${this.menu.selectedValue.text}`));
+          this.menu.cells = this.getCells();
+          this.scrollToFirstItem();
         },
       }] : null,
     ].filter(notEmpty);
@@ -137,29 +162,38 @@ export class UpgradeGarageScene extends Scene {
       SceneManager.popScene();
     }
 
-    if (Input.getKeyDown('KeyS')) {
-      this.menu.selectNextRow(true);
-    }
-    if (Input.getKeyDown('KeyW')) {
-      this.menu.selectPreviousRow(true);
-    }
-
-    if (Input.getKeyDown('Enter')) {
-      SceneManager.pushScene(new DialogBoxScene(`You've purchased\n${this.menu.selectedValue.text}`));
-
-      this.menu.cells = this.getCells();
-
-      // Scroll to item number 1
-      for (let i = 0; i < 10; i += 1) {
-        this.menu.selectPreviousRow();
+    if (this.menu.cells.length > 0) {
+      if (Input.getKeyDown('KeyS')) {
+        this.menu.selectNextRow(true);
       }
+      if (Input.getKeyDown('KeyW')) {
+        this.menu.selectPreviousRow(true);
+      }
+
+      if (Input.getKeyDown('Enter')) {
+        this.menu.selectedValue.action();
+      }
+    }
+  }
+
+  // TODO: Ponczek API should have this
+  scrollToFirstItem(): void {
+    for (let i = 0; i < 10; i += 1) {
+      this.menu.selectPreviousRow();
     }
   }
 
   render(scr: Screen): void {
     scr.clearScreen(ENDESGA16Palette.darkBark);
     scr.drawText('Welcome to McMechaniol\'s Garage!', 0, 3, ENDESGA16PaletteIdx[6]);
-    scr.drawText('What would you like to see installed?', 8, 20, Color.white);
-    this.menu.drawAt(new Vector2(8, 32), scr);
+
+    if (this.menu.cells.length > 0) {
+      scr.drawText('What would you like to see installed?', 8, 20, Color.white);
+      this.menu.drawAt(new Vector2(8, 32), scr);
+
+      scr.drawText(this.menu.selectedValue.description, 10, 130, ENDESGA16PaletteIdx[12]);
+    } else {
+      scr.drawText('Your truck has all upgrades installed.', 8, 20, Color.white);
+    }
   }
 }
