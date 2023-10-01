@@ -19,5 +19,9 @@ Cargo hold is a limited space
     - doing jobs earns money and points
     - uncovering the map
 
+## Title ideas?
+- Something haul?
+
+
 ## License
 This project is licensed under the [MIT license](LICENSE).
