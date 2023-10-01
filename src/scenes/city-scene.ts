@@ -60,7 +60,7 @@ export class CityScene extends Scene {
   }
 
   completeJobs(): void {
-    const completedJobs = GameState.activeJobs.filter((aj) => aj.job.targetCity.id === this.city.id);
+    const completedJobs = GameState.activeJobs.filter((aj) => aj.job.targetCityId === this.city.id);
     const completedJobIds = completedJobs.map((aj) => aj.job.id);
 
     if (completedJobs.length === 0) {
@@ -68,7 +68,7 @@ export class CityScene extends Scene {
       return;
     }
 
-    GameState.activeJobs = GameState.activeJobs.filter((aj) => aj.job.targetCity.id !== this.city.id);
+    GameState.activeJobs = GameState.activeJobs.filter((aj) => aj.job.targetCityId !== this.city.id);
 
     let totalCash = 0;
     let late = false;

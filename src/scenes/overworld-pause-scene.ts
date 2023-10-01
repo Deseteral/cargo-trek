@@ -36,7 +36,8 @@ class ActiveJobsMenuGridView extends GridView<ActiveJob> {
 
     const job = item.job;
     const color = isSelected ? ENDESGA16PaletteIdx[4] : Color.white;
-    const text = `${isSelected ? '>' : ' '}${job.targetCity.name}`;
+    const targetCity = GameState.world.cities.find((c) => c.id === job.targetCityId)!;
+    const text = `${isSelected ? '>' : ' '}${targetCity.name}`;
 
     scr.drawText(text, x, y, color);
     scr.color(color);
@@ -120,8 +121,9 @@ export class OverworldPauseScene extends Scene {
 
     const aj = this.activeJobsMenu.selectedValue;
     const timeDiff = aj.completeUntilTime - GameState.time;
+    const targetCity = GameState.world.cities.find((c) => c.id === aj.job.targetCityId)!;
     const text = [
-      `${aj.job.type.capitalize()} to ${aj.job.targetCity.name}`,
+      `${aj.job.type.capitalize()} to ${targetCity.name}`,
       `Payment: $${aj.job.price}`,
       '',
       timeDiff <= 0 ? 'Delayed shipment' : `Time left: ${formattedDurationTime(timeDiff)}`,
@@ -228,7 +230,8 @@ export class OverworldPauseScene extends Scene {
 
         if (this.selectedMenu === 'activeJobs' && GameState.activeJobs.length > 0) {
           const selectedJob = this.activeJobsMenu.selectedValue.job;
-          const targetCityPos = selectedJob.targetCity.position;
+          const targetCity = GameState.world.cities.find((c) => c.id === selectedJob.targetCityId)!;
+          const targetCityPos = targetCity.position;
 
           scr.color(ENDESGA16PaletteIdx[4]);
           scr.drawRect(

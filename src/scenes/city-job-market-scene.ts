@@ -18,7 +18,8 @@ class JobMarketMenuGridView extends GridView<MenuItem> {
 
     const job = item.job;
     const color = isSelected ? ENDESGA16PaletteIdx[4] : Color.white;
-    const text = `${job.type.capitalize()} to ${job.targetCity.name}, $${job.price}`;
+    const targetCity = GameState.world.cities.find((c) => c.id === job.targetCityId)!;
+    const text = `${job.type.capitalize()} to ${targetCity.name}, $${job.price}`;
 
     scr.drawText(text, x, y, color);
     scr.color(color);
@@ -81,8 +82,11 @@ export class CityJobMarketScene extends Scene {
       scr.color(ENDESGA16PaletteIdx[4]);
 
       const selectedJob = this.menu.selectedValue.job;
-      const fromCityPos = selectedJob.fromCity.position;
-      const targetCityPos = selectedJob.targetCity.position;
+      const fromCity = GameState.world.cities.find((c) => c.id === selectedJob.fromCityId)!;
+      const targetCity = GameState.world.cities.find((c) => c.id === selectedJob.targetCityId)!;
+
+      const fromCityPos = fromCity.position;
+      const targetCityPos = targetCity.position;
       const minimapX = 5;
       const minimapY = scr.height - 5 - GameState.world.minimapSize;
 

@@ -117,9 +117,9 @@ export class GameState {
     GameState.cash = data.cash;
     GameState.points = data.points;
 
-    GameState.cargoStorage = { // TODO
-      bounds: getCargoStorageForLevel(4),
-      cargo: [],
+    GameState.cargoStorage = {
+      bounds: getCargoStorageForLevel(data.upgrades.cargoLevel),
+      cargo: [], // TODO
     };
 
     GameState.time = data.time;

@@ -16,8 +16,8 @@ const JOB_TYPES: string[] = [
 
 export interface DeliveryJob {
   id: number,
-  fromCity: City,
-  targetCity: City,
+  fromCityId: number,
+  targetCityId: number,
   price: number,
   cargo: Cargo,
   timeToComplete: number,
@@ -44,8 +44,8 @@ export abstract class DeliveryJobGenerator {
 
       jobs.push({
         id,
-        fromCity,
-        targetCity,
+        fromCityId: fromCity.id,
+        targetCityId: targetCity.id,
         price: distance | 0,
         cargo: {
           parentJobId: id,
