@@ -3,7 +3,7 @@ import { formattedCalendarTime } from 'ludum-dare-54/game/world-time';
 import { CityScene } from 'ludum-dare-54/scenes/city-scene';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { OverworldPauseScene } from 'ludum-dare-54/scenes/overworld-pause-scene';
-import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, SceneManager, Timer, Texture, Assets, SoundPlayer, SoundPlaybackId, Random } from 'ponczek';
+import { Scene, Screen, Vector2, Camera, Input, ENDESGA16PaletteIdx, Color, SceneManager, Timer, Texture, Assets, SoundPlayer, SoundPlaybackId, Random, Ponczek } from 'ponczek';
 
 const UNTIL_NEXT_MINUTE_MS = 1;
 const CHARGE_PRICE = 0.2;
@@ -82,6 +82,10 @@ export class OverworldScene extends Scene {
     if (Input.getKey('KeyD')) this.camera.position.x += cameraSpeed;
     if (Input.getKey('KeyW')) this.camera.position.y -= cameraSpeed;
     if (Input.getKey('KeyS')) this.camera.position.y += cameraSpeed;
+    if (Input.getKeyDown('KeyQ')) this.lookAtTruck();
+
+    this.camera.position.x = Math.clamp(this.camera.position.x, (Ponczek.screen.width / 2), GameState.world.mapSize - (Ponczek.screen.width / 2));
+    this.camera.position.y = Math.clamp(this.camera.position.y, (Ponczek.screen.height / 2), GameState.world.mapSize - (Ponczek.screen.height / 2));
 
     this.camera.screenToWorld(Input.pointer, this.mouseInWorld);
 
@@ -90,8 +94,6 @@ export class OverworldScene extends Scene {
     } else {
       GameState.truck.stopDriving();
     }
-
-    if (Input.getKeyDown('KeyQ')) this.lookAtTruck();
 
     GameState.truck.update();
     GameState.world.clearFogAt(GameState.truck.position);
