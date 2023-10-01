@@ -30,6 +30,7 @@ export class GameState {
   static time: number;
   static completedJobs: number;
   static distanceDriven: number;
+  static isAdvancedPlayer: boolean;
 
   static create(seed: number): void {
     GameState.seed = seed;
@@ -53,7 +54,7 @@ export class GameState {
     GameState.time = 0;
 
     GameState.completedJobs = 0;
-
     GameState.distanceDriven = 0;
+    GameState.isAdvancedPlayer = false;
   }
 }

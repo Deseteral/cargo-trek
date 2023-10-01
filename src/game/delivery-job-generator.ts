@@ -29,14 +29,12 @@ export abstract class DeliveryJobGenerator {
   static nextId: number = 0;
 
   static generate(amount: number, fromCity: City): DeliveryJob[] {
-    const isAdvancedPlayer = GameState.completedJobs >= 5;
-
     const cityList = GameState.world.cities
       .filter((city) => city.id !== fromCity.id)
       .map((city) => ({ distance: Vector2.sqrDistance(fromCity.position, city.position), city }))
       .sort((a, b) => a.distance - b.distance);
 
-    const targetCities = Random.default.pickMany(isAdvancedPlayer ? cityList : cityList.slice(0, 4), amount, true).map(({ city }) => city);
+    const targetCities = Random.default.pickMany(GameState.isAdvancedPlayer ? cityList : cityList.slice(0, 4), amount, true).map(({ city }) => city);
 
     const jobs: DeliveryJob[] = [];
     for (let idx = 0; idx < targetCities.length; idx += 1) {

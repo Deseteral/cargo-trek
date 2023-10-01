@@ -91,6 +91,8 @@ export class CityScene extends Scene {
 
     GameState.completedJobs += completedJobs.length;
 
+    GameState.isAdvancedPlayer = GameState.completedJobs >= 5;
+
     const text = [
       `Completed ${completedJobs.length} jobs for $${totalCash}.`,
     ];
