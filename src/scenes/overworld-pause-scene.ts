@@ -93,6 +93,16 @@ export class OverworldPauseScene extends Scene {
         5,
         5,
       );
+
+      // if (GameState.upgrades.gps) {
+      //   scr.color(Color.white);
+      //   scr.drawRect(
+      //     minimapX + (GameState.truck.position.x / GameState.world.minimapScale) - 2,
+      //     minimapY + (GameState.truck.position.y / GameState.world.minimapScale) - 2,
+      //     5,
+      //     5,
+      //   );
+      // }
     } else {
       scr.drawText('Currently you have no\nactive jobs', 5, 38, Color.white);
     }

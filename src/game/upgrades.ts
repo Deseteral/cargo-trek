@@ -7,6 +7,7 @@ export interface Upgrades {
   batteryLevel: number,
   highEfficiency: boolean,
   fastCharging: boolean,
+  gps: boolean,
 }
 
 export function getCargoStorageForLevel(level: number): Rectangle {
@@ -44,4 +45,5 @@ export const UPGRADE_PRICES = {
   batteryLevel: [200, 400, 550, 625, 680, 725, 790, 810, 870, 900, 960, 1060],
   highEfficiency: 100,
   fastCharging: 500,
+  gps: 500,
 } as const;

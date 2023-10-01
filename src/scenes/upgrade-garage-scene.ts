@@ -154,6 +154,24 @@ export class UpgradeGarageScene extends Scene {
           this.scrollToFirstItem();
         },
       }] : null,
+      !GameState.upgrades.gps ? [{
+        text: `GPS navigation ($${UPGRADE_PRICES.gps})`,
+        description: 'Shows your position on the map.',
+        action: () => {
+          const price = UPGRADE_PRICES.gps;
+          if (GameState.cash < price) {
+            SceneManager.pushScene(new DialogBoxScene("You don't have enough money."));
+            return;
+          }
+
+          GameState.upgrades.gps = true;
+          GameState.cash -= price;
+
+          SceneManager.pushScene(new DialogBoxScene(`You've purchased\n${this.menu.selectedValue.text}`));
+          this.menu.cells = this.getCells();
+          this.scrollToFirstItem();
+        },
+      }] : null,
     ].filter(notEmpty);
   }
 
