@@ -46,7 +46,7 @@ class ActiveJobsMenuGridView extends GridView<ActiveJob> {
   }
 }
 
-type SelectedMenu = 'menu' | 'activeJobs' | 'truckUpgrades';
+type SelectedMenu = 'menu' | 'activeJobs' | 'truckUpgrades' | 'quests';
 
 export class OverworldPauseScene extends Scene {
   menu: OverworldPauseMenuGridView;
@@ -73,6 +73,12 @@ export class OverworldPauseScene extends Scene {
         text: 'Truck upgrades',
         action: () => {
           this.selectedMenu = 'truckUpgrades';
+        },
+      }],
+      [{
+        text: 'Quests',
+        action: () => {
+          this.selectedMenu = 'quests';
         },
       }],
       [null],
@@ -108,6 +114,8 @@ export class OverworldPauseScene extends Scene {
       } else if (this.selectedMenu === 'activeJobs') {
         this.selectedMenu = 'menu';
       } else if (this.selectedMenu === 'truckUpgrades') {
+        this.selectedMenu = 'menu';
+      } else if (this.selectedMenu === 'quests') {
         this.selectedMenu = 'menu';
       }
     }
@@ -233,6 +241,30 @@ export class OverworldPauseScene extends Scene {
       scr.drawText('GPS navigation', x, y, Color.white);
       y += lineHeight;
       scr.drawText(GameState.upgrades.gps ? 'installed' : 'not installed', x + 5, y, ENDESGA16PaletteIdx[GameState.upgrades.gps ? 9 : 12]);
+      y += lineHeight;
+      y += lineHeight;
+    }
+
+    if (this.selectedMenu === 'quests') {
+      const lineHeight = 10;
+      const x = 1;
+      let y = 5;
+      let completed = false;
+
+      scr.drawText('Quests', x, y, ENDESGA16PaletteIdx[6]);
+      y += 20;
+
+      scr.drawText('Visit all towns', x, y, Color.white);
+      y += lineHeight;
+      completed = GameState.visitedCityIds.length === GameState.world.cities.length;
+      scr.drawText(`${GameState.visitedCityIds.length}/${GameState.world.cities.length}`, x + 5, y, ENDESGA16PaletteIdx[completed ? 9 : 12]);
+      y += lineHeight;
+      y += lineHeight;
+
+      scr.drawText('Drive 100k km', x, y, Color.white);
+      y += lineHeight;
+      completed = GameState.distanceDriven >= 100000;
+      scr.drawText(`${GameState.distanceDriven | 0}/100 000 km`, x + 5, y, ENDESGA16PaletteIdx[completed ? 9 : 12]);
       y += lineHeight;
       y += lineHeight;
     }
