@@ -34,6 +34,8 @@ export class OverworldScene extends Scene {
   cloudTexture: Texture;
   clouds: Cloud[];
 
+  nearbyText: (string | null) = null;
+
   constructor() {
     super();
     this.camera = new Camera();
@@ -63,6 +65,8 @@ export class OverworldScene extends Scene {
   }
 
   update(): void {
+    this.nearbyText = '';
+
     if (Input.getKeyDown('Escape')) {
       SceneManager.pushScene(new OverworldPauseScene(this));
     }
@@ -116,11 +120,13 @@ export class OverworldScene extends Scene {
       SceneManager.pushScene(new DialogBoxScene("You've ran out of battery.\nYou will be transported\nto the nearest city."));
     }
 
-    if (Input.getKeyDown('KeyE')) {
-      for (let idx = 0; idx < GameState.world.cities.length; idx += 1) {
-        const c = GameState.world.cities[idx];
-        const dst = Vector2.sqrDistance(c.position, GameState.truck.position);
-        if (dst < 5) {
+    for (let idx = 0; idx < GameState.world.cities.length; idx += 1) {
+      const c = GameState.world.cities[idx];
+      const dst = Vector2.sqrDistance(c.position, GameState.truck.position);
+      if (dst < 5) {
+        this.nearbyText = 'Press E to enter town';
+
+        if (Input.getKeyDown('KeyE')) {
           SceneManager.pushScene(new CityScene(c));
         }
       }
@@ -135,6 +141,7 @@ export class OverworldScene extends Scene {
       if (dst < 5) {
         this.drawChargingCost = true;
         nearCharger = true;
+        this.nearbyText = 'Press E to charge';
 
         if (GameState.truck.batteryPercent < 1.0 && Input.getKey('KeyE')) {
           if (GameState.cash >= CHARGE_PRICE) {
@@ -246,6 +253,11 @@ export class OverworldScene extends Scene {
     if (this.drawChargingCost) {
       const notEnoughCashText = GameState.cash < CHARGE_PRICE ? ' Not enough money to charge' : '';
       scr.drawText(`-$${this.chargingCost | 0}${notEnoughCashText}`, 76, 20, Color.white);
+    }
+
+    // Nearby text
+    if (this.nearbyText) {
+      scr.drawText(this.nearbyText, 5, scr.height - 12, Color.white);
     }
 
     // Cursor pointer
