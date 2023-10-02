@@ -1,6 +1,7 @@
 import { DeliveryJob } from 'ludum-dare-54/game/delivery-job-generator';
 import { GameState } from 'ludum-dare-54/game/game-state';
 import { City } from 'ludum-dare-54/game/world-map';
+import { formattedDurationTime } from 'ludum-dare-54/game/world-time';
 import { CargoScene } from 'ludum-dare-54/scenes/cargo-scene';
 import { Color, Screen, Input, Scene, SceneManager, ENDESGA16Palette, GridView, Vector2, ENDESGA16PaletteIdx, Ponczek, SoundPlayer } from 'ponczek';
 
@@ -10,7 +11,7 @@ interface MenuItem {
 
 class JobMarketMenuGridView extends GridView<MenuItem> {
   constructor() {
-    super(Ponczek.screen.width, 12);
+    super(Ponczek.screen.width - 10, 24);
   }
 
   public drawCell(item: (MenuItem | null), _row: number, _column: number, x: number, y: number, isSelected: boolean, scr: Screen): void {
@@ -19,9 +20,10 @@ class JobMarketMenuGridView extends GridView<MenuItem> {
     const job = item.job;
     const color = isSelected ? ENDESGA16PaletteIdx[4] : Color.white;
     const targetCity = GameState.world.cities.find((c) => c.id === job.targetCityId)!;
-    const text = `${job.type.capitalize()} to ${targetCity.name}, $${job.price | 0}`;
+    const text = `${job.type.capitalize()} to ${targetCity.name}`;
 
     scr.drawText(text, x, y, color);
+    scr.drawText(`$${job.price | 0} | ${formattedDurationTime(job.timeToComplete)} to complete`, x, y + 10, color);
     scr.color(color);
     if (isSelected) scr.drawLine(x, y + 8, x + scr.activeFont!.getLineLengthPx(text), y + 8);
   }
@@ -77,7 +79,7 @@ export class CityJobMarketScene extends Scene {
   render(scr: Screen): void {
     scr.clearScreen(ENDESGA16Palette.darkBark);
 
-    this.menu.drawAt(new Vector2(5, 5), scr);
+    this.menu.drawAt(new Vector2(3, 5), scr);
 
     if (this.menu.cells.length > 0) {
       // Minimap
