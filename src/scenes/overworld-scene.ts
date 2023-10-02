@@ -1,6 +1,7 @@
 import { GameState } from 'ludum-dare-54/game/game-state';
 import { formattedCalendarTime } from 'ludum-dare-54/game/world-time';
 import { drawCursor } from 'ludum-dare-54/gfx/cursor';
+import { DialogBox } from 'ludum-dare-54/gfx/dialog-box';
 import { CityScene } from 'ludum-dare-54/scenes/city-scene';
 import { DialogBoxScene } from 'ludum-dare-54/scenes/dialog-box-scene';
 import { OverworldPauseScene } from 'ludum-dare-54/scenes/overworld-pause-scene';
@@ -240,6 +241,9 @@ export class OverworldScene extends Scene {
 
     this.camera.end();
 
+    // Top frame
+    DialogBox.drawFrame(-5, -5, 115, 35, scr);
+
     // Time
     scr.drawText(formattedCalendarTime(), 5, 5, Color.white);
 
@@ -257,7 +261,8 @@ export class OverworldScene extends Scene {
 
     // Nearby text
     if (this.nearbyText) {
-      scr.drawText(this.nearbyText, 5, scr.height - 12, Color.white);
+      DialogBox.drawFrame(-5, scr.height - 12, this.nearbyText.length * scr.activeFont!.charWidth + 8, 15, scr);
+      scr.drawText(this.nearbyText, 2, scr.height - 12, Color.white);
     }
 
     // Cursor pointer

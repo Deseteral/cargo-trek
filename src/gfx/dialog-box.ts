@@ -29,15 +29,19 @@ export abstract class DialogBox {
     replaceColorEffect.apply(DialogBox.frameShadowTexture);
   }
 
-  static drawBox(text: string, scr: Screen): void {
+  static drawFrame(x: number, y: number, width: number, height: number, scr: Screen): void {
+    scr.drawNineSlice(DialogBox.frameShadowTexture, x + 2, y + 2, width, height, 8, 8);
+    scr.drawNineSlice(DialogBox.frameTexture, x, y, width, height, 8, 8);
+  }
+
+  static drawBoxCenter(text: string, scr: Screen): void {
     const longestLineLengthPx = Math.max(...text.split('\n').map((s) => s.length)) * scr.activeFont!.charWidth;
     const heightPx = text.split('\n').length * (scr.activeFont!.charHeight);
 
     const x = ((scr.width - longestLineLengthPx) / 2) | 0;
     const y = ((scr.height - heightPx) / 2) | 0;
 
-    scr.drawNineSlice(DialogBox.frameShadowTexture, x + 2, y + 2, longestLineLengthPx, heightPx, 8, 8);
-    scr.drawNineSlice(DialogBox.frameTexture, x, y, longestLineLengthPx, heightPx, 8, 8);
+    this.drawFrame(x, y, longestLineLengthPx, heightPx, scr);
     scr.drawText(text, x, y, Color.white);
   }
 }

@@ -120,11 +120,11 @@ export class MainMenuScene extends Scene {
     scr.drawText('Created in 48 hours for Ludum Dare 54', 1, scr.height - 10, ENDESGA16PaletteIdx[1]);
 
     if (this.loadingGame) {
-      DialogBox.drawBox('Loading...', scr);
+      DialogBox.drawBoxCenter('Loading...', scr);
     }
 
     if (this.creatingNewGame) {
-      DialogBox.drawBox('Generating new world...', scr);
+      DialogBox.drawBoxCenter('Generating new world...', scr);
     }
   }
 }

@@ -16,6 +16,6 @@ export class DialogBoxScene extends Scene {
   }
 
   render(scr: Screen): void {
-    DialogBox.drawBox(this.text, scr);
+    DialogBox.drawBoxCenter(this.text, scr);
   }
 }

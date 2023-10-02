@@ -385,11 +385,11 @@ export class OverworldPauseScene extends Scene {
     }
 
     if (this.loadingGame) {
-      DialogBox.drawBox('Loading...', scr);
+      DialogBox.drawBoxCenter('Loading...', scr);
     }
 
     if (this.savingGame) {
-      DialogBox.drawBox('Saving...', scr);
+      DialogBox.drawBoxCenter('Saving...', scr);
     }
   }
 
