@@ -18,8 +18,22 @@ You can play it on [my itch.io page](https://deseteral.itch.io/cargo-trek).
 Made using my custom framework [ponczek](https://github.com/Deseteral/ponczek).
 
 ## Building
+Install dependencies:
 ```sh
+git submodule update --init --recursive
+cd ./ponczek
 yarn install
+cd ..
+yarn install
+```
+
+Development build with watch mode:
+```sh
+yarn dev
+```
+
+Production build:
+```sh
 yarn build
 ```
 
